@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<TabbedPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+            xmlns:android="clr-namespace:Xamarin.Forms.PlatformConfiguration.AndroidSpecific;assembly=Xamarin.Forms.Core"
+            xmlns:pages="clr-namespace:Martivi.Pages"
+            mc:Ignorable="d"
+             x:Class="Martivi.Pages.HomePage" android:TabbedPage.ToolbarPlacement="Bottom">
+  <!--Pages can be added as references or inline-->
+    <pages:MenuPage Title="Menu" IconImageSource="menu.png"></pages:MenuPage>
+    <pages:ReservationPage Title="Reservation" IconImageSource="reservation.png"></pages:ReservationPage>
+    <pages:InfoPage Title="Info" IconImageSource="information.png"></pages:InfoPage>
+</TabbedPage>
