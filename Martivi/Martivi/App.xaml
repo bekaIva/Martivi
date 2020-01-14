@@ -4,8 +4,9 @@
              xmlns:d="http://xamarin.com/schemas/2014/forms/design"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d"
+             xmlns:MainPageViewModel="clr-namespace:Martivi.ViewModels"
              x:Class="Martivi.App">
     <Application.Resources>
-
+        <MainPageViewModel:MenuPageViewModel x:Key="MainPageViewModel"></MainPageViewModel:MenuPageViewModel>
     </Application.Resources>
 </Application>

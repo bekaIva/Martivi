@@ -3,20 +3,26 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:d="http://xamarin.com/schemas/2014/forms/design"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:ViewModel="clr-namespace:Martivi.ViewModels"
              mc:Ignorable="d"
-             x:Class="Martivi.Pages.MenuPage" x:Name="MainPage" BindingContext="{StaticResource MainPageViewModel}">
+             x:Class="Martivi.Pages.SubMenuPage" >
+    <ContentPage.BindingContext>
+        <ViewModel:SubMenuViewModel x:Name="ViewModel"></ViewModel:SubMenuViewModel>
+    </ContentPage.BindingContext>
     <ContentPage.Content>
-        <Grid x:Name="ContentGrid" >
-            
-       
-            <ListView x:Name="lv" SeparatorVisibility="None" HasUnevenRows="True"  ItemSelected="lv_ItemSelected" ItemsSource="{Binding Menus}">
+        <Grid >
+            <ListView SeparatorVisibility="None" x:Name="lv" HasUnevenRows="True" ItemsSource="{Binding SelectedMenu.subMenus}" >
                 <ListView.ItemTemplate>
                     <DataTemplate>
                         <ViewCell>
-                            <Grid >
+                            <Grid>
                                 <Image Source="{Binding image}" HeightRequest="200" Aspect="Fill"></Image>
                                 <BoxView BackgroundColor="Black" Opacity="0.4"></BoxView>
-                                <Label Text="{Binding name}" HorizontalTextAlignment="Center" FontSize="Large" TextColor="White" VerticalOptions="Center"></Label>
+                                <StackLayout Margin="5" VerticalOptions="End">
+                                    <Label Text="{Binding name}" FontSize="Large" TextColor="Yellow"></Label>
+                                    <Label Text="{Binding price}" FontSize="Medium" TextColor="White"></Label>
+                                    <Label Text="{Binding description}" FontSize="Small" TextColor="White"></Label>
+                                </StackLayout>
                             </Grid>
                         </ViewCell>
                     </DataTemplate>
@@ -24,6 +30,4 @@
             </ListView>
         </Grid>
     </ContentPage.Content>
-        
-        
 </ContentPage>
