@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:d="http://xamarin.com/schemas/2014/forms/design"
@@ -7,9 +7,42 @@
              x:Class="Martivi.Pages.InfoPage">
     <ContentPage.Content>
         <StackLayout>
-            <Label Text="Welcome to Info Page!"
-                VerticalOptions="CenterAndExpand" 
-                HorizontalOptions="CenterAndExpand" />
+            <Label Text="Timings" TextColor="Black" HorizontalOptions="Center" FontSize="Large"></Label>
+            <Label Text="Mon-Hours: 9:00am - 11:00pm"  HorizontalOptions="Center" FontSize="Medium"></Label>
+            <Label Text="Fri-Sat: 9:00am - 1:00pm"  HorizontalOptions="Center" FontSize="Medium"></Label>
+            <Label Text="Sun: 9:00am - 1:00pm"  HorizontalOptions="Center" FontSize="Medium"></Label>
+            <Label Text="Address" TextColor="Black" HorizontalOptions="Center" FontSize="Large"></Label>
+            <Label Text="Akhaltsikhe" TextColor="Black" HorizontalOptions="Center" FontSize="Medium"></Label>
+            <Label Text="Follow us" TextColor="Black" HorizontalOptions="Center" FontSize="Large"></Label>
+            <StackLayout HorizontalOptions="Center" Margin="5" Orientation="Horizontal">
+                <Image Source="facebook.png">
+                    <Image.GestureRecognizers>
+                        <TapGestureRecognizer x:Name="TapFacebook" NumberOfTapsRequired="1" Tapped="FacebookTapped"></TapGestureRecognizer>
+                    </Image.GestureRecognizers>
+                </Image>
+                <Image Source="twitter.png">
+                    <Image.GestureRecognizers>
+                        <TapGestureRecognizer x:Name="Taptwitter" NumberOfTapsRequired="1" Tapped="twitterTapped"></TapGestureRecognizer>
+                    </Image.GestureRecognizers>
+                </Image>
+                <Image Source="instagram.png">
+                    <Image.GestureRecognizers>
+                        <TapGestureRecognizer x:Name="Tapinstagram" NumberOfTapsRequired="1" Tapped="instagramTapped"></TapGestureRecognizer>
+                    </Image.GestureRecognizers>
+                </Image>
+                <Image Source="youtube.png">
+                    <Image.GestureRecognizers>
+                        <TapGestureRecognizer x:Name="Tapyoutube" NumberOfTapsRequired="1" Tapped="youtubeTapped"></TapGestureRecognizer>
+                    </Image.GestureRecognizers>
+                </Image>
+            </StackLayout>
+            
+            <Label Text="Contact Us" TextColor="Black" HorizontalOptions="Center" FontSize="Large"></Label>
+            <Image Source="phone.png">
+                <Image.GestureRecognizers>
+                    <TapGestureRecognizer x:Name="TappCall" NumberOfTapsRequired="1" Tapped="CallTapped"></TapGestureRecognizer>
+                </Image.GestureRecognizers>
+            </Image>
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>

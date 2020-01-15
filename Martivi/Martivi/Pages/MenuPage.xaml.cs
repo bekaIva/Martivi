@@ -15,21 +15,14 @@ namespace Martivi.Pages
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class MenuPage : ContentPage
     {
-        
-
-        
-       
-
         public MenuPage()
         {
             InitializeComponent();
         }
         protected override async void OnAppearing()
         {
-            base.OnAppearing();
-          
+            base.OnAppearing();          
         }
-
         private void lv_ItemSelected(object sender, SelectedItemChangedEventArgs e)
         {
             var Selected = e.SelectedItem as Model.Menu;

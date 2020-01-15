@@ -4,12 +4,22 @@
              xmlns:d="http://xamarin.com/schemas/2014/forms/design"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d"
-             x:Class="Martivi.Pages.ReservationPage">
+             xmlns:ViewModel="clr-namespace:Martivi.ViewModels"
+             x:Class="Martivi.Pages.ReservationPage" BackgroundColor="White" >
+    <ContentPage.BindingContext>
+        <ViewModel:ReservationPageViewModel></ViewModel:ReservationPageViewModel>
+    </ContentPage.BindingContext>
     <ContentPage.Content>
         <StackLayout>
-            <Label Text="Welcome to ReservationPage"
-                VerticalOptions="CenterAndExpand" 
-                HorizontalOptions="CenterAndExpand" />
+            <Entry Placeholder="Name" x:Name="EntName" Text="{Binding Name,Mode=TwoWay}"></Entry>
+            <Entry Placeholder="Email" Text="{Binding Email,Mode=TwoWay}"></Entry>
+            <Entry Placeholder="Phone" Text="{Binding Phone,Mode=TwoWay}"></Entry>
+            <Entry Placeholder="Total People" Text="{Binding TotalPeople,Mode=TwoWay}"></Entry>
+            <Label Text="Booking Date"></Label>
+            <DatePicker Format="D" Date="{Binding Date,Mode=TwoWay}"></DatePicker>
+            <Label Text="Booking Time"></Label>
+            <TimePicker Time="{Binding Time,Mode=TwoWay}"></TimePicker>
+            <Button Clicked="Reserve_Click" Text="Book Table" TextColor="White" FontSize="Medium" BackgroundColor="#f50057"></Button>
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>
