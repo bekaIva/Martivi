@@ -1,4 +1,5 @@
 ﻿using Martivi.Services;
+using Martivi.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -13,11 +14,13 @@ using Xamarin.Forms.Xaml;
 namespace Martivi.Pages
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
-    public partial class MenuPage : ContentPage
+    public partial class CategoryPage : ContentPage
     {
-        public MenuPage()
+        MainViewModel viewModel;
+        public CategoryPage()
         {
             InitializeComponent();
+            viewModel = this.BindingContext as MainViewModel;
         }
         protected override async void OnAppearing()
         {
@@ -25,8 +28,10 @@ namespace Martivi.Pages
         }
         private void lv_ItemSelected(object sender, SelectedItemChangedEventArgs e)
         {
-            var Selected = e.SelectedItem as Model.Menu;
-            Navigation.PushAsync(new SubMenuPage(Selected));
+            var Selected = e.SelectedItem as Model.Category;
+            viewModel.SelectedCategory = Selected;
+            if(Selected!=null) Navigation.PushAsync(new ProductPage());
+            ((ListView)sender).SelectedItem = null;
         }
     }
 }

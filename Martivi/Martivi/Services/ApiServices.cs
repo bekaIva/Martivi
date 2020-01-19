@@ -14,13 +14,13 @@ namespace Martivi.Services
         public ApiServices()
         {
         }
-        public async Task<List<Menu>> GetMenu()
+        public async Task<List<Category>> GetCategories()
         {
-            var res = await client.GetStringAsync("https://martiviapi.azurewebsites.net/api/menus");
-            List<Menu> menu = JsonConvert.DeserializeObject<List<Menu>>(res);
+            var res = await client.GetStringAsync("https://martiviapi.azurewebsites.net/api/Categories");
+            List<Category> menu = JsonConvert.DeserializeObject<List<Category>>(res);
             return menu;
         }
-        public async Task<bool> ReserveTable(Reservation reservation)
+        public async Task<bool> Chekout(Order reservation)
         {
             var json = JsonConvert.SerializeObject(reservation);
             var content = new StringContent(json, Encoding.UTF8, "application/json");

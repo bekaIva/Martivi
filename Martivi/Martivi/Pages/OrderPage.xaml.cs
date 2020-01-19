@@ -11,14 +11,14 @@ using Xamarin.Forms.Xaml;
 namespace Martivi.Pages
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
-    public partial class ReservationPage : ContentPage
+    public partial class OrderPage : ContentPage
     {
 
-        ReservationPageViewModel ViewModel;
-        public ReservationPage()
+        MainViewModel ViewModel;
+        public OrderPage()
         {
             InitializeComponent();
-            ViewModel = this.BindingContext as ReservationPageViewModel;
+            ViewModel = this.BindingContext as MainViewModel;
             
         }
 
@@ -27,7 +27,7 @@ namespace Martivi.Pages
         {
             try
             {
-                await ViewModel.Reserve();
+              
             }
             catch
             { }

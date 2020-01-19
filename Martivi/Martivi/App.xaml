@@ -5,8 +5,22 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d"
              xmlns:MainPageViewModel="clr-namespace:Martivi.ViewModels"
+             xmlns:model="clr-namespace:Martivi.Model"
              x:Class="Martivi.App">
     <Application.Resources>
-        <MainPageViewModel:MenuPageViewModel x:Key="MainPageViewModel"></MainPageViewModel:MenuPageViewModel>
+        <ResourceDictionary>
+            <MainPageViewModel:MainViewModel x:Key="MainViewModel"></MainPageViewModel:MainViewModel>
+            <Style TargetType="NavigationPage">
+                <Setter Property="BarBackgroundColor" Value="#f50057"></Setter>
+                
+            </Style>
+            <model:InverseZeroVisibilityConverter x:Key="inverseZeroVisibilityConverter"/>
+            <model:ZeroVisibilityConverter x:Key="zeroVisibilityConverter"/>
+            <model:CurrencyFormatConverter x:Key="currencyFormatConverter"/>
+            <model:TotalItemsCountConverter x:Key="totalItemsCountConverter"/>
+            <model:ShortDescription x:Key="ShortDescription"></model:ShortDescription>
+            <model:WeightConverter x:Key="WeightConverter"></model:WeightConverter>
+        </ResourceDictionary>
+       
     </Application.Resources>
 </Application>

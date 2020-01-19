@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 
 using Foundation;
+using Syncfusion.ListView.XForms.iOS;
+using Syncfusion.XForms.iOS.EffectsView;
 using UIKit;
 
 namespace Martivi.iOS
@@ -24,7 +26,9 @@ namespace Martivi.iOS
         {
             global::Xamarin.Forms.Forms.Init();
             LoadApplication(new App());
-
+            SfListViewRenderer.Init();
+            SfEffectsViewRenderer.Init();
+            FFImageLoading.Forms.Platform.CachedImageRenderer.Init();
             return base.FinishedLaunching(app, options);
         }
     }
