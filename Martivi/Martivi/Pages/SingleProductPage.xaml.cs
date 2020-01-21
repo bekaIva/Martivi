@@ -20,6 +20,7 @@ namespace Martivi.Pages
             
             InitializeComponent();
             contentGrid.BindingContext = p;
+            Title = p.Name;
         }
     }
 }

@@ -1,0 +1,51 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Shell xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+       xmlns:local="clr-namespace:Martivi.Pages"
+       xmlns:ffimageloadingsvg="clr-namespace:FFImageLoading.Svg.Forms;assembly=FFImageLoading.Svg.Forms"
+       xmlns:fftransf="clr-namespace:FFImageLoading.Transformations;assembly=FFImageLoading.Transformations"
+             mc:Ignorable="d"
+             x:Class="Martivi.Pages.MainShell" BindingContext="{StaticResource MainViewModel}" x:Name="shellPage" >
+    
+    <Shell.FlyoutHeader>
+        <Grid HeightRequest="160" BackgroundColor="{StaticResource primary}">
+            <Label Text="{Binding UserName}" TextColor="White" FontSize="20" VerticalOptions="Center" HorizontalOptions="Center" HorizontalTextAlignment="Center" VerticalTextAlignment="Center"></Label>
+            
+           
+        </Grid>
+    </Shell.FlyoutHeader>
+    
+    <FlyoutItem Title="Home">
+        <FlyoutItem.Icon>
+            <FontImageSource Color="{StaticResource primary_text}" Size="24" FontFamily="{StaticResource FontAwesome5ProLight}"  Glyph="&#xf80c;"></FontImageSource>
+        </FlyoutItem.Icon>
+        <Tab Title="კატეგორიები" Icon="menu.png">
+            <ShellContent ContentTemplate="{DataTemplate local:CategoryPage}"/>
+        </Tab>
+        <Tab Title="კალათა" Icon="reservation.png">
+            <ShellContent ContentTemplate="{DataTemplate local:OrderPage}" />
+
+        </Tab>
+        <Tab Title="შესახებ" Icon="information.png">
+            <ShellContent ContentTemplate="{DataTemplate local:InfoPage}" />
+
+        </Tab>
+    </FlyoutItem>
+   
+    <MenuItem  Clicked="SignInOutClicked" IconImageSource="{Binding IsSignedIn,Converter={StaticResource IsSignedInConverter},ConverterParameter=Icon}">
+        <Shell.MenuItemTemplate>
+            <DataTemplate>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="1*"/>
+                        <ColumnDefinition Width="4*"/>
+                    </Grid.ColumnDefinitions>
+                    <Image Source="{Binding Icon}"></Image>
+                    <Label Grid.Column="1" FontAttributes="Italic" TextColor="{StaticResource primary_text}" FontSize="24" Text="{Binding BindingContext.IsSignedIn,Converter={StaticResource IsSignedInConverter},ConverterParameter=Label}"></Label>
+                </Grid>
+            </DataTemplate>
+        </Shell.MenuItemTemplate>
+    </MenuItem>
+</Shell>

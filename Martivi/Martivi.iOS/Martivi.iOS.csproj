@@ -67,6 +67,9 @@
     <None Include="Entitlements.plist" />
     <None Include="Info.plist" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <BundleResource Include="Resources\FontAwesome5ProRegular.otf" />
+    <BundleResource Include="Resources\FontAwesome5BrandsRegular.otf" />
+    <BundleResource Include="Resources\FontAwesome5ProLight.otf" />
   </ItemGroup>
   <ItemGroup>
     <InterfaceDefinition Include="Resources\LaunchScreen.storyboard" />
@@ -131,7 +134,16 @@
     <PackageReference Include="Syncfusion.Xamarin.SfNumericUpDown">
       <Version>17.4.0.43</Version>
     </PackageReference>
+    <PackageReference Include="Xam.Plugins.Settings">
+      <Version>3.1.1</Version>
+    </PackageReference>
     <PackageReference Include="Xamarin.FFImageLoading.Forms">
+      <Version>2.4.11.982</Version>
+    </PackageReference>
+    <PackageReference Include="Xamarin.FFImageLoading.Svg.Forms">
+      <Version>2.4.11.982</Version>
+    </PackageReference>
+    <PackageReference Include="Xamarin.FFImageLoading.Transformations">
       <Version>2.4.11.982</Version>
     </PackageReference>
     <PackageReference Include="Xamarin.Forms" Version="4.4.0.991477" />
@@ -224,5 +236,8 @@
   </ItemGroup>
   <ItemGroup>
     <BundleResource Include="Resources\placeholderimage%403x.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\food.svg" />
   </ItemGroup>
 </Project>

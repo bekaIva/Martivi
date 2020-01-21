@@ -25,5 +25,10 @@ namespace Martivi.Pages
         {
             Navigation.PushAsync(new SingleProductPage(viewModel,e.ItemData as Product));
         }
+        protected override void OnAppearing()
+        {
+            base.OnAppearing();
+            
+        }
     }
 }

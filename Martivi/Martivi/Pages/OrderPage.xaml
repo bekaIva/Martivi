@@ -6,7 +6,7 @@
              xmlns:sync="clr-namespace:Syncfusion.ListView.XForms;assembly=Syncfusion.SfListView.XForms"
              xmlns:numeric="clr-namespace:Syncfusion.SfNumericUpDown.XForms;assembly=Syncfusion.SfNumericUpDown.XForms"
              mc:Ignorable="d"
-             x:Class="Martivi.Pages.OrderPage" BackgroundColor="White" BindingContext="{StaticResource MainViewModel}" x:Name="orderPage" >
+             x:Class="Martivi.Pages.OrderPage" BackgroundColor="White" BindingContext="{StaticResource MainViewModel}" x:Name="orderPage" Title="კალათა">
   
     <ContentPage.Content>
 

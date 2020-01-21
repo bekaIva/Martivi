@@ -1,4 +1,4 @@
-#region Copyright Syncfusion Inc. 2001-2019.
+﻿#region Copyright Syncfusion Inc. 2001-2019.
 // Copyright Syncfusion Inc. 2001-2019. All rights reserved.
 // Use of this code is subject to the terms of our license.
 // A copy of the current license can be obtained at any time by e-mailing
@@ -17,6 +17,51 @@ using Xamarin.Forms.Internals;
 namespace Martivi.Model
 {
     [Preserve(AllMembers = true)]
+
+    public class IsSignedInConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            if(parameter is string p)
+            {
+                switch(p)
+                {
+                    case "Label":
+                        {
+                            if(value is bool v)
+                            {
+                                if (v == true)
+                                {
+                                    return "გამოსვლა";
+                                }
+                                else
+                                {
+                                    return "შესვლა";
+                                }
+                            }
+                            break;
+                        }
+                    case "Icon":
+                        {
+                            if (value is bool v)
+                            {
+                                if (v) return Application.Current.Resources["SignOutImageSource"];
+                                else return Application.Current.Resources["SignInImageSource"];
+                            }
+                                
+                            break;
+                        }
+                }
+            }
+            return value;
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            throw new NotImplementedException();
+        }
+    }
+
     public class WeightConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)

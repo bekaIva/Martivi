@@ -34,5 +34,11 @@
     <string>Martivi</string>
     <key>XSAppIconAssets</key>
     <string>Assets.xcassets/AppIcon.appiconset</string>
+  <key>UIAppFonts</key>
+  <array>
+    <string>FontAwesome5BrandsRegular.otf</string>
+    <string>FontAwesome5ProRegular.otf</string>
+    <string>FontAwesome5ProLight.otf</string>
+  </array>
 </dict>
 </plist>

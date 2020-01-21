@@ -10,20 +10,16 @@ using Xamarin.Forms.Xaml;
 namespace Martivi.Pages
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
-    public partial class HomePage : TabbedPage
+    public partial class SignUpPage : ContentPage
     {
-        public HomePage()
+        public SignUpPage()
         {
             InitializeComponent();
         }
         protected override void OnAppearing()
         {
             base.OnAppearing();
-            foreach(var p in Navigation.NavigationStack.ToArray())
-            {
-                if(p.GetType()!=typeof(HomePage))
-                Navigation.RemovePage(p);
-            }
+            Shell.SetTabBarIsVisible(this, false);
         }
     }
 }

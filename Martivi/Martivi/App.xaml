@@ -9,17 +9,75 @@
              x:Class="Martivi.App">
     <Application.Resources>
         <ResourceDictionary>
-            <MainPageViewModel:MainViewModel x:Key="MainViewModel"></MainPageViewModel:MainViewModel>
-            <Style TargetType="NavigationPage">
-                <Setter Property="BarBackgroundColor" Value="#f50057"></Setter>
+           
+            <Color x:Key="primary">#FF5722</Color>
+            <Color x:Key="primary_dark">#E64A19</Color>
+            <Color x:Key="primary_light">#FFCCBC</Color>
+            <Color x:Key="accent">#FF5252</Color>
+            <Color x:Key="primary_text">#212121</Color>
+            <Color x:Key="secondary_text">#757575</Color>
+            <Color x:Key="icons">#FFFFFF</Color>
+            <Color x:Key="divider">#BDBDBD</Color>
+
+           
+
+
+            <Style x:Key="BaseStyle" TargetType="Element">
+                <Setter Property="Shell.BackgroundColor" Value="{StaticResource primary}" />
+                <Setter Property="Shell.ForegroundColor" Value="White" />
+                <Setter Property="Shell.TitleColor" Value="White" />
+                <Setter Property="Shell.DisabledColor" Value="#B4FFFFFF" />
+                <Setter Property="Shell.UnselectedColor" Value="#95FFFFFF" />
+                <Setter Property="Shell.TabBarBackgroundColor" Value="{StaticResource primary}" />
+                <Setter Property="Shell.TabBarUnselectedColor" Value="#95FFFFFF"/>
+                <Setter Property="Shell.TabBarTitleColor" Value="Yellow"/>
                 
+
             </Style>
+            <Style TargetType="FlyoutItem">
+                <Setter Property="Shell.BackgroundColor" Value="{StaticResource primary}"/>
+                <Setter Property="Shell.BackgroundColor" Value="{StaticResource primary}"/>
+            </Style>
+            <Style TargetType="Tab" BasedOn="{StaticResource BaseStyle}" />
+            <MainPageViewModel:MainViewModel x:Key="MainViewModel"></MainPageViewModel:MainViewModel>
+           
             <model:InverseZeroVisibilityConverter x:Key="inverseZeroVisibilityConverter"/>
             <model:ZeroVisibilityConverter x:Key="zeroVisibilityConverter"/>
             <model:CurrencyFormatConverter x:Key="currencyFormatConverter"/>
             <model:TotalItemsCountConverter x:Key="totalItemsCountConverter"/>
             <model:ShortDescription x:Key="ShortDescription"></model:ShortDescription>
             <model:WeightConverter x:Key="WeightConverter"></model:WeightConverter>
+            <model:IsSignedInConverter x:Key="IsSignedInConverter"></model:IsSignedInConverter>
+            <OnPlatform x:TypeArguments="x:String" 
+                x:Key="FontAwesomeBrands">
+                <On Platform="Android" 
+          Value="FontAwesome5BrandsRegular.otf#Regular" />
+                <On Platform="iOS" 
+          Value="FontAwesome5BrandsRegular-Regular" />
+                <On Platform="UWP" 
+          Value="/Assets/FontAwesome5BrandsRegular.otf#Font Awesome 5 Brands" />
+            </OnPlatform>
+
+            <OnPlatform x:TypeArguments="x:String" 
+                x:Key="FontAwesome5Pro">
+                <On Platform="Android" 
+          Value="FontAwesome5ProRegular.otf#Regular" />
+                <On Platform="iOS" 
+          Value="FontAwesome5ProRegular.otf-Regular" />
+                <On Platform="UWP" 
+          Value="/Assets/FontAwesome5ProRegular.otf#Font Awesome 5 Free" />
+            </OnPlatform>  
+             <OnPlatform x:TypeArguments="x:String" 
+                x:Key="FontAwesome5ProLight">
+                <On Platform="Android" 
+          Value="FontAwesome5ProLight.otf#Light" />
+                <On Platform="iOS" 
+          Value="FontAwesome5ProLight.otf-Light" />
+                <On Platform="UWP" 
+          Value="/Assets/FontAwesome5ProLight.otf#Font Awesome 5 Free" />
+            </OnPlatform>
+            <FontImageSource x:Key="SignInImageSource" Color="{StaticResource primary_text}" Size="24" FontFamily="{StaticResource FontAwesome5ProLight}" Glyph="&#xf2f5;"></FontImageSource>
+            <FontImageSource x:Key="SignOutImageSource" Color="{StaticResource primary_text}" Size="24" FontFamily="{StaticResource FontAwesome5ProLight}" Glyph="&#xf2f6;"></FontImageSource>
         </ResourceDictionary>
        
     </Application.Resources>

@@ -5,7 +5,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:ffimageloading="clr-namespace:FFImageLoading.Forms;assembly=FFImageLoading.Forms"
              mc:Ignorable="d"
-             x:Class="Martivi.Pages.CategoryPage" x:Name="categoryPage" BindingContext="{StaticResource MainViewModel}">
+             x:Class="Martivi.Pages.CategoryPage" x:Name="categoryPage" BindingContext="{StaticResource MainViewModel}" Title="კატეგორიები" >
     <ContentPage.Content>
         <Grid x:Name="ContentGrid" >
             
