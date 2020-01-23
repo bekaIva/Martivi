@@ -23,13 +23,24 @@ namespace Martivi.Pages
 
         private void SignInOutClicked(object sender, EventArgs e)
         {
-            if (!mv.IsSignedIn)
-            {                
-                Shell.Current.FlyoutIsPresented = false;
-                var page = new SignInPage();                
-               Shell.Current.Navigation.PushAsync(page);
+            try
+            {
+                if (!mv.IsSignedIn)
+                {
+                    Shell.Current.FlyoutIsPresented = false;
+                    var page = new SignInPage();
+                    Shell.Current.Navigation.PushAsync(page);
+                }
+                else
+                {
+                    mv.SingOut();
+                }
             }
-            else { }
+            catch(Exception ee)
+            {
+                DisplayAlert("შეცდომა", ee.Message, "Ok");
+            }
+            
         }
 
         

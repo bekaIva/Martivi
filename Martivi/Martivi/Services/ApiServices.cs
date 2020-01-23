@@ -34,13 +34,7 @@ namespace Martivi.Services
             List<Category> menu = JsonConvert.DeserializeObject<List<Category>>(res);
             return menu;
         }
-        public async Task<bool> Chekout(Order reservation)
-        {
-            var json = JsonConvert.SerializeObject(reservation);
-            var content = new StringContent(json, Encoding.UTF8, "application/json");
-            var response = await client.PostAsync(ServerBaseAddress+"/api/Reservations", content);
-            return response.IsSuccessStatusCode;
-        }
+      
         public async Task<UserBase> Register(RegisterModelBase regModel)
         {
             var json = JsonConvert.SerializeObject(regModel);
@@ -54,9 +48,9 @@ namespace Martivi.Services
             }
             if(response.StatusCode== System.Net.HttpStatusCode.BadRequest)
             {
-                throw new Exception(resStr);
+                throw new RegistrationException(resStr);
             }
-            throw new Exception("Registration Failed! \nError Code: " + response.StatusCode + "\n" + resStr);
+            throw new RegistrationException("რეგისტრაცია არ შესრულდა! \nშეცდომის კოდი: " + response.StatusCode + "\n" + resStr);
 
         }
         public async Task<UserBase> GetUser(int userId,string token)
@@ -92,7 +86,7 @@ namespace Martivi.Services
             {
                 throw new Exception(resStr);
             }
-            throw new Exception("Registration Failed! \nError Code: " + response.StatusCode + "\n" + resStr);
+            throw new AuthenticateException("ავტორიზაცია არ შესრულდა! \nშეცდომის კოდი: " + response.StatusCode + "\n" + resStr);
         }
         public async Task SendMessage(ChatMessage message,string token)
         {
@@ -106,7 +100,60 @@ namespace Martivi.Services
                 throw new Exception(resStr);
             }
             if (response.IsSuccessStatusCode) return;
-            throw new Exception("Registration Failed! \nError Code: " + response.StatusCode + "\n" + resStr);
+            throw new Exception("Message send Failed! \nError Code: " + response.StatusCode + "\n" + resStr);
+        }
+        public async Task<bool> Chekout(Order order)
+        {
+            var json = JsonConvert.SerializeObject(order);
+            var content = new StringContent(json, Encoding.UTF8, "application/json");
+            var response = await sClient.GetResponsePost(ServerBaseAddress + "/api/Orders", content, RequestHeaders: new Header[] { new Header() { Name = "Authorization", Value = order.User.Token } });
+            string resStr = await response.Content.ReadAsStringAsync();
+            if (response.StatusCode == System.Net.HttpStatusCode.BadRequest)
+            {
+                throw new Exception(resStr);
+            }
+            if (response.IsSuccessStatusCode) return true;
+            throw new Exception("Message send Failed! \nError Code: " + response.StatusCode + "\n" + resStr);
+        }
+
+        public async Task<bool> DeleteOrder(Order order,string Token)
+        {
+            var json = JsonConvert.SerializeObject(order);
+            var content = new StringContent(json, Encoding.UTF8, "application/json");
+            var response = await sClient.GetResponsePost(ServerBaseAddress + "/api/Orders/DeleteOrder", content, RequestHeaders: new Header[] { new Header() { Name = "Authorization", Value = Token } });
+            string resStr = await response.Content.ReadAsStringAsync();
+            if (response.IsSuccessStatusCode)
+            {
+
+                return true;
+            }
+
+            if (response.StatusCode == System.Net.HttpStatusCode.BadRequest)
+            {
+                throw new Exception(response.StatusCode.ToString() + ": " + resStr);
+            }
+
+            throw new Exception(response.StatusCode.ToString() + ": " + resStr);
+        }
+
+        public async Task<List<Order>> LoadOrders(int UserId,string Token)
+        {
+            var json = JsonConvert.SerializeObject(new User() {UserId=UserId });
+            var content = new StringContent(json, Encoding.UTF8, "application/json");
+            var response = await sClient.GetResponsePost(ServerBaseAddress + "/api/Orders/GetOrders", content, RequestHeaders: new Header[] { new Header() { Name = "Authorization", Value = Token } });
+            string resStr = await response.Content.ReadAsStringAsync();
+            if (response.IsSuccessStatusCode)
+            {
+                var orders = JsonConvert.DeserializeObject<List<Order>>(resStr);
+                return orders;
+            }
+
+            if (response.StatusCode == System.Net.HttpStatusCode.BadRequest)
+            {
+                throw new Exception(response.StatusCode.ToString()+": "+ resStr);
+            }
+
+            throw new Exception(response.StatusCode.ToString() + ": " + resStr);
         }
     }
 }

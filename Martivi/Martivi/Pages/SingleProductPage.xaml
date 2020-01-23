@@ -37,7 +37,7 @@
                                VerticalOptions="Start" HorizontalOptions="End" CornerRadius="8"
                                HeightRequest="14" WidthRequest="20" OutlineColor="Transparent"
                                IsVisible="{Binding TotalOrderedItems, Mode=OneWay, Converter={StaticResource inverseZeroVisibilityConverter}}"
-                               BackgroundColor="{OnPlatform Default=#1C73F2, Android=#f50057, UWP=#0078D7}">
+                               BackgroundColor="{StaticResource primary}">
                             <Label InputTransparent="True" Margin="0" TextColor="White" Text="{Binding TotalOrderedItems}" FontSize="11"
                                    VerticalOptions="Center" HorizontalOptions="Center"/>
                         </Frame>
@@ -81,7 +81,7 @@
                         <Label Text="{Binding Price, Converter={StaticResource currencyFormatConverter}}" VerticalOptions="Start" FontAttributes="Bold" 
                                                HorizontalOptions="Start" FontSize="16"
                                                Margin='{OnPlatform Default="0,12,0,0", Android="0,16,0,0"}'
-                                                TextColor="{OnPlatform Default=#1C73F2, Android=#f50057, UWP=#0078D7}" />
+                                                TextColor="{StaticResource primary}" />
                         <numeric:SfNumericUpDown Grid.Column="1"  x:Name="numericUpDown" MaximumDecimalDigits="0"
                                                                IsEditable="False" Minimum="0" Maximum="9" HorizontalOptions="End" VerticalOptions="Center"
                                                                 AllowNull="false" FormatString="n" Watermark="Units" TextAlignment="Center"
@@ -89,15 +89,15 @@
                                                                Value="{Binding Quantity, Mode=TwoWay}"
                                                                IsVisible="{Binding Quantity, Converter={StaticResource inverseZeroVisibilityConverter}}"
                                                                  TextColor="{OnPlatform Default=#1C73F2, Android=#FFFFFF, UWP=#0078D7}"
-                                                                 BackgroundColor="{OnPlatform Default=#FFFFFF, Android=#f50057, UWP=#C9C9C9}"
+                                                                 BackgroundColor="{StaticResource primary}"
                                                                  WidthRequest="{OnPlatform Default=150}" />
                         <Button Grid.Column="1" x:Name="addButton" FontSize="16" Text="ADD" BorderWidth="1"  WidthRequest="80"
                                                 VerticalOptions="CenterAndExpand" HorizontalOptions="End" 
                                                 Command="{Binding Path=BindingContext.AddCommand, Source={x:Reference Name=page}}"
                                                 CommandParameter="{Binding .}"
                                                 IsVisible="{Binding Quantity, Converter={StaticResource zeroVisibilityConverter}}"
-                                                BackgroundColor="{OnPlatform Default=#FFFFFF, Android=#f50057, UWP=#C9C9C9}"
-                                                BorderColor="{OnPlatform Default=#1C73F2, Android=#f50057, UWP=#C9C9C9}"
+                                                BackgroundColor="{StaticResource primary}"
+                                                BorderColor="{StaticResource primary}"
                                                 TextColor="{OnPlatform Default=#1C73F2, Android=#FFFFFF, UWP=#000000}" />
                     </Grid>
                 </Grid>

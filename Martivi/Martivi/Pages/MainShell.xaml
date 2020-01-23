@@ -17,12 +17,12 @@
         </Grid>
     </Shell.FlyoutHeader>
     
-    <FlyoutItem Title="Home">
+    <FlyoutItem Title="Home" Route="home">
         <FlyoutItem.Icon>
-            <FontImageSource Color="{StaticResource primary_text}" Size="24" FontFamily="{StaticResource FontAwesome5ProLight}"  Glyph="&#xf80c;"></FontImageSource>
+            <FontImageSource Color="{StaticResource primary_text}" Size="24" FontFamily="{StaticResource FontAwesome5ProRegular}"  Glyph="&#xf80c;"></FontImageSource>
         </FlyoutItem.Icon>
-        <Tab Title="კატეგორიები" Icon="menu.png">
-            <ShellContent ContentTemplate="{DataTemplate local:CategoryPage}"/>
+        <Tab Title="კატეგორიები" Icon="menu.png" Route="cb">
+            <ShellContent Route="category" ContentTemplate="{DataTemplate local:CategoryPage}"/>
         </Tab>
         <Tab Title="კალათა" Icon="reservation.png">
             <ShellContent ContentTemplate="{DataTemplate local:OrderPage}" />
@@ -33,6 +33,24 @@
 
         </Tab>
     </FlyoutItem>
+    <FlyoutItem Title="პროფილი" Route="profile" IsEnabled="{Binding IsSignedIn}">
+        <FlyoutItem.Icon>
+            <FontImageSource Color="{StaticResource primary_text}" Size="24" FontFamily="{StaticResource FontAwesome5ProRegular}"  Glyph="&#xf007;"></FontImageSource>
+        </FlyoutItem.Icon>
+        <Tab Title="ჩემი შეკვეთები" Route="orderstab">
+            <Tab.Icon>
+                <FontImageSource Color="{StaticResource primary_text}" Size="24" FontFamily="{StaticResource FontAwesome5ProSolid}"  Glyph="&#xf218;"></FontImageSource>
+            </Tab.Icon>
+            <ShellContent Route="orderspage"  ContentTemplate="{DataTemplate local:MyOrdersPage}"></ShellContent>
+        </Tab>
+        <Tab Route="profiletab" Title="პროფილი">
+            <Tab.Icon>
+                <FontImageSource Color="{StaticResource primary_text}" Size="24" FontFamily="{StaticResource FontAwesome5ProRegular}"  Glyph="&#xf007;"></FontImageSource>
+            </Tab.Icon>
+            <ShellContent Route="profilepage"  ContentTemplate="{DataTemplate local:ProfilePage}"></ShellContent>
+        </Tab>
+        
+    </FlyoutItem>
    
     <MenuItem  Clicked="SignInOutClicked" IconImageSource="{Binding IsSignedIn,Converter={StaticResource IsSignedInConverter},ConverterParameter=Icon}">
         <Shell.MenuItemTemplate>
@@ -42,8 +60,8 @@
                         <ColumnDefinition Width="1*"/>
                         <ColumnDefinition Width="4*"/>
                     </Grid.ColumnDefinitions>
-                    <Image Source="{Binding Icon}"></Image>
-                    <Label Grid.Column="1" FontAttributes="Italic" TextColor="{StaticResource primary_text}" FontSize="24" Text="{Binding BindingContext.IsSignedIn,Converter={StaticResource IsSignedInConverter},ConverterParameter=Label}"></Label>
+                    <Image Source="{Binding Icon}" Margin="2"></Image>
+                    <Label Grid.Column="1" FontAttributes="Italic" TextColor="{StaticResource primary_text}" FontSize="18" Text="{Binding BindingContext.IsSignedIn,Converter={StaticResource IsSignedInConverter},ConverterParameter=Label}"></Label>
                 </Grid>
             </DataTemplate>
         </Shell.MenuItemTemplate>

@@ -6,9 +6,10 @@
              xmlns:ffimageloadingsvg="clr-namespace:FFImageLoading.Svg.Forms;assembly=FFImageLoading.Svg.Forms"
              xmlns:fftransf="clr-namespace:FFImageLoading.Transformations;assembly=FFImageLoading.Transformations"
              mc:Ignorable="d"
-             x:Class="Martivi.Pages.SignUpPage">
+             x:Class="Martivi.Pages.SignUpPage" BindingContext="{StaticResource MainViewModel}" x:Name="singUpPage">
     <ContentPage.Content>
-        <Grid BackgroundColor="{StaticResource primary_light}">
+        <Grid>
+            <Grid BackgroundColor="{StaticResource primary_light}">
             <Grid.RowDefinitions>
                 <RowDefinition Height="1*"/>
                 <RowDefinition Height="4*"/>
@@ -24,26 +25,28 @@
                     </ffimageloadingsvg:SvgCachedImage>
                 </Frame>
             </Grid>
-            <Grid Grid.Row="1" Margin="4">
+            <Grid Grid.Row="1" Margin="4" BindingContext="{x:Reference singUpPage}">
 
                 <StackLayout Orientation="Vertical">
-                    <Entry Placeholder="ელ-ფოსტა"></Entry>
+                    <Entry Placeholder="ელ-ფოსტა" Text="{Binding Email,Mode=TwoWay}"></Entry>
                     <BoxView HeightRequest="2"></BoxView>
-                    <Entry Placeholder="პაროლი"></Entry>
+                    <Entry Placeholder="პაროლი" Text="{Binding Password, Mode=TwoWay}"></Entry>
                     <BoxView HeightRequest="2"></BoxView>
-                    <Entry Placeholder="სახელი"></Entry>
+                    <Entry Placeholder="სახელი" Text="{Binding Name,Mode=TwoWay}"></Entry>
                     <BoxView HeightRequest="2"></BoxView>
-                    <Entry Placeholder="გვარი"></Entry>
+                    <Entry Placeholder="გვარი" Text="{Binding LastName,Mode=TwoWay}"></Entry>
                     <BoxView HeightRequest="2"></BoxView>
-                    <Entry Placeholder="ტელეფონი"></Entry>
+                    <Entry Placeholder="ტელეფონი" Text="{Binding Phone, Mode=TwoWay}"></Entry>
                     <BoxView HeightRequest="2"></BoxView>
-                    <Entry Placeholder="მისამართი"></Entry>
+                    <Entry Placeholder="მისამართი" Text="{Binding Address, Mode=TwoWay}"></Entry>
                     <BoxView HeightRequest="2"></BoxView>
-                    <Button HorizontalOptions="Fill" HeightRequest="40" Text="რეგისტრაცია" BackgroundColor="{StaticResource primary}"></Button>
+                    <Button Clicked="RegistrationClicked" HorizontalOptions="Fill" HeightRequest="40" Text="რეგისტრაცია" BackgroundColor="{StaticResource primary}"></Button>
                 </StackLayout>
 
-            </Grid>
-           
+            </Grid>           
         </Grid>
+            <ActivityIndicator BindingContext="{x:Reference singUpPage}" HorizontalOptions="Center" VerticalOptions="Center" Color="#FF5722" IsRunning="{Binding IsBusy}"></ActivityIndicator>
+        </Grid>
+        
     </ContentPage.Content>
 </ContentPage>

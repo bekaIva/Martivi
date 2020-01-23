@@ -10,7 +10,8 @@
   
     <ContentPage.Content>
 
-        <Grid x:Name="OrdersLayout" RowSpacing="0">
+        <Grid>
+            <Grid x:Name="OrdersLayout" RowSpacing="0">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
@@ -35,11 +36,11 @@
                         </Grid.ColumnDefinitions>
                         <Label FontAttributes="Bold" Margin="0" Text="{Binding TotalOrderedItems, Converter={StaticResource totalItemsCountConverter}}"
                          VerticalOptions="Center" HorizontalOptions="End" FontSize="16"
-                         TextColor="{OnPlatform Android=#009688, iOS=#1C73F2, UWP=#0078D7}" />
+                         TextColor="{StaticResource primary}" />
                         <Label Grid.Column="1" FontAttributes="Bold"
                            Text="{Binding TotalPrice, StringFormat='{0:c}'}" 
                            VerticalOptions="Center" HorizontalOptions="End" Margin="16,0,8,0" FontSize="16"
-                         TextColor="{OnPlatform Android=#009688, iOS=#1C73F2, UWP=#0078D7}" />
+                         TextColor="{StaticResource primary}" />
                     </Grid>
                 </Grid>
             </Frame>
@@ -89,7 +90,7 @@
                                         </Grid.ColumnDefinitions>
                                         <Label Text="{Binding TotalPrice, Converter={StaticResource currencyFormatConverter}}" VerticalOptions="Start" FontAttributes="Bold"
                                          HorizontalOptions="Start" FontSize="16"
-                                         TextColor="{OnPlatform Default=#1C73F2, Android=#009688, UWP=#0078D7}"
+                                         TextColor="{StaticResource primary}"
                                          Margin='{OnPlatform Default="0,12,0,0", Android="0,16,0,0"}' />
                                         <numeric:SfNumericUpDown Grid.Column="1"  x:Name="numericUpDown" MaximumDecimalDigits="0" IsEditable="False"
                                                            Minimum="0" Maximum="9"
@@ -99,7 +100,7 @@
                                                               Value="{Binding Quantity, Mode=TwoWay}"
                                                            TextColor="{OnPlatform Default=#1C73F2, Android=#FFFFFF, UWP=#0078D7}"
                                                            WidthRequest="{OnPlatform Default=150}"
-                                                           BackgroundColor="{OnPlatform Default=#FFFFFF, Android=#009688, UWP=#C9C9C9}" />
+                                                           BackgroundColor="{StaticResource primary}" />
                                     </Grid>
                                 </Grid>
                             </Grid>
@@ -111,14 +112,19 @@
             <Label Grid.Row="2" LineBreakMode="WordWrap" FontAttributes="Bold"
              Text="Your cart is empty!" VerticalOptions="Center" HorizontalOptions="Center"
              IsVisible="{Binding TotalOrderedItems, Converter={StaticResource zeroVisibilityConverter}}" FontSize="16"
-             TextColor="{OnPlatform Default=#1C73F2, Android=#009688, UWP=#0078D7}" />
+             TextColor="{StaticResource primary}" />
 
-            <Button Grid.Row="3" TextColor="#FFFFFF" Text="CHECKOUT" 
+            <Button Grid.Row="3" TextColor="#FFFFFF" Text="გადახდა" 
                 HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand"
                 Command="{Binding CheckoutCommand}" CommandParameter="{Binding Source={x:Reference Name=orderPage}}" BorderRadius="0"
                 IsVisible="{Binding TotalOrderedItems, Converter={StaticResource inverseZeroVisibilityConverter}}"
                 FontSize="{OnPlatform Default=12, Android=16}"
-                BackgroundColor="{OnPlatform Default=#1C73F2, Android=#009688, UWP=#0078D7}" />
+                BackgroundColor="{StaticResource primary_dark}" />
         </Grid>
+
+            <ActivityIndicator  HorizontalOptions="Center" VerticalOptions="Center" Color="#FF5722" IsRunning="{Binding MakingOrder}"></ActivityIndicator>
+        
+        </Grid>
+        
     </ContentPage.Content>
 </ContentPage>

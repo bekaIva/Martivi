@@ -8,6 +8,7 @@ using Plugin.Settings.Abstractions;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
@@ -39,6 +40,9 @@ namespace Martivi.ViewModels
 
         private int totalOrderedItems = 0;
         private double totalPrice = 0;
+
+       
+
         public int TotalOrderedItems
         {
             get { return totalOrderedItems; }
@@ -70,6 +74,23 @@ namespace Martivi.ViewModels
             get { return _IsBusy; }
             set { _IsBusy = value; OnPropertyChanged(); }
         }
+        private bool _MakingOrder;
+
+        public bool MakingOrder
+        {
+            get { return _MakingOrder; }
+            set { _MakingOrder = value;OnPropertyChanged(); }
+        }
+
+        private bool _UpdatingOrdersHistory;
+
+        public bool UpdatingOrdersHistory
+        {
+            get { return _UpdatingOrdersHistory; }
+            set { _UpdatingOrdersHistory = value; OnPropertyChanged(); }
+        }
+
+
         private static ISettings AppSettings =>
     CrossSettings.Current;
 
@@ -122,7 +143,6 @@ namespace Martivi.ViewModels
         public Command<object> LoadMoreItemsCommand { get; set; }
 
         public Command<object> OrderListCommand { get; set; }
-
         public Command<object> RemoveOrderCommand { get; set; }
 
 
@@ -135,6 +155,17 @@ namespace Martivi.ViewModels
             get { return _Categories; }
             set { _Categories = value; OnPropertyChanged(); }
         }
+
+
+
+        private ObservableCollection<Order> _MadeOrders;
+        public ObservableCollection<Order> MadeOrders
+        {
+            get { return _MadeOrders; }
+            set { _MadeOrders = value; OnPropertyChanged(); }
+        }
+
+
         public ObservableCollection<Product> Orders { get; set; } = new ObservableCollection<Product>();
         private Category _SelectedCategory;
 
@@ -148,6 +179,7 @@ namespace Martivi.ViewModels
         #region Constructors
         public MainViewModel()
         {
+            MadeOrders = new ObservableCollection<Order>();
             SelectedCategory = new Category();
             Services = new ApiServices();
             Categories = new ObservableCollection<Category>();
@@ -161,35 +193,104 @@ namespace Martivi.ViewModels
             
 
         }
-        public async Task Auth(AuthenticateModelBase auth)
+
+        #endregion
+        #region Methods
+        public async Task<User> Auth(AuthenticateModelBase auth)
         {
-           var authRes = await Services.Authenticate(auth);
-            Token = "Bearer "+ authRes.Token;
+            var authRes = await Services.Authenticate(auth);
+            Token = "Bearer " + authRes.Token;
             UserId = authRes.UserId;
             UserName = authRes.Username;
             FirstName = authRes.FirstName;
             LastName = authRes.LastName;
+           
+            await LoadUser();
+            return authRes;
+        }
+        internal async void SingOut()
+        {
+            Token =  null;
+            UserId = -1;
+            UserName = "Guest";
+            FirstName = null;
+            LastName = null;
             await LoadUser();
         }
         public async Task LoadUser()
         {
+           
             if (Token?.Length > 0 && UserId > 0)
             {
-               var user= await Services.GetUser(UserId, Token);
+                var user = await Services.GetUser(UserId, Token);
+                if (user == null)
+                {
+                    Token = null; UserId = -1;
+                }
             }
             else
             {
-                UserName = "Guest";
+
+            }
+            if (Token?.Length > 0 && UserId > 0)
+            {
+                IsSignedIn = true;
+                LoadOrders();
+            }
+            else IsSignedIn = false;
+        }
+        public async Task DeleteOrder(Order o)
+        {
+            try
+            {
+                if (UpdatingOrdersHistory) return;
+                UpdatingOrdersHistory = true;
+               await Services.DeleteOrder(o, Token);
+               
+            }
+            catch
+            {
+
+            }
+            finally
+            {
+                UpdatingOrdersHistory = false;
+            }
+            LoadOrders();
+        }
+        public async Task LoadOrders()
+        {
+            try
+            {
+                if (UpdatingOrdersHistory) return;
+                UpdatingOrdersHistory = true;
+              var orders =  await Services.LoadOrders(UserId, Token);
+                Device.BeginInvokeOnMainThread(() =>
+                {
+                    MadeOrders.Clear();
+                    foreach(var order in orders)
+                    {
+                        MadeOrders.Add(order);
+                    }
+                });
+            }
+            catch
+            {
+
+            }
+            finally
+            {
+                UpdatingOrdersHistory = false;
             }
         }
         async Task Initialize()
         {
-          
-           //await Services.SendMessage(new ChatMessage() {Message="ტესტ ტესტ ტეს",UserId=UserId,Side=MessageSide.Client },Token);
+
+            //await Services.SendMessage(new ChatMessage() {Message="ტესტ ტესტ ტეს",UserId=UserId,Side=MessageSide.Client },Token);
             GetCategories();
+            LoadUser();
         }
-        #endregion
-        #region Methods
+       
         private void AddQuantity(object obj)
         {
             var p = obj as Product;
@@ -206,24 +307,46 @@ namespace Martivi.ViewModels
             var p = obj as Product;
             p.Quantity = 0;
         }
-       
         private async void CheckOut(object obj)
         {
-            var checkout = await Application.Current.MainPage.DisplayAlert("Checkout", "Do you want to checkout?", "Yes", "No");
-            if (checkout)
+            try
             {
-                while (Orders.Count > 0)
+                if (MakingOrder) return;
+                MakingOrder = true;
+                var checkout = await Application.Current.MainPage.DisplayAlert("Checkout", "Do you want to checkout?", "Yes", "No");
+                if (checkout)
                 {
-                    Orders[Orders.Count - 1].Quantity = 0;
+                    if (!IsSignedIn) throw new Exception("გთხოვთ გაიაროთ ავტორიზაცია!");
+                    Order o = new Order() {OrderTimeTicks= DateTime.Now.Ticks, User = new User() { UserId = UserId,Token=Token }, OrderedProducts = new List<Product>() };
+                    o.OrderedProducts.AddRange(Orders.ToArray());
+                   var res =  await Services.Chekout(o);
+                    if (res)
+                    {
+                        while (Orders.Count > 0)
+                        {
+                            Orders[Orders.Count - 1].Quantity = 0;
+                        }
+                        await Application.Current.MainPage.DisplayAlert("", "შეკვეთა წარმატებით შესრულდა!", "OK");
+                        LoadOrders();
+                        Device.BeginInvokeOnMainThread(() =>
+                        {
+                            Shell.Current.GoToAsync($"//profile/orderstab/orderspage");
+                        });
+                        return;
+                    }
+                    await Application.Current.MainPage.DisplayAlert("", "შეკვეთა არ შესრულდა!", "OK");
+
+
+
                 }
-
-                await Application.Current.MainPage.DisplayAlert("", "Your order has been placed.", "OK");
-
-                Device.BeginInvokeOnMainThread(() =>
-                {
-                    if (obj != null)
-                        (obj as ContentPage).Navigation.PopAsync();
-                });
+            }
+            catch
+            {
+                await Application.Current.MainPage.DisplayAlert("", "შეკვეთა არ შესრულდა!", "OK");
+            }
+            finally
+            {
+                MakingOrder = false;
             }
         }
 

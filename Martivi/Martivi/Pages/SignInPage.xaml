@@ -6,9 +6,10 @@
              mc:Ignorable="d"
              xmlns:ffimageloadingsvg="clr-namespace:FFImageLoading.Svg.Forms;assembly=FFImageLoading.Svg.Forms"
              xmlns:fftransf="clr-namespace:FFImageLoading.Transformations;assembly=FFImageLoading.Transformations"
-             x:Class="Martivi.Pages.SignInPage" Title="შესვლა">
+             x:Class="Martivi.Pages.SignInPage" Title="შესვლა" BindingContext="{StaticResource MainViewModel}" x:Name="signingPage">
     <ContentPage.Content>
-        <Grid BackgroundColor="{StaticResource primary_light}">
+        <Grid>
+            <Grid BackgroundColor="{StaticResource primary_light}">
             <Grid.RowDefinitions>
                 <RowDefinition Height="1*"/>
                 <RowDefinition Height="4*"/>
@@ -26,12 +27,12 @@
             </Grid>
             <Grid Grid.Row="1" Margin="4">
                
-                <StackLayout Orientation="Vertical">
-                    <Entry Placeholder="ელ-ფოსტა"></Entry>
+                <StackLayout Orientation="Vertical" BindingContext="{x:Reference signingPage}">
+                    <Entry Placeholder="ელ-ფოსტა" Text="{Binding Email,Mode=TwoWay}"></Entry>
                     <BoxView HeightRequest="2"></BoxView>
-                    <Entry Placeholder="პაროლი"></Entry>
+                    <Entry Placeholder="პაროლი" Text="{Binding Password,Mode=TwoWay}"></Entry>
                     <BoxView HeightRequest="2"></BoxView>
-                    <Button HorizontalOptions="Fill" HeightRequest="40" Text="შესვლა" BackgroundColor="{StaticResource primary}"></Button>
+                    <Button HorizontalOptions="Fill" Clicked="SigninTapped" HeightRequest="40" Text="შესვლა" BackgroundColor="{StaticResource primary}"></Button>
                 </StackLayout>
                 
             </Grid>
@@ -43,5 +44,8 @@
                 </Label.GestureRecognizers>
             </Label>
         </Grid>
+            <ActivityIndicator BindingContext="{x:Reference signingPage}" HorizontalOptions="Center" VerticalOptions="Center" Color="#FF5722" IsRunning="{Binding IsBusy}"></ActivityIndicator>
+        </Grid>
+        
     </ContentPage.Content>
 </ContentPage>

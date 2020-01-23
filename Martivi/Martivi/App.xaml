@@ -48,6 +48,8 @@
             <model:ShortDescription x:Key="ShortDescription"></model:ShortDescription>
             <model:WeightConverter x:Key="WeightConverter"></model:WeightConverter>
             <model:IsSignedInConverter x:Key="IsSignedInConverter"></model:IsSignedInConverter>
+            <model:OrderedProductsToTotalPriceCoverter x:Key="OrderedProductsToTotalPriceCoverter"/>
+            <model:OrderStatusConverter x:Key="OrderStatusConverter"/>
             <OnPlatform x:TypeArguments="x:String" 
                 x:Key="FontAwesomeBrands">
                 <On Platform="Android" 
@@ -59,7 +61,7 @@
             </OnPlatform>
 
             <OnPlatform x:TypeArguments="x:String" 
-                x:Key="FontAwesome5Pro">
+                x:Key="FontAwesome5ProRegular">
                 <On Platform="Android" 
           Value="FontAwesome5ProRegular.otf#Regular" />
                 <On Platform="iOS" 
@@ -67,7 +69,8 @@
                 <On Platform="UWP" 
           Value="/Assets/FontAwesome5ProRegular.otf#Font Awesome 5 Free" />
             </OnPlatform>  
-             <OnPlatform x:TypeArguments="x:String" 
+            
+            <OnPlatform x:TypeArguments="x:String" 
                 x:Key="FontAwesome5ProLight">
                 <On Platform="Android" 
           Value="FontAwesome5ProLight.otf#Light" />
@@ -76,8 +79,27 @@
                 <On Platform="UWP" 
           Value="/Assets/FontAwesome5ProLight.otf#Font Awesome 5 Free" />
             </OnPlatform>
-            <FontImageSource x:Key="SignInImageSource" Color="{StaticResource primary_text}" Size="24" FontFamily="{StaticResource FontAwesome5ProLight}" Glyph="&#xf2f5;"></FontImageSource>
-            <FontImageSource x:Key="SignOutImageSource" Color="{StaticResource primary_text}" Size="24" FontFamily="{StaticResource FontAwesome5ProLight}" Glyph="&#xf2f6;"></FontImageSource>
+            <OnPlatform x:TypeArguments="x:String" 
+                x:Key="FontAwesome5DuotoneSolid">
+                <On Platform="Android" 
+          Value="FontAwesome5DuotoneSolid.otf#Solid" />
+                <On Platform="iOS" 
+          Value="FontAwesome5DuotoneSolid.otf-Solid" />
+                <On Platform="UWP" 
+          Value="/Assets/FontAwesome5DuotoneSolid.otf#Font Awesome 5 Free" />
+            </OnPlatform>
+
+            <OnPlatform x:TypeArguments="x:String" 
+                x:Key="FontAwesome5ProSolid">
+                <On Platform="Android" 
+          Value="FontAwesome5ProSolid.otf#Solid" />
+                <On Platform="iOS" 
+          Value="FontAwesome5ProSolid.otf-Solid" />
+                <On Platform="UWP" 
+          Value="/Assets/FontAwesome5ProSolid.otf#Font Awesome 5 Free" />
+            </OnPlatform>
+            <FontImageSource x:Key="SignInImageSource" Color="{StaticResource primary_text}" Size="16" FontFamily="{StaticResource FontAwesome5ProRegular}" Glyph="&#xf2f5;"></FontImageSource>
+            <FontImageSource x:Key="SignOutImageSource" Color="{StaticResource primary_text}" Size="16" FontFamily="{StaticResource FontAwesome5ProRegular}" Glyph="&#xf2f6;"></FontImageSource>
         </ResourceDictionary>
        
     </Application.Resources>

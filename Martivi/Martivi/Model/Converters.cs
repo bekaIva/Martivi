@@ -17,6 +17,48 @@ using Xamarin.Forms.Internals;
 namespace Martivi.Model
 {
     [Preserve(AllMembers = true)]
+    public class OrderStatusConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+           if(value is OrderStatus os)
+            {
+                switch(os)
+                {
+                    case OrderStatus.Accepted: return "შესრულების მოლოდინში" ;
+                    case OrderStatus.Completed: return "შეკვეთა შესრულებულია";
+                        
+                }
+            }
+            return value;
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            throw new NotImplementedException();
+        }
+    }
+
+    public class OrderedProductsToTotalPriceCoverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            double totalPrice=0;
+            if(value is List<Product> products)
+            {
+                foreach(var p in products)
+                {
+                    totalPrice += p.Price * p.Quantity;
+                }
+            }
+            return totalPrice.ToString() + " ₾";
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            throw new NotImplementedException();
+        }
+    }
 
     public class IsSignedInConverter : IValueConverter
     {
