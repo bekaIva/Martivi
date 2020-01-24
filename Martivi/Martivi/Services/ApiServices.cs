@@ -30,7 +30,7 @@ namespace Martivi.Services
         }
         public async Task<List<Category>> GetCategories()
         {
-            var res = await client.GetStringAsync(ServerBaseAddress+"/api/Categories");
+            var res = await client.GetStringAsync(ServerBaseAddress+"api/Categories");
             List<Category> menu = JsonConvert.DeserializeObject<List<Category>>(res);
             return menu;
         }

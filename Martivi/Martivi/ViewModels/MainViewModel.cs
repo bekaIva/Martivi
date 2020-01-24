@@ -3,6 +3,7 @@ using Martivi.Pages;
 using Martivi.Services;
 using MartiviSharedLib;
 using MartiviSharedLib.Models.Users;
+using Microsoft.AspNetCore.SignalR.Client;
 using Plugin.Settings;
 using Plugin.Settings.Abstractions;
 using System;
@@ -175,10 +176,87 @@ namespace Martivi.ViewModels
             set { _SelectedCategory = value; }
         }
 
+        private ObservableCollection<MessageModel> _messages;
+        public ObservableCollection<MessageModel> Messages
+        {
+            get
+            {
+                return _messages;
+            }
+            set
+            {
+                _messages = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private string _name;
+        private string _message;
+        public string Name
+        {
+            get
+            {
+                return _name;
+            }
+            set
+            {
+                _name = value;
+                OnPropertyChanged();
+            }
+        }
+
+
+        public string Message
+        {
+            get
+            {
+                return _message;
+            }
+            set
+            {
+                _message = value;
+                OnPropertyChanged();
+            }
+        }
+
+
+
+        private bool _isConnected;
+        public bool IsConnected
+        {
+            get
+            {
+                return _isConnected;
+            }
+            set
+            {
+                _isConnected = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private HubConnection hubConnection;
+
+        public Command SendMessageCommand { get; }
+        public Command ConnectCommand { get; }
+        public Command DisconnectCommand { get; }
         #endregion
         #region Constructors
         public MainViewModel()
         {
+            //AppSettings.AddOrUpdateValue("ServerBaseAddress", "https://martiviapi.azurewebsites.net/");
+            AppSettings.AddOrUpdateValue("ServerBaseAddress", "http://192.168.100.11:44379/");
+            Messages = new ObservableCollection<MessageModel>();
+            SendMessageCommand = new Command(async () => { await SendMessage(Name, Message); });
+            ConnectCommand = new Command(async () => await Connect());
+            DisconnectCommand = new Command(async () => await Disconnect());
+
+            IsConnected = false;
+
+         
+
+
+
             MadeOrders = new ObservableCollection<Order>();
             SelectedCategory = new Category();
             Services = new ApiServices();
@@ -188,7 +266,7 @@ namespace Martivi.ViewModels
             CheckoutCommand = new Command(CheckOut);
             RemoveOrderCommand = new Command<object>(RemoveOrder);
             LoadMoreItemsCommand = new Command<object>(LoadMoreItems, CanLoadMoreItems);
-            AppSettings.AddOrUpdateValue("ServerBaseAddress", "https://martiviapi.azurewebsites.net/");
+           
             Initialize();
             
 
@@ -196,10 +274,30 @@ namespace Martivi.ViewModels
 
         #endregion
         #region Methods
+        async Task Connect()
+        {
+            await hubConnection.StartAsync();
+            await hubConnection.InvokeAsync("JoinChat", UserName);
+
+            IsConnected = true;
+        }
+
+        async Task SendMessage(string user, string message)
+        {
+            await hubConnection.InvokeAsync("SendMessage", user, message);
+        }
+
+        async Task Disconnect()
+        {
+            await hubConnection.InvokeAsync("LeaveChat", Name);
+            await hubConnection.StopAsync();
+
+            IsConnected = false;
+        }
         public async Task<User> Auth(AuthenticateModelBase auth)
         {
             var authRes = await Services.Authenticate(auth);
-            Token = "Bearer " + authRes.Token;
+            Token = authRes.Token;
             UserId = authRes.UserId;
             UserName = authRes.Username;
             FirstName = authRes.FirstName;
@@ -222,7 +320,7 @@ namespace Martivi.ViewModels
            
             if (Token?.Length > 0 && UserId > 0)
             {
-                var user = await Services.GetUser(UserId, Token);
+                var user = await Services.GetUser(UserId, "Bearer "+ Token);
                 if (user == null)
                 {
                     Token = null; UserId = -1;
@@ -236,8 +334,31 @@ namespace Martivi.ViewModels
             {
                 IsSignedIn = true;
                 LoadOrders();
+                StartHubConnection();
             }
             else IsSignedIn = false;
+        }
+        async Task StartHubConnection()
+        {
+            hubConnection = new HubConnectionBuilder()
+      .WithUrl(AppSettings.GetValueOrDefault("ServerBaseAddress", "") + "chatHub", options => { options.AccessTokenProvider = () => Task.FromResult(Token); }).Build();
+
+
+            hubConnection.On<string>("JoinChat", (user) =>
+            {
+                Messages.Add(new MessageModel() { User = Name, Message = $"{user} has joined the chat", IsSystemMessage = true });
+            });
+
+            hubConnection.On<string>("LeaveChat", (user) =>
+            {
+                Messages.Add(new MessageModel() { User = Name, Message = $"{user} has left the chat", IsSystemMessage = true });
+            });
+
+            hubConnection.On<string, string>("ReceiveMessage", (user, message) =>
+            {
+                Messages.Add(new MessageModel() { User = user, Message = message, IsSystemMessage = false, IsOwnMessage = Name == user });
+            });
+            Connect();
         }
         public async Task DeleteOrder(Order o)
         {
@@ -245,7 +366,7 @@ namespace Martivi.ViewModels
             {
                 if (UpdatingOrdersHistory) return;
                 UpdatingOrdersHistory = true;
-               await Services.DeleteOrder(o, Token);
+               await Services.DeleteOrder(o, "Bearer "+ Token);
                
             }
             catch
@@ -264,7 +385,7 @@ namespace Martivi.ViewModels
             {
                 if (UpdatingOrdersHistory) return;
                 UpdatingOrdersHistory = true;
-              var orders =  await Services.LoadOrders(UserId, Token);
+              var orders =  await Services.LoadOrders(UserId, "Bearer " + Token);
                 Device.BeginInvokeOnMainThread(() =>
                 {
                     MadeOrders.Clear();
