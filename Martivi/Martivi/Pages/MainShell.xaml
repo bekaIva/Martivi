@@ -51,7 +51,14 @@
         </Tab>
         
     </FlyoutItem>
-   
+    <FlyoutItem Title="კონტაქტი" Route="contacttoadminflyout">
+        <Tab Title="კავშირი ადმინთან" Route="contacttoadmintab">
+            <ShellContent Route="contacttoadminpage" ContentTemplate="{DataTemplate local:ContactToAdminPage}"></ShellContent>
+        </Tab>
+        <Tab Title="საერთო" Route="globaltab">
+            <ShellContent Route="globalpage" ContentTemplate="{DataTemplate local:GlobalChatPage}"></ShellContent>
+        </Tab>
+    </FlyoutItem>
     <MenuItem  Clicked="SignInOutClicked" IconImageSource="{Binding IsSignedIn,Converter={StaticResource IsSignedInConverter},ConverterParameter=Icon}">
         <Shell.MenuItemTemplate>
             <DataTemplate>

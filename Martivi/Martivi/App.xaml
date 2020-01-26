@@ -98,6 +98,14 @@
                 <On Platform="UWP" 
           Value="/Assets/FontAwesome5ProSolid.otf#Font Awesome 5 Free" />
             </OnPlatform>
+
+
+            <OnPlatform x:TypeArguments="x:String" x:Key="ListViewFontIconFamily">
+                <On Platform="Android" Value="UIFontIcons.ttf#UIFontIcons"/>
+                <On Platform="UWP" Value="Assets/UIFontIcons.ttf#UIFontIcons" />
+                <On Platform="WPF" Value="Assets/Fonts/UIFontIcons.ttf#UIFontIcons" />
+                <On Platform="iOS" Value="UIFontIcons" />
+            </OnPlatform>
             <FontImageSource x:Key="SignInImageSource" Color="{StaticResource primary_text}" Size="16" FontFamily="{StaticResource FontAwesome5ProRegular}" Glyph="&#xf2f5;"></FontImageSource>
             <FontImageSource x:Key="SignOutImageSource" Color="{StaticResource primary_text}" Size="16" FontFamily="{StaticResource FontAwesome5ProRegular}" Glyph="&#xf2f6;"></FontImageSource>
         </ResourceDictionary>

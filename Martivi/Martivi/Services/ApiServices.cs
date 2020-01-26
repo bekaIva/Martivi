@@ -1,7 +1,6 @@
 ﻿using HttpControl;
 using Martivi.Model;
 using MartiviSharedLib;
-using MartiviSharedLib.Model;
 using MartiviSharedLib.Models.Users;
 using Newtonsoft.Json;
 using Plugin.Settings;
@@ -71,6 +70,24 @@ namespace Martivi.Services
             throw new Exception("Get user failed! \nError Code: " + response.StatusCode + "\n" + resStr);
 
         }
+        public async Task<List<ChatMessage>> GetChatMessages(string token)
+        {
+            var response = await sClient.GetResponse(ServerBaseAddress + "api/Chat/GetChat", new Header[] { new Header() { Name = "Authorization", Value = token } });
+
+            string resStr = await response.Content.ReadAsStringAsync();
+            if (response.IsSuccessStatusCode)
+            {
+
+                var chatmessages = JsonConvert.DeserializeObject<List<ChatMessage>>(resStr);
+                return chatmessages;
+            }
+            if (response.StatusCode == System.Net.HttpStatusCode.BadRequest)
+            {
+                throw new Exception(resStr);
+            }
+            throw new Exception("Get user failed! \nError Code: " + response.StatusCode + "\n" + resStr);
+
+        }
         public async Task<User> Authenticate(AuthenticateModelBase authModel)
         {
             var json = JsonConvert.SerializeObject(authModel);
@@ -106,7 +123,7 @@ namespace Martivi.Services
         {
             var json = JsonConvert.SerializeObject(order);
             var content = new StringContent(json, Encoding.UTF8, "application/json");
-            var response = await sClient.GetResponsePost(ServerBaseAddress + "/api/Orders", content, RequestHeaders: new Header[] { new Header() { Name = "Authorization", Value = order.User.Token } });
+            var response = await sClient.GetResponsePost(ServerBaseAddress + "Api/Orders", content, RequestHeaders: new Header[] { new Header() { Name = "Authorization", Value = order.User.Token } });
             string resStr = await response.Content.ReadAsStringAsync();
             if (response.StatusCode == System.Net.HttpStatusCode.BadRequest)
             {
@@ -120,7 +137,7 @@ namespace Martivi.Services
         {
             var json = JsonConvert.SerializeObject(order);
             var content = new StringContent(json, Encoding.UTF8, "application/json");
-            var response = await sClient.GetResponsePost(ServerBaseAddress + "/api/Orders/DeleteOrder", content, RequestHeaders: new Header[] { new Header() { Name = "Authorization", Value = Token } });
+            var response = await sClient.GetResponsePost(ServerBaseAddress + "api/Orders/DeleteOrder", content, RequestHeaders: new Header[] { new Header() { Name = "Authorization", Value = Token } });
             string resStr = await response.Content.ReadAsStringAsync();
             if (response.IsSuccessStatusCode)
             {
@@ -140,7 +157,7 @@ namespace Martivi.Services
         {
             var json = JsonConvert.SerializeObject(new User() {UserId=UserId });
             var content = new StringContent(json, Encoding.UTF8, "application/json");
-            var response = await sClient.GetResponsePost(ServerBaseAddress + "/api/Orders/GetOrders", content, RequestHeaders: new Header[] { new Header() { Name = "Authorization", Value = Token } });
+            var response = await sClient.GetResponsePost(ServerBaseAddress + "api/Orders/GetOrders", content, RequestHeaders: new Header[] { new Header() { Name = "Authorization", Value = Token } });
             string resStr = await response.Content.ReadAsStringAsync();
             if (response.IsSuccessStatusCode)
             {

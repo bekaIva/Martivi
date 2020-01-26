@@ -72,6 +72,9 @@
     <BundleResource Include="Resources\FontAwesome5ProLight.otf" />
     <BundleResource Include="Resources\FontAwesome5DuotoneSolid.otf" />
     <BundleResource Include="Resources\FontAwesome5ProSolid.otf" />
+    <BundleResource Include="Resources\SB Icons.ttf" />
+    <BundleResource Include="Resources\Sync FontIcons.ttf" />
+    <BundleResource Include="Resources\UIFontIcons.ttf" />
   </ItemGroup>
   <ItemGroup>
     <InterfaceDefinition Include="Resources\LaunchScreen.storyboard" />

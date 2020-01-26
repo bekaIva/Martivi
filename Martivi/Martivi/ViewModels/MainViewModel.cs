@@ -6,6 +6,7 @@ using MartiviSharedLib.Models.Users;
 using Microsoft.AspNetCore.SignalR.Client;
 using Plugin.Settings;
 using Plugin.Settings.Abstractions;
+using Syncfusion.ListView.XForms;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -19,7 +20,74 @@ namespace Martivi.ViewModels
 {
    public class MainViewModel:PropertyChangedBase
     {
+        #region Constructors
+        public MainViewModel()
+        {
+            //AppSettings.AddOrUpdateValue("ServerBaseAddress", "https://martiviapi.azurewebsites.net/");
+            AppSettings.AddOrUpdateValue("ServerBaseAddress", "http://192.168.100.11:44379/");
+            ConnectCommand = new Command(async () => await Connect());
+            DisconnectCommand = new Command(async () => await Disconnect());
+
+            IsConnected = false;
+
+            Instance = this;
+
+
+            ChatMessages = new ObservableCollection<ChatMessage>();
+            MadeOrders = new ObservableCollection<Order>();
+            SelectedCategory = new Category();
+            Services = new ApiServices();
+            Categories = new ObservableCollection<Category>();
+            AddCommand = new Command<object>(AddQuantity);
+            OrderListCommand = new Command<object>(NavigateOrdersPage);
+            CheckoutCommand = new Command(CheckOut);
+            RemoveOrderCommand = new Command<object>(RemoveOrder);
+            LoadMoreItemsCommand = new Command<object>(LoadMoreItems, CanLoadMoreItems);
+
+            Initialize();
+
+
+
+        }
+
+        #endregion
+
+
+
         #region Properties
+        private ObservableCollection<ChatMessage> _ChatMessages;
+        private string newText;
+        private string sendIcon;
+
+        public ObservableCollection<ChatMessage> ChatMessages
+        {
+            get { return _ChatMessages; }
+            set { this._ChatMessages = value; }
+        }
+
+        public string NewText
+        {
+            get { return newText; }
+            set
+            {
+                newText = value;
+                OnPropertyChanged("NewText");
+            }
+        }
+
+        public string SendIcon
+        {
+            get
+            { return sendIcon; }
+            set
+            { sendIcon = value; }
+        }
+
+        public Command<object> SendCommandAdmin { get; set; }
+
+        public Command<object> LoadCommand { get; set; }
+
+
 
         private string _Test;
 
@@ -29,6 +97,7 @@ namespace Martivi.ViewModels
             set { _Test = value; OnPropertyChanged(); }
         }
 
+        public MainViewModel Instance { get; set; }
 
         private bool _IsSignedIn;
 
@@ -91,6 +160,14 @@ namespace Martivi.ViewModels
             set { _UpdatingOrdersHistory = value; OnPropertyChanged(); }
         }
 
+        private bool _ChatMessagesLoading;
+
+        public bool ChatMessagesLoading
+        {
+            get { return _ChatMessagesLoading; }
+            set { _ChatMessagesLoading = value; OnPropertyChanged(); }
+        }
+
 
         private static ISettings AppSettings =>
     CrossSettings.Current;
@@ -105,7 +182,7 @@ namespace Martivi.ViewModels
                 OnPropertyChanged();
             }
         }
-        public static int UserId
+        public int UserId
         {
             get => AppSettings.GetValueOrDefault(nameof(UserId), -1);
             set => AppSettings.AddOrUpdateValue(nameof(UserId), value);
@@ -176,19 +253,7 @@ namespace Martivi.ViewModels
             set { _SelectedCategory = value; }
         }
 
-        private ObservableCollection<MessageModel> _messages;
-        public ObservableCollection<MessageModel> Messages
-        {
-            get
-            {
-                return _messages;
-            }
-            set
-            {
-                _messages = value;
-                OnPropertyChanged();
-            }
-        }
+     
 
         private string _name;
         private string _message;
@@ -241,51 +306,72 @@ namespace Martivi.ViewModels
         public Command ConnectCommand { get; }
         public Command DisconnectCommand { get; }
         #endregion
-        #region Constructors
-        public MainViewModel()
+
+        #region Methods
+        private void InitializeSendCommand()
         {
-            //AppSettings.AddOrUpdateValue("ServerBaseAddress", "https://martiviapi.azurewebsites.net/");
-            AppSettings.AddOrUpdateValue("ServerBaseAddress", "http://192.168.100.11:44379/");
-            Messages = new ObservableCollection<MessageModel>();
-            SendMessageCommand = new Command(async () => { await SendMessage(Name, Message); });
-            ConnectCommand = new Command(async () => await Connect());
-            DisconnectCommand = new Command(async () => await Disconnect());
-
-            IsConnected = false;
-
-         
-
-
-
-            MadeOrders = new ObservableCollection<Order>();
-            SelectedCategory = new Category();
-            Services = new ApiServices();
-            Categories = new ObservableCollection<Category>();
-            AddCommand = new Command<object>(AddQuantity);
-            OrderListCommand = new Command<object>(NavigateOrdersPage);
-            CheckoutCommand = new Command(CheckOut);
-            RemoveOrderCommand = new Command<object>(RemoveOrder);
-            LoadMoreItemsCommand = new Command<object>(LoadMoreItems, CanLoadMoreItems);
-           
-            Initialize();
-            
-
+            SendIcon = "\ue745";
+            SendCommandAdmin = new Command<object>(OnSendCommandAdmin);
+            NewText = "";
         }
 
-        #endregion
-        #region Methods
+        private void OnSendCommandAdmin(object obj)
+        {
+            var Listview = obj as Syncfusion.ListView.XForms.SfListView;
+            if (!string.IsNullOrWhiteSpace(NewText))
+            {
+                // await hubConnection.InvokeAsync("SendMessage", user, message);
+
+                var chatMessage = new ChatMessage
+                {
+                    UserId = UserId,
+                    Username = UserName,
+                    Target=MessageTarget.Admin,
+                    Text = NewText,
+                    TemplateType = TemplateType.OutGoingText,
+                    DateTime = string.Format("{0:d/M/yyyy HH:mm:ss}", DateTime.Now)
+                };
+                ChatMessages.Add(chatMessage);
+                hubConnection.InvokeAsync("SendMessage", chatMessage);
+                (Listview.LayoutManager as LinearLayout).ScrollToRowIndex(ChatMessages.Count - 1, Syncfusion.ListView.XForms.ScrollToPosition.Start);
+            }
+            NewText = null;
+        }
+
+        private void OnLoaded(object obj)
+        {
+            var ListView = obj as Syncfusion.ListView.XForms.SfListView;
+            var scrollView = ListView.Parent as ScrollView;
+            ListView.HeightRequest = scrollView.Height;
+
+            if (Device.RuntimePlatform == Device.macOS)
+            {
+                Device.BeginInvokeOnMainThread(() =>
+                {
+                    ListView.ScrollTo(2500);
+                });
+            }
+            else
+            {
+                Device.BeginInvokeOnMainThread(() =>
+                {
+                    (ListView.LayoutManager as LinearLayout).ScrollToRowIndex(this.ChatMessages.Count - 1, Syncfusion.ListView.XForms.ScrollToPosition.Start);
+                });
+            }
+        }
+
+
+
         async Task Connect()
         {
             await hubConnection.StartAsync();
             await hubConnection.InvokeAsync("JoinChat", UserName);
 
-            IsConnected = true;
+            if (hubConnection.State == HubConnectionState.Connected) IsConnected = true;
+            else IsConnected = false;
         }
 
-        async Task SendMessage(string user, string message)
-        {
-            await hubConnection.InvokeAsync("SendMessage", user, message);
-        }
+       
 
         async Task Disconnect()
         {
@@ -334,32 +420,41 @@ namespace Martivi.ViewModels
             {
                 IsSignedIn = true;
                 LoadOrders();
-                StartHubConnection();
+                LoadMessages();
+                await StartHubConnection();
+                Connect();
             }
             else IsSignedIn = false;
         }
         async Task StartHubConnection()
         {
             hubConnection = new HubConnectionBuilder()
-      .WithUrl(AppSettings.GetValueOrDefault("ServerBaseAddress", "") + "chatHub", options => { options.AccessTokenProvider = () => Task.FromResult(Token); }).Build();
+      .WithUrl(AppSettings.GetValueOrDefault("ServerBaseAddress", "") + "chatHub", options => {options.AccessTokenProvider = () => Task.FromResult(Token); }).Build();
 
 
             hubConnection.On<string>("JoinChat", (user) =>
             {
-                Messages.Add(new MessageModel() { User = Name, Message = $"{user} has joined the chat", IsSystemMessage = true });
+                
             });
 
             hubConnection.On<string>("LeaveChat", (user) =>
             {
-                Messages.Add(new MessageModel() { User = Name, Message = $"{user} has left the chat", IsSystemMessage = true });
+               
             });
 
             hubConnection.On<string, string>("ReceiveMessage", (user, message) =>
             {
-                Messages.Add(new MessageModel() { User = user, Message = message, IsSystemMessage = false, IsOwnMessage = Name == user });
+               
             });
-            Connect();
+            hubConnection.Closed += HubConnection_Closed;
         }
+
+        private async Task HubConnection_Closed(Exception arg)
+        {
+            
+
+        }
+
         public async Task DeleteOrder(Order o)
         {
             try
@@ -404,9 +499,33 @@ namespace Martivi.ViewModels
                 UpdatingOrdersHistory = false;
             }
         }
+        public async Task LoadMessages()
+        {
+            try
+            {
+                ChatMessagesLoading = true;
+                var messages = await Services.GetChatMessages("Bearer " + Token);
+                Device.BeginInvokeOnMainThread(() =>
+                {
+                    ChatMessages.Clear();
+                    foreach (var message in messages)
+                    {
+                        ChatMessages.Add(message);
+                    }
+                });
+            }
+            catch
+            {
+
+            }
+            finally
+            {
+                UpdatingOrdersHistory = false;
+            }
+        }
         async Task Initialize()
         {
-
+            InitializeSendCommand();
             //await Services.SendMessage(new ChatMessage() {Message="ტესტ ტესტ ტეს",UserId=UserId,Side=MessageSide.Client },Token);
             GetCategories();
             LoadUser();
@@ -438,7 +557,7 @@ namespace Martivi.ViewModels
                 if (checkout)
                 {
                     if (!IsSignedIn) throw new Exception("გთხოვთ გაიაროთ ავტორიზაცია!");
-                    Order o = new Order() {OrderTimeTicks= DateTime.Now.Ticks, User = new User() { UserId = UserId,Token=Token }, OrderedProducts = new List<Product>() };
+                    Order o = new Order() {OrderTimeTicks= DateTime.Now.Ticks, User = new User() { UserId = UserId,Token= "Bearer "+Token }, OrderedProducts = new List<Product>() };
                     o.OrderedProducts.AddRange(Orders.ToArray());
                    var res =  await Services.Chekout(o);
                     if (res)
