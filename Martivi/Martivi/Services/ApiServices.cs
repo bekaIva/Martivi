@@ -72,6 +72,7 @@ namespace Martivi.Services
         }
         public async Task<List<ChatMessage>> GetChatMessages(string token)
         {
+            
             var response = await sClient.GetResponse(ServerBaseAddress + "api/Chat/GetChat", new Header[] { new Header() { Name = "Authorization", Value = token } });
 
             string resStr = await response.Content.ReadAsStringAsync();

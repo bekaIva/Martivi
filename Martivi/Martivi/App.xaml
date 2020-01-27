@@ -61,6 +61,16 @@
             </OnPlatform>
 
             <OnPlatform x:TypeArguments="x:String" 
+                x:Key="FontAwesome5ProSolid">
+                <On Platform="Android" 
+          Value="FontAwesome5ProSolid.otf#Solid" />
+                <On Platform="iOS" 
+          Value="FontAwesome5ProSolid.otf-Solid" />
+                <On Platform="UWP" 
+          Value="/Assets/FontAwesome5ProSolid.otf#Font Awesome 5 Free" />
+            </OnPlatform>
+
+            <OnPlatform x:TypeArguments="x:String" 
                 x:Key="FontAwesome5ProRegular">
                 <On Platform="Android" 
           Value="FontAwesome5ProRegular.otf#Regular" />
@@ -88,18 +98,7 @@
                 <On Platform="UWP" 
           Value="/Assets/FontAwesome5DuotoneSolid.otf#Font Awesome 5 Free" />
             </OnPlatform>
-
-            <OnPlatform x:TypeArguments="x:String" 
-                x:Key="FontAwesome5ProSolid">
-                <On Platform="Android" 
-          Value="FontAwesome5ProSolid.otf#Solid" />
-                <On Platform="iOS" 
-          Value="FontAwesome5ProSolid.otf-Solid" />
-                <On Platform="UWP" 
-          Value="/Assets/FontAwesome5ProSolid.otf#Font Awesome 5 Free" />
-            </OnPlatform>
-
-
+            
             <OnPlatform x:TypeArguments="x:String" x:Key="ListViewFontIconFamily">
                 <On Platform="Android" Value="UIFontIcons.ttf#UIFontIcons"/>
                 <On Platform="UWP" Value="Assets/UIFontIcons.ttf#UIFontIcons" />

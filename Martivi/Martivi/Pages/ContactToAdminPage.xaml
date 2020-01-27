@@ -7,7 +7,7 @@
              xmlns:model="clr-namespace:Martivi.Model"
              xmlns:ViewModels="clr-namespace:Martivi.ViewModels"
              xmlns:sync="clr-namespace:Syncfusion.ListView.XForms;assembly=Syncfusion.SfListView.XForms"
-             x:Class="Martivi.Pages.ContactToAdminPage" BindingContext="{StaticResource MainViewModel}" >
+             x:Class="Martivi.Pages.ContactToAdminPage" BindingContext="{StaticResource MainViewModel}" Title="კავშირი">
    
     <ContentPage.Resources>
         <model:MessageDataTemplateSelector x:Key="MessageDataTemplateSelector"></model:MessageDataTemplateSelector>

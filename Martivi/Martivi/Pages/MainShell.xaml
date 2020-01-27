@@ -53,9 +53,16 @@
     </FlyoutItem>
     <FlyoutItem Title="კონტაქტი" Route="contacttoadminflyout">
         <Tab Title="კავშირი ადმინთან" Route="contacttoadmintab">
+            <Tab.Icon>
+                <FontImageSource Color="{StaticResource primary_text}" Size="24" FontFamily="{StaticResource FontAwesome5DuotoneSolid}"  Glyph="&#xf059;"></FontImageSource>
+            </Tab.Icon>
             <ShellContent Route="contacttoadminpage" ContentTemplate="{DataTemplate local:ContactToAdminPage}"></ShellContent>
         </Tab>
         <Tab Title="საერთო" Route="globaltab">
+            <Tab.Icon>
+                <FontImageSource Color="{StaticResource primary_text}" Size="24" FontFamily="{StaticResource FontAwesome5ProSolid}"  Glyph="&#xf4b6;"></FontImageSource>
+            </Tab.Icon>
+            
             <ShellContent Route="globalpage" ContentTemplate="{DataTemplate local:GlobalChatPage}"></ShellContent>
         </Tab>
     </FlyoutItem>

@@ -32,7 +32,7 @@ namespace Martivi.ViewModels
 
             Instance = this;
 
-
+            GlobalChatMessages = new ObservableCollection<ChatMessage>();
             ChatMessages = new ObservableCollection<ChatMessage>();
             MadeOrders = new ObservableCollection<Order>();
             SelectedCategory = new Category();
@@ -57,6 +57,7 @@ namespace Martivi.ViewModels
         #region Properties
         private ObservableCollection<ChatMessage> _ChatMessages;
         private string newText;
+        private string newTextGlobal;
         private string sendIcon;
 
         public ObservableCollection<ChatMessage> ChatMessages
@@ -65,6 +66,15 @@ namespace Martivi.ViewModels
             set { this._ChatMessages = value; }
         }
 
+        private ObservableCollection<ChatMessage> _GlobalChatMessages;
+
+        public ObservableCollection<ChatMessage> GlobalChatMessages
+        {
+            get { return _GlobalChatMessages; }
+            set { _GlobalChatMessages = value; OnPropertyChanged(); }
+        }
+
+
         public string NewText
         {
             get { return newText; }
@@ -72,6 +82,15 @@ namespace Martivi.ViewModels
             {
                 newText = value;
                 OnPropertyChanged("NewText");
+            }
+        }
+        public string NewTextGlobal
+        {
+            get { return newTextGlobal; }
+            set
+            {
+                newTextGlobal = value;
+                OnPropertyChanged();
             }
         }
 
@@ -84,6 +103,7 @@ namespace Martivi.ViewModels
         }
 
         public Command<object> SendCommandAdmin { get; set; }
+        public Command<object> SendCommandGlobal { get; set; }
 
         public Command<object> LoadCommand { get; set; }
 
@@ -312,7 +332,9 @@ namespace Martivi.ViewModels
         {
             SendIcon = "\ue745";
             SendCommandAdmin = new Command<object>(OnSendCommandAdmin);
+            SendCommandGlobal = new Command<object>(OnSendGlobalCommand);
             NewText = "";
+            newTextGlobal = "";
         }
 
         private void OnSendCommandAdmin(object obj)
@@ -332,6 +354,28 @@ namespace Martivi.ViewModels
                     DateTime = string.Format("{0:d/M/yyyy HH:mm:ss}", DateTime.Now)
                 };
                 ChatMessages.Add(chatMessage);
+                hubConnection.InvokeAsync("SendMessage", chatMessage);
+                (Listview.LayoutManager as LinearLayout).ScrollToRowIndex(ChatMessages.Count - 1, Syncfusion.ListView.XForms.ScrollToPosition.Start);
+            }
+            NewText = null;
+        }
+        private void OnSendGlobalCommand(object obj)
+        {
+            var Listview = obj as Syncfusion.ListView.XForms.SfListView;
+            if (!string.IsNullOrWhiteSpace(NewText))
+            {
+                // await hubConnection.InvokeAsync("SendMessage", user, message);
+
+                var chatMessage = new ChatMessage
+                {
+                    UserId = UserId,
+                    Username = UserName,
+                    Target = MessageTarget.Global,
+                    Text = NewText,
+                    TemplateType = TemplateType.OutGoingText,
+                    DateTime = string.Format("{0:d/M/yyyy HH:mm:ss}", DateTime.Now)
+                };
+                GlobalChatMessages.Add(chatMessage);
                 hubConnection.InvokeAsync("SendMessage", chatMessage);
                 (Listview.LayoutManager as LinearLayout).ScrollToRowIndex(ChatMessages.Count - 1, Syncfusion.ListView.XForms.ScrollToPosition.Start);
             }
@@ -508,9 +552,18 @@ namespace Martivi.ViewModels
                 Device.BeginInvokeOnMainThread(() =>
                 {
                     ChatMessages.Clear();
+                    GlobalChatMessages.Clear();
                     foreach (var message in messages)
                     {
-                        ChatMessages.Add(message);
+                        if(message.Target== MessageTarget.Global)
+                        {
+                            GlobalChatMessages.Add(message);
+                        }
+                        else
+                        {
+                            ChatMessages.Add(message);
+                        }
+                        
                     }
                 });
             }
