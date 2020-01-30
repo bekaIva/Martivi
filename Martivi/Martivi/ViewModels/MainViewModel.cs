@@ -55,6 +55,8 @@ namespace Martivi.ViewModels
 
 
         #region Properties
+
+
         private ObservableCollection<ChatMessage> _ChatMessages;
         private string newText;
         private string newTextGlobal;
@@ -73,6 +75,15 @@ namespace Martivi.ViewModels
             get { return _GlobalChatMessages; }
             set { _GlobalChatMessages = value; OnPropertyChanged(); }
         }
+
+        private User _CurrentUser;
+
+        public User CurrentUser
+        {
+            get { return _CurrentUser; }
+            set { _CurrentUser = value; OnPropertyChanged(); }
+        }
+
 
 
         public string NewText
@@ -207,6 +218,8 @@ namespace Martivi.ViewModels
             get => AppSettings.GetValueOrDefault(nameof(UserId), -1);
             set => AppSettings.AddOrUpdateValue(nameof(UserId), value);
         }
+
+
 
         public string Token
         {
@@ -443,6 +456,7 @@ namespace Martivi.ViewModels
             UserName = "Guest";
             FirstName = null;
             LastName = null;
+            CurrentUser = null;
             await LoadUser();
         }
         public async Task LoadUser()
@@ -450,10 +464,11 @@ namespace Martivi.ViewModels
            
             if (Token?.Length > 0 && UserId > 0)
             {
-                var user = await Services.GetUser(UserId, "Bearer "+ Token);
-                if (user == null)
+                CurrentUser = await Services.GetUser(UserId, "Bearer "+ Token);
+                if (CurrentUser == null)
                 {
                     Token = null; UserId = -1;
+                    
                 }
             }
             else

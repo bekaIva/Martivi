@@ -14,7 +14,7 @@
                 <ColumnDefinition Width="Auto"></ColumnDefinition>
                 <ColumnDefinition Width="Auto"></ColumnDefinition>
             </Grid.ColumnDefinitions>
-            <Image Grid.Column="0" Margin="12,16,0,16" Source="{Binding ProfileImage}"
+            <Image Grid.Column="0" Margin="12,16,0,16" Source="{Binding OwnerProfileImage}"
                HeightRequest="48" WidthRequest="48" 
                HorizontalOptions="Center" VerticalOptions="Start"/>
             <Grid x:Name="gridLayout" Grid.Column="1" Margin="0,16,24,16" 

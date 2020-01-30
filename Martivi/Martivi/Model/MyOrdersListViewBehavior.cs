@@ -62,22 +62,21 @@ namespace Martivi.Model
             {
 
                 var mainStack = new StackLayout();
-                mainStack.BackgroundColor = Color.Teal;
 
                 var deletedButton = new Button()
                 {
                     Text = "Delete",
                     HeightRequest = 50,
-                    BackgroundColor = Color.Teal,
-                    TextColor = Color.White
+                    BackgroundColor = Color.White,
+                    TextColor = Color.Black
                 };
                 deletedButton.Clicked += DeletedButton_Clicked;
                 var sortButton = new Button()
                 {
                     Text = "Sort",
                     HeightRequest = 50,
-                    BackgroundColor = Color.Teal,
-                    TextColor = Color.White
+                    BackgroundColor = Color.White,
+                    TextColor = Color.Black
                 };
                 sortButton.Clicked += SortButton_Clicked;
                 mainStack.Children.Add(deletedButton);
@@ -122,15 +121,18 @@ namespace Martivi.Model
             popupLayout.IsVisible = false;
         }
 
-        private void DeletedButton_Clicked(object sender, EventArgs e)
+        private async void DeletedButton_Clicked(object sender, EventArgs e)
         {
 
             if (ListView == null)
                 return;
             if(item.Status== OrderStatus.Accepted)
             {
-                App.Current.MainPage.DisplayAlert("შეცდომა", "სანამ არ დასრულდება შეკვეთა წაშლა არ შეიძლება.", "OK");
-                goto cont;
+               if(await App.Current.MainPage.DisplayAlert("", "შეკვეთა შესრულების პროცესშია, დარწმუნებული ხართ, რომ გსურთ წაშლა?.", "კი","არა"))
+                {
+
+                }
+                else goto cont;
             }
             var source = ListView.ItemsSource as IList<Order>;
 

@@ -52,7 +52,7 @@ namespace Martivi.Services
             throw new RegistrationException("რეგისტრაცია არ შესრულდა! \nშეცდომის კოდი: " + response.StatusCode + "\n" + resStr);
 
         }
-        public async Task<UserBase> GetUser(int userId,string token)
+        public async Task<User> GetUser(int userId,string token)
         {
             var response = await sClient.GetResponse(ServerBaseAddress + "Users/" + userId, new Header[] { new Header() { Name = "Authorization", Value = token } });
             
@@ -60,7 +60,7 @@ namespace Martivi.Services
             if (response.IsSuccessStatusCode)
             {
 
-                var ubase = JsonConvert.DeserializeObject<UserBase>(resStr);
+                var ubase = JsonConvert.DeserializeObject<User>(resStr);
                 return ubase;
             }
             if (response.StatusCode == System.Net.HttpStatusCode.BadRequest)

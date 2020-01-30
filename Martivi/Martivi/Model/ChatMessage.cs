@@ -81,5 +81,14 @@ namespace Martivi.Model
             set;
         }
 
+        private string _OwnerProfileImage;
+
+        public string OwnerProfileImage
+        {
+            get { return _OwnerProfileImage; }
+            set { _OwnerProfileImage = value; OnPropertyChanged(); }
+        }
+
+
     }
 }
