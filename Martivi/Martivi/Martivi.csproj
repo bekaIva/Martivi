@@ -89,7 +89,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\..\HttpControl\HttpControl.csproj" />
-    <ProjectReference Include="..\..\..\MartiviSharedLib\MartiviSharedLib\MartiviSharedLib.csproj" />
   </ItemGroup>
 
   <ItemGroup>
