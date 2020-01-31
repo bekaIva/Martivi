@@ -10,6 +10,7 @@ using Syncfusion.ListView.XForms;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Globalization;
 using System.Linq;
 using System.Net;
 using System.Text;
@@ -55,6 +56,7 @@ namespace Martivi.ViewModels
 
 
         #region Properties
+       
 
 
         private ObservableCollection<ChatMessage> _ChatMessages;
@@ -350,49 +352,73 @@ namespace Martivi.ViewModels
             newTextGlobal = "";
         }
 
-        private void OnSendCommandAdmin(object obj)
+        private async void OnSendCommandAdmin(object obj)
         {
-            var Listview = obj as Syncfusion.ListView.XForms.SfListView;
-            if (!string.IsNullOrWhiteSpace(NewText))
+            try
             {
-                // await hubConnection.InvokeAsync("SendMessage", user, message);
-
-                var chatMessage = new ChatMessage
+                if(!IsSignedIn)
                 {
-                    UserId = UserId,
-                    Username = UserName,
-                    Target=MessageTarget.Admin,
-                    Text = NewText,
-                    TemplateType = TemplateType.OutGoingText,
-                    DateTime = string.Format("{0:d/M/yyyy HH:mm:ss}", DateTime.Now)
-                };
-                ChatMessages.Add(chatMessage);
-                hubConnection.InvokeAsync("SendMessage", chatMessage);
-                (Listview.LayoutManager as LinearLayout).ScrollToRowIndex(ChatMessages.Count - 1, Syncfusion.ListView.XForms.ScrollToPosition.Start);
+                    await Application.Current.MainPage.DisplayAlert("შეცდომა", "გთხოვთ გაიაროთ ავტორიზაცია", "OK");
+                    return;
+                }
+                var Listview = obj as Syncfusion.ListView.XForms.SfListView;
+                if (!string.IsNullOrWhiteSpace(NewText))
+                {
+                    // await hubConnection.InvokeAsync("SendMessage", user, message);
+
+                    var chatMessage = new ChatMessage
+                    {
+                        UserId = UserId,
+                        Username = UserName,
+                        Target = MessageTarget.Admin,
+                        Text = NewText,
+                        TemplateType = TemplateType.OutGoingText,
+                        DateTime = string.Format("{0:d/M/yyyy HH:mm:ss}", DateTime.Now)
+                    };
+                    ChatMessages.Add(chatMessage);
+                    hubConnection.InvokeAsync("SendMessage", chatMessage);
+                    (Listview.LayoutManager as LinearLayout).ScrollToRowIndex(ChatMessages.Count - 1, Syncfusion.ListView.XForms.ScrollToPosition.Start);
+                }
+                NewText = null;
             }
-            NewText = null;
+            catch (Exception ee)
+            {
+                await Application.Current.MainPage.DisplayAlert("შეცდომა", ee.Message, "OK");
+            }
         }
-        private void OnSendGlobalCommand(object obj)
+        private async void OnSendGlobalCommand(object obj)
         {
-            var Listview = obj as Syncfusion.ListView.XForms.SfListView;
-            if (!string.IsNullOrWhiteSpace(NewText))
+            try
             {
-                // await hubConnection.InvokeAsync("SendMessage", user, message);
-
-                var chatMessage = new ChatMessage
+                if (!IsSignedIn)
                 {
-                    UserId = UserId,
-                    Username = UserName,
-                    Target = MessageTarget.Global,
-                    Text = NewText,
-                    TemplateType = TemplateType.OutGoingText,
-                    DateTime = string.Format("{0:d/M/yyyy HH:mm:ss}", DateTime.Now)
-                };
-                GlobalChatMessages.Add(chatMessage);
-                hubConnection.InvokeAsync("SendMessage", chatMessage);
-                (Listview.LayoutManager as LinearLayout).ScrollToRowIndex(ChatMessages.Count - 1, Syncfusion.ListView.XForms.ScrollToPosition.Start);
+                    await Application.Current.MainPage.DisplayAlert("შეცდომა", "გთხოვთ გაიაროთ ავტორიზაცია", "OK");
+                    return;
+                }
+                var Listview = obj as Syncfusion.ListView.XForms.SfListView;
+                if (!string.IsNullOrWhiteSpace(NewText))
+                {
+                    // await hubConnection.InvokeAsync("SendMessage", user, message);
+
+                    var chatMessage = new ChatMessage
+                    {
+                        UserId = UserId,
+                        Username = UserName,
+                        Target = MessageTarget.Global,
+                        Text = NewText,
+                        TemplateType = TemplateType.OutGoingText,
+                        DateTime = string.Format("{0:d/M/yyyy HH:mm:ss}", DateTime.Now)
+                    };
+                    GlobalChatMessages.Add(chatMessage);
+                    hubConnection.InvokeAsync("SendMessage", chatMessage);
+                    (Listview.LayoutManager as LinearLayout).ScrollToRowIndex(ChatMessages.Count - 1, Syncfusion.ListView.XForms.ScrollToPosition.Start);
+                }
+                NewText = null;
             }
-            NewText = null;
+            catch (Exception ee)
+            {
+                await Application.Current.MainPage.DisplayAlert("შეცდომა", ee.Message, "OK");
+            }
         }
 
         private void OnLoaded(object obj)
@@ -533,11 +559,35 @@ namespace Martivi.ViewModels
             }
             LoadOrders();
         }
-        public async Task LoadOrders()
+        public async Task CancelOrder(Order o)
         {
             try
             {
                 if (UpdatingOrdersHistory) return;
+                UpdatingOrdersHistory = true;
+                await Services.CancelOrder(o, "Bearer " + Token);
+                await LoadOrders();
+
+            }
+            catch
+            {
+
+            }
+            finally
+            {
+                UpdatingOrdersHistory = false;
+            }            
+        }
+        public async Task<bool> UpdateUser(UpdateModel update)
+        {
+           var res = await Services.UpdateUserProfile(update, "Bearer " + Token);
+            await LoadUser();
+            return res;
+        }
+        public async Task LoadOrders()
+        {
+            try
+            {
                 UpdatingOrdersHistory = true;
               var orders =  await Services.LoadOrders(UserId, "Bearer " + Token);
                 Device.BeginInvokeOnMainThread(() =>
@@ -621,7 +671,7 @@ namespace Martivi.ViewModels
             {
                 if (MakingOrder) return;
                 MakingOrder = true;
-                var checkout = await Application.Current.MainPage.DisplayAlert("Checkout", "Do you want to checkout?", "Yes", "No");
+                var checkout = await Application.Current.MainPage.DisplayAlert("შეკვეთა", "გსურთ შეკვეთა?", "დიახ", "არა");
                 if (checkout)
                 {
                     if (!IsSignedIn) throw new Exception("გთხოვთ გაიაროთ ავტორიზაცია!");
@@ -648,9 +698,9 @@ namespace Martivi.ViewModels
 
                 }
             }
-            catch
+            catch(Exception ee)
             {
-                await Application.Current.MainPage.DisplayAlert("", "შეკვეთა არ შესრულდა!", "OK");
+                await Application.Current.MainPage.DisplayAlert("შეცდომა", ee.Message, "OK");
             }
             finally
             {

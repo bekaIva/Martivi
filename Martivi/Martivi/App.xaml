@@ -50,6 +50,7 @@
             <model:IsSignedInConverter x:Key="IsSignedInConverter"></model:IsSignedInConverter>
             <model:OrderedProductsToTotalPriceCoverter x:Key="OrderedProductsToTotalPriceCoverter"/>
             <model:OrderStatusConverter x:Key="OrderStatusConverter"/>
+            
             <OnPlatform x:TypeArguments="x:String" 
                 x:Key="FontAwesomeBrands">
                 <On Platform="Android" 

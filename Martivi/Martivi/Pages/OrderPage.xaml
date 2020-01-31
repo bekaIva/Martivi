@@ -38,7 +38,7 @@
                          VerticalOptions="Center" HorizontalOptions="End" FontSize="16"
                          TextColor="{StaticResource primary}" />
                         <Label Grid.Column="1" FontAttributes="Bold"
-                           Text="{Binding TotalPrice, StringFormat='{0:c}'}" 
+                           Text="{Binding TotalPrice, StringFormat='₾{0}'}" 
                            VerticalOptions="Center" HorizontalOptions="End" Margin="16,0,8,0" FontSize="16"
                          TextColor="{StaticResource primary}" />
                     </Grid>
@@ -110,11 +110,11 @@
                 </sync:SfListView.ItemTemplate>
             </sync:SfListView>
             <Label Grid.Row="2" LineBreakMode="WordWrap" FontAttributes="Bold"
-             Text="Your cart is empty!" VerticalOptions="Center" HorizontalOptions="Center"
+             Text="კალათა ცარიელია!" VerticalOptions="Center" HorizontalOptions="Center"
              IsVisible="{Binding TotalOrderedItems, Converter={StaticResource zeroVisibilityConverter}}" FontSize="16"
              TextColor="{StaticResource primary}" />
 
-            <Button Grid.Row="3" TextColor="#FFFFFF" Text="გადახდა" 
+            <Button Grid.Row="3" TextColor="#FFFFFF" Text="შეკვეთა" 
                 HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand"
                 Command="{Binding CheckoutCommand}" CommandParameter="{Binding Source={x:Reference Name=orderPage}}" BorderRadius="0"
                 IsVisible="{Binding TotalOrderedItems, Converter={StaticResource inverseZeroVisibilityConverter}}"

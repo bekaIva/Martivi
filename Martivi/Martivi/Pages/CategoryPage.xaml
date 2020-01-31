@@ -25,6 +25,10 @@
                     </DataTemplate>
                 </ListView.ItemTemplate>
             </ListView>
+            <Label  LineBreakMode="WordWrap" FontAttributes="Bold"
+             Text="სია ცარიელია!" VerticalOptions="Center" HorizontalOptions="Center"
+             IsVisible="{Binding Categories.Count, Converter={StaticResource zeroVisibilityConverter}}" FontSize="16"
+             TextColor="{StaticResource primary}" />
             <ActivityIndicator HorizontalOptions="Center" VerticalOptions="Center" Color="#FF5722" IsRunning="{Binding IsBusy}"></ActivityIndicator>
         </Grid>
     </ContentPage.Content>

@@ -7,7 +7,7 @@
        xmlns:ffimageloadingsvg="clr-namespace:FFImageLoading.Svg.Forms;assembly=FFImageLoading.Svg.Forms"
        xmlns:fftransf="clr-namespace:FFImageLoading.Transformations;assembly=FFImageLoading.Transformations"
              mc:Ignorable="d"
-             x:Class="Martivi.Pages.MainShell" BindingContext="{StaticResource MainViewModel}" x:Name="shellPage" >
+             x:Class="Martivi.Pages.MainShell" BindingContext="{StaticResource MainViewModel}" x:Name="shellPage">
     
     <Shell.FlyoutHeader>
         <Grid HeightRequest="160" BackgroundColor="{StaticResource primary}">
@@ -25,7 +25,7 @@
             <ShellContent Route="category" ContentTemplate="{DataTemplate local:CategoryPage}"/>
         </Tab>
         <Tab Title="კალათა" Icon="reservation.png">
-            <ShellContent ContentTemplate="{DataTemplate local:OrderPage}" />
+            <ShellContent  ContentTemplate="{DataTemplate local:OrderPage}" />
 
         </Tab>
         <Tab Title="შესახებ" Icon="information.png">
@@ -52,6 +52,9 @@
         
     </FlyoutItem>
     <FlyoutItem Title="კონტაქტი" Route="contacttoadminflyout">
+        <FlyoutItem.Icon>
+            <FontImageSource Color="{StaticResource primary_text}" Size="24" FontFamily="{StaticResource FontAwesome5ProRegular}"  Glyph="&#xf4b6;"></FontImageSource>
+        </FlyoutItem.Icon>
         <Tab Title="კავშირი ადმინთან" Route="contacttoadmintab">
             <Tab.Icon>
                 <FontImageSource Color="{StaticResource primary_text}" Size="24" FontFamily="{StaticResource FontAwesome5DuotoneSolid}"  Glyph="&#xf059;"></FontImageSource>

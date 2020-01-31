@@ -154,6 +154,26 @@ namespace Martivi.Services
             throw new Exception(response.StatusCode.ToString() + ": " + resStr);
         }
 
+        public async Task<bool> CancelOrder(Order order, string Token)
+        {
+            var json = JsonConvert.SerializeObject(order);
+            var content = new StringContent(json, Encoding.UTF8, "application/json");
+            var response = await sClient.GetResponsePost(ServerBaseAddress + "api/Orders/CancelOrder", content, RequestHeaders: new Header[] { new Header() { Name = "Authorization", Value = Token } });
+            string resStr = await response.Content.ReadAsStringAsync();
+            if (response.IsSuccessStatusCode)
+            {
+
+                return true;
+            }
+
+            if (response.StatusCode == System.Net.HttpStatusCode.BadRequest)
+            {
+                throw new Exception(response.StatusCode.ToString() + ": " + resStr);
+            }
+
+            throw new Exception(response.StatusCode.ToString() + ": " + resStr);
+        }
+
         public async Task<List<Order>> LoadOrders(int UserId,string Token)
         {
             var json = JsonConvert.SerializeObject(new User() {UserId=UserId });
@@ -169,6 +189,25 @@ namespace Martivi.Services
             if (response.StatusCode == System.Net.HttpStatusCode.BadRequest)
             {
                 throw new Exception(response.StatusCode.ToString()+": "+ resStr);
+            }
+
+            throw new Exception(response.StatusCode.ToString() + ": " + resStr);
+        }
+        public async Task<bool> UpdateUserProfile(UpdateModel update, string Token)
+        {
+            var json = JsonConvert.SerializeObject(update);
+            var content = new StringContent(json, Encoding.UTF8, "application/json");
+            var response = await sClient.GetResponsePost(ServerBaseAddress + "Users/Update", content, RequestHeaders: new Header[] { new Header() { Name = "Authorization", Value = Token } });
+            string resStr = await response.Content.ReadAsStringAsync();
+            if (response.IsSuccessStatusCode)
+            {
+
+                return true;
+            }
+
+            if (response.StatusCode == System.Net.HttpStatusCode.BadRequest)
+            {
+                throw new Exception(response.StatusCode.ToString() + ": " + resStr);
             }
 
             throw new Exception(response.StatusCode.ToString() + ": " + resStr);

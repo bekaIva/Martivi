@@ -56,7 +56,7 @@ namespace Martivi.Model
         {
             item = e.ItemData as Order;
             popupLayout = new SfPopupLayout();
-            popupLayout.PopupView.HeightRequest = 100;
+            
             popupLayout.PopupView.WidthRequest = 100;
             popupLayout.PopupView.ContentTemplate = new DataTemplate(() =>
             {
@@ -65,7 +65,7 @@ namespace Martivi.Model
 
                 var deletedButton = new Button()
                 {
-                    Text = "Delete",
+                    Text = "წაშლა",
                     HeightRequest = 50,
                     BackgroundColor = Color.White,
                     TextColor = Color.Black
@@ -73,14 +73,34 @@ namespace Martivi.Model
                 deletedButton.Clicked += DeletedButton_Clicked;
                 var sortButton = new Button()
                 {
-                    Text = "Sort",
+                    Text = "დალაგება",
                     HeightRequest = 50,
                     BackgroundColor = Color.White,
                     TextColor = Color.Black
                 };
                 sortButton.Clicked += SortButton_Clicked;
+
+                if (item.Status == OrderStatus.Accepted)
+                {
+                    popupLayout.PopupView.HeightRequest = 160;
+                    var CancelButton = new Button()
+                    {
+                        Text = "გაუქმება",
+                        HeightRequest = 50,
+                        BackgroundColor = Color.White,
+                        TextColor = Color.Black
+                    };
+                    CancelButton.Clicked += CancelButton_Clicked;
+                    mainStack.Children.Add(CancelButton);
+                }
+                else
+                {
+                    popupLayout.PopupView.HeightRequest = 100;
+                }
+
                 mainStack.Children.Add(deletedButton);
                 mainStack.Children.Add(sortButton);
+                
                 return mainStack;
 
             });
@@ -94,6 +114,27 @@ namespace Martivi.Model
                 popupLayout.Show((double)(e.Position.X - 100), (double)(e.Position.Y - 100));
             else
                 popupLayout.Show((double)e.Position.X, (double)(e.Position.Y));
+        }
+
+        private async void CancelButton_Clicked(object sender, EventArgs e)
+        {
+            if (ListView == null)
+                return;
+            if (item.Status == OrderStatus.Accepted)
+            {
+                if (await App.Current.MainPage.DisplayAlert("", "დარწმუნებული ხართ, რომ გსურთ შეკვეთის გაუქმება?", "კი", "არა"))
+                {
+                   mv.CancelOrder(item);
+                }
+            }
+            try
+            {
+                popupLayout.Dismiss();
+            }
+            catch
+            {
+
+            }
         }
 
         private void SortButton_Clicked(object sender, EventArgs e)
@@ -123,38 +164,50 @@ namespace Martivi.Model
 
         private async void DeletedButton_Clicked(object sender, EventArgs e)
         {
-
-            if (ListView == null)
-                return;
-            if(item.Status== OrderStatus.Accepted)
+            try
             {
-               if(await App.Current.MainPage.DisplayAlert("", "შეკვეთა შესრულების პროცესშია, დარწმუნებული ხართ, რომ გსურთ წაშლა?.", "კი","არა"))
+                if (ListView == null)
+                    return;
+                if (item.Status == OrderStatus.Accepted)
+                {
+
+                    if (await App.Current.MainPage.DisplayAlert("", "შეკვეთა შესრულების პროცესშია, დარწმუნებული ხართ, რომ გსურთ გაუქმება და წაშლა?.", "კი", "არა"))
+                    {
+                        await mv.CancelOrder(item);
+                    }
+                    else
+                    {
+                        return;
+                    }
+                }
+                var source = ListView.ItemsSource as IList<Order>;
+
+                if (source != null && source.Contains(item))
+                {
+                    source.Remove(item);
+                    mv.DeleteOrder(item);
+                }
+                else
+                    App.Current.MainPage.DisplayAlert("Alert", "Unable to delete the item", "OK");
+
+                item = null;
+                source = null;
+
+            }
+            catch(Exception ee)
+            {
+                App.Current.MainPage.DisplayAlert("შეცდომა", ee.Message, "OK");
+            }
+            finally
+            {
+                try
+                {
+                    popupLayout.Dismiss();
+                }
+                catch
                 {
 
                 }
-                else goto cont;
-            }
-            var source = ListView.ItemsSource as IList<Order>;
-
-            if (source != null && source.Contains(item))
-            {
-                source.Remove(item);
-                mv.DeleteOrder(item);
-            }
-            else
-                App.Current.MainPage.DisplayAlert("Alert", "Unable to delete the item", "OK");
-
-            item = null;
-            source = null;
-
-            cont:
-            try
-            {
-                popupLayout.Dismiss();
-            }
-            catch
-            {
-
             }
 
         }

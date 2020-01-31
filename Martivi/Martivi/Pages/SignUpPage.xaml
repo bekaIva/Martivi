@@ -30,7 +30,7 @@
                 <StackLayout Orientation="Vertical">
                     <Entry Placeholder="ელ-ფოსტა" Text="{Binding Email,Mode=TwoWay}"></Entry>
                     <BoxView HeightRequest="2"></BoxView>
-                    <Entry Placeholder="პაროლი" Text="{Binding Password, Mode=TwoWay}"></Entry>
+                    <Entry Placeholder="პაროლი" IsPassword="True" Text="{Binding Password, Mode=TwoWay}"></Entry>
                     <BoxView HeightRequest="2"></BoxView>
                     <Entry Placeholder="სახელი" Text="{Binding Name,Mode=TwoWay}"></Entry>
                     <BoxView HeightRequest="2"></BoxView>

@@ -117,7 +117,12 @@
                         </DataTemplate>
                     </sync:SfListView.ItemTemplate>
                 </sync:SfListView>
+                <Label Grid.Row="2" LineBreakMode="WordWrap" FontAttributes="Bold"
+             Text="კატეგორია ცარიელია!" VerticalOptions="Center" HorizontalOptions="Center"
+             IsVisible="{Binding SelectedCategory.Products.Count, Converter={StaticResource zeroVisibilityConverter}}" FontSize="16"
+             TextColor="{StaticResource primary}" />
             </Grid>
+            
         </Grid>
     </ContentPage.Content>
 </ContentPage>

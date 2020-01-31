@@ -30,7 +30,7 @@
                 <StackLayout Orientation="Vertical" BindingContext="{x:Reference signingPage}">
                     <Entry Placeholder="ელ-ფოსტა" Text="{Binding Email,Mode=TwoWay}"></Entry>
                     <BoxView HeightRequest="2"></BoxView>
-                    <Entry Placeholder="პაროლი" Text="{Binding Password,Mode=TwoWay}"></Entry>
+                    <Entry Placeholder="პაროლი" IsPassword="True" Text="{Binding Password,Mode=TwoWay}"></Entry>
                     <BoxView HeightRequest="2"></BoxView>
                     <Button HorizontalOptions="Fill" Clicked="SigninTapped" HeightRequest="40" Text="შესვლა" BackgroundColor="{StaticResource primary}"></Button>
                 </StackLayout>

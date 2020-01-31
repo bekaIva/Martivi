@@ -10,54 +10,60 @@
              x:Class="Martivi.Pages.MyOrdersPage" Title="ჩემი შეკვეთები" BindingContext="{StaticResource MainViewModel}">
     <ContentPage.Content>
         <Grid>
-            <pullToRefresh:SfPullToRefresh RefreshCommand="{Binding RefreshOrdered}" Refreshing="refreshing">
+            <pullToRefresh:SfPullToRefresh  Refreshing="refreshing">
                 <pullToRefresh:SfPullToRefresh.PullableContent>
-                    <sync:SfListView x:Name="sflv" BindingContext="{StaticResource MainViewModel}" SelectionMode="Single" ItemsSource="{Binding MadeOrders, Mode=OneWay}" ItemSpacing="0,5,0,5" BackgroundColor="#F0F0F0" ItemSize="100">
-                        <sync:SfListView.Behaviors>
-                            <model:Behavior></model:Behavior>
-                        </sync:SfListView.Behaviors>
-                        <sync:SfListView.ItemTemplate>
-                            <DataTemplate>
-                                <Frame OutlineColor="#b3b3b3" Padding="2" Margin="10,0,10,0" HasShadow="True" >
-                                    <Grid BackgroundColor="White" Padding="10">
-                                        <Grid.RowDefinitions>
-                                            <RowDefinition Height="Auto"/>
-                                            <RowDefinition Height="*"/>
-                                            <RowDefinition Height="Auto"/>
-                                        </Grid.RowDefinitions>
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="*"/>
-                                            <ColumnDefinition Width="auto"/>
-                                        </Grid.ColumnDefinitions>
-                                        
+                    <Grid>
+                        <sync:SfListView x:Name="sflv" ItemTapped="OrderTapped" BindingContext="{StaticResource MainViewModel}" SelectionMode="Single" ItemsSource="{Binding MadeOrders, Mode=OneWay}" ItemSpacing="0,5,0,5" BackgroundColor="#F0F0F0" ItemSize="100">
+                            <sync:SfListView.Behaviors>
+                                <model:Behavior></model:Behavior>
+                            </sync:SfListView.Behaviors>
+                            <sync:SfListView.ItemTemplate>
+                                <DataTemplate>
+                                    <Frame OutlineColor="#b3b3b3" Padding="2" Margin="10,0,10,0" HasShadow="True" >
+                                        <Grid BackgroundColor="White" Padding="10">
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition Height="Auto"/>
+                                                <RowDefinition Height="*"/>
+                                                <RowDefinition Height="Auto"/>
+                                            </Grid.RowDefinitions>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="*"/>
+                                                <ColumnDefinition Width="auto"/>
+                                            </Grid.ColumnDefinitions>
 
-                                        <Label x:Name="TitleLabel" LineBreakMode="NoWrap" Text="{Binding OrderTime}" 
+
+                                            <Label x:Name="TitleLabel" LineBreakMode="NoWrap" Text="{Binding OrderTime}" 
                        FontAttributes="Bold" TextColor="Black"
                                        FontSize="{OnPlatform Android={OnIdiom Phone=16, Tablet=18}, iOS={OnIdiom Phone=16, Tablet=18}, UWP={OnIdiom Phone=18, Tablet=20, Desktop=20}, macOS=18, WPF=20}"/>
 
-                                        <StackLayout Grid.Column="1" Orientation="Horizontal">
-                                            <Label Text="Id:" TextColor="{StaticResource primary}" VerticalOptions="Center" VerticalTextAlignment="Center"></Label>
-                                            <Label x:Name="IdLabel" VerticalOptions="Center" VerticalTextAlignment="Center" TextColor="{StaticResource primary_dark}" Grid.Column="1" LineBreakMode="NoWrap" Text="{Binding OrderId}"
+                                            <StackLayout Grid.Column="1" Orientation="Horizontal">
+                                                <Label Text="Id:" TextColor="{StaticResource primary}" VerticalOptions="Center" VerticalTextAlignment="Center"></Label>
+                                                <Label x:Name="IdLabel" VerticalOptions="Center" VerticalTextAlignment="Center" TextColor="{StaticResource primary_dark}" Grid.Column="1" LineBreakMode="NoWrap" Text="{Binding OrderId}"
                        FontAttributes="Bold" 
                                        FontSize="16"/>
-                                        </StackLayout>
-                                       
+                                            </StackLayout>
 
-                                        <Label Grid.ColumnSpan="2" Grid.Row="1" x:Name="DescriptionLabel" Text="{Binding OrderedProducts,Converter={StaticResource OrderedProductsToTotalPriceCoverter}}" TextColor="{StaticResource primary}"
+
+                                            <Label Grid.ColumnSpan="2" Grid.Row="1" x:Name="DescriptionLabel" Text="{Binding OrderedProducts,Converter={StaticResource OrderedProductsToTotalPriceCoverter}}" TextColor="{StaticResource primary}"
                                        FontSize="{OnPlatform Android={OnIdiom Phone=12, Tablet=14}, iOS={OnIdiom Phone=12, Tablet=14}, UWP={OnIdiom Phone=12, Tablet=12, Desktop=12}, macOS=14, WPF=12}"/>
 
-                                        <Frame Grid.Row="2" Grid.ColumnSpan="2" Padding="4,2,4,2" BackgroundColor="#FFE7E8E9" HorizontalOptions="Start" VerticalOptions="End"
+                                            <Frame Grid.Row="2" Grid.ColumnSpan="2" Padding="4,2,4,2" BackgroundColor="#FFE7E8E9" HorizontalOptions="Start" VerticalOptions="End"
                                        HasShadow="True">
-                                            <Label x:Name="TagLabel" LineBreakMode="NoWrap" Text="{Binding Status,Converter={StaticResource OrderStatusConverter}}"
+                                                <Label x:Name="TagLabel" LineBreakMode="NoWrap" Text="{Binding Status,Converter={StaticResource OrderStatusConverter}}"
                           FontSize="10" TextColor="Black"/>
-                                        </Frame>
-                                    </Grid>
-                                </Frame>
-                            </DataTemplate>
-                        </sync:SfListView.ItemTemplate>
-                    </sync:SfListView>
+                                            </Frame>
+                                        </Grid>
+                                    </Frame>
+                                </DataTemplate>
+                            </sync:SfListView.ItemTemplate>
+                        </sync:SfListView>
+                        <Label  LineBreakMode="WordWrap" FontAttributes="Bold"
+             Text="კალათა ცარიელია!" VerticalOptions="Center" HorizontalOptions="Center"
+             IsVisible="{Binding MadeOrders.Count, Converter={StaticResource zeroVisibilityConverter}}" FontSize="16"
+             TextColor="{StaticResource primary}" />
+                    </Grid>
                 </pullToRefresh:SfPullToRefresh.PullableContent>
-            </pullToRefresh:SfPullToRefresh>
+            </pullToRefresh:SfPullToRefresh>            
             <ActivityIndicator  HorizontalOptions="Center" VerticalOptions="Center" Color="#FF5722" IsRunning="{Binding UpdatingOrdersHistory}"></ActivityIndicator>
         </Grid>
     </ContentPage.Content>

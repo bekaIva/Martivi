@@ -8,6 +8,7 @@ namespace Martivi.Model
     public enum OrderStatus
     {
         Accepted,
+        Canceled,
         Completed
     }
     public class Order:PropertyChangedBase

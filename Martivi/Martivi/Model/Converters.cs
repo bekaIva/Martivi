@@ -6,7 +6,9 @@
 // applicable laws. 
 #endregion
 using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Globalization;
 using System.Linq;
 using System.Text;
@@ -27,7 +29,8 @@ namespace Martivi.Model
                 {
                     case OrderStatus.Accepted: return "შესრულების მოლოდინში" ;
                     case OrderStatus.Completed: return "შეკვეთა შესრულებულია";
-                        
+                    case OrderStatus.Canceled: return "შეკვეთა გაუქმებულია";
+
                 }
             }
             return value;
@@ -51,7 +54,7 @@ namespace Martivi.Model
                     totalPrice += p.Price * p.Quantity;
                 }
             }
-            return totalPrice.ToString() + " ₾";
+            return string.Format("₾{0:0.00}", totalPrice);
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
@@ -166,7 +169,7 @@ namespace Martivi.Model
         {
             throw new NotImplementedException();
         }
-    }
+    }    
 
     [Preserve(AllMembers = true)]
     public class TotalItemsCountConverter : IValueConverter
@@ -174,8 +177,8 @@ namespace Martivi.Model
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
             if (value is int && (int)value <= 1)
-                return value + " Item |";
-            return value + " Items |";
+                return value + " პროდუქტი |";
+            return value + " პროდუქტები |";
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
@@ -190,7 +193,7 @@ namespace Martivi.Model
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
             var d = (double)value;
-            return string.Format("${0:0.00}", d);
+            return string.Format("₾{0:0.00}", d);
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

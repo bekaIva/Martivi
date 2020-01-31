@@ -1,10 +1,13 @@
 namespace MartiviSharedLib.Models.Users
 {
-  public class UpdateModelBase
+  public class UpdateModel
     {
+        public string ProfileImageUrl { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string Username { get; set; }
+        public string Phone { get; set; }
+        public string UserAddress { get; set; }
         public string Password { get; set; }
     }
 }

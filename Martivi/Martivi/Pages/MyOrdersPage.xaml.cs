@@ -1,4 +1,5 @@
-﻿using Martivi.ViewModels;
+﻿using Martivi.Model;
+using Martivi.ViewModels;
 using Syncfusion.SfPullToRefresh.XForms;
 using System;
 using System.Collections.Generic;
@@ -40,6 +41,12 @@ namespace Martivi.Pages
             }
         }
 
-     
+        private void OrderTapped(object sender, Syncfusion.ListView.XForms.ItemTappedEventArgs e)
+        {
+            if(e.ItemData is Order order)
+            {
+                Navigation.PushAsync(new OrderDetailPage(order));
+            }
+        }
     }
 }
