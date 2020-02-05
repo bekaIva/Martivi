@@ -1,4 +1,5 @@
 ﻿using Martivi.Model;
+using Martivi.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -47,13 +48,13 @@ namespace Martivi.Pages
             get { return _Order; }
             set { _Order = value; OnPropertyChanged(); }
         }
-
-        public OrderDetailPage(Order order)
+        MainViewModel mv;
+        public OrderDetailPage()
         {
-            Order = order;
             InitializeComponent();
-            TotalOrderedItems = order.OrderedProducts.Count;
-            foreach(var p in order.OrderedProducts)
+            mv = Application.Current.Resources["MainViewModel"] as MainViewModel;
+            TotalOrderedItems =  mv.SelectedDetailOrder.OrderedProducts.Count;
+            foreach(var p in mv.SelectedDetailOrder.OrderedProducts)
             {
                 TotalPrice += p.TotalPrice;
             }

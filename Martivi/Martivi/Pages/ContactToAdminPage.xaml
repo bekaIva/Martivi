@@ -15,7 +15,7 @@
     <ContentPage.Content>
         <Grid Padding="5" BackgroundColor="White">
             <ScrollView x:Name="scrollView" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
-                <sync:SfListView x:Name="listView" IsStickyFooter="true" ItemSize="100"
+                <sync:SfListView x:Name="listView" IsStickyFooter="true" ItemSize="100" ItemAppearing="ItemAppearing"
                                  ItemsSource="{Binding ChatMessages}"
                                  ItemTemplate="{StaticResource MessageDataTemplateSelector}"
                                  SelectionMode="None"

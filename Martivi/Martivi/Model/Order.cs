@@ -11,6 +11,11 @@ namespace Martivi.Model
         Canceled,
         Completed
     }
+    public enum PaymentStatus
+    {
+        Paid,
+        NotPaid
+    }
     public class Order:PropertyChangedBase
     {
         private OrderStatus _Status;
@@ -21,7 +26,7 @@ namespace Martivi.Model
             set { _Status = value; OnPropertyChanged(); }
         }
 
-
+        public PaymentStatus Payment { get; set; }
         public int OrderId { get; set; }
         public User User { get; set; }
         public virtual List<Product> OrderedProducts { get; set; }

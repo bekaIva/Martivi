@@ -62,10 +62,12 @@ namespace Martivi.Pages
             try
             {
                 IsBusy = true;
-               var user = await vm.Auth(new AuthenticateModelBase() { Username = Email, Password = Password });
-               await DisplayAlert("შესრულდა", "მოგესალმებით " + user.FirstName+", თქვენ წარმატებით გაიარეთ ავტორიზაცია.", "Ok");
-                Navigation.PopAsync();
-                Shell.Current.GoToAsync($"//profile/profiletab/profilepage");
+               var user = await vm.Auth(new AuthenticateModelBase() { Username = Email, Password = Password,IsAdmin=false });
+               
+                    await DisplayAlert("შესრულდა", "მოგესალმებით " + user.FirstName + ", თქვენ წარმატებით გაიარეთ ავტორიზაცია.", "Ok");
+                    Navigation.PopAsync();
+                    Shell.Current.GoToAsync($"//profile/profiletab/profilepage");
+              
             }
             catch(HttpRequestException he)
             {

@@ -45,7 +45,8 @@ namespace Martivi.Pages
         {
             if(e.ItemData is Order order)
             {
-                Navigation.PushAsync(new OrderDetailPage(order));
+                vm.SelectedDetailOrder = order;
+                Navigation.PushAsync(new OrderDetailPage());
             }
         }
     }

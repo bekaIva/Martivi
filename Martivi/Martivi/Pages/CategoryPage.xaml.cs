@@ -24,14 +24,14 @@ namespace Martivi.Pages
         }
         protected override async void OnAppearing()
         {
-            base.OnAppearing();          
+            base.OnAppearing();
+            lv.SelectedItem = null;
         }
-        private void lv_ItemSelected(object sender, SelectedItemChangedEventArgs e)
+        private async void lv_ItemSelected(object sender, SelectedItemChangedEventArgs e)
         {
             var Selected = e.SelectedItem as Model.Category;
             viewModel.SelectedCategory = Selected;
             if(Selected!=null) Navigation.PushAsync(new ProductPage());
-            ((ListView)sender).SelectedItem = null;
         }
     }
 }

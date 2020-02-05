@@ -6,5 +6,7 @@ namespace MartiviSharedLib
     {
         public virtual string Username { get; set; }
         public virtual string Password { get; set; }
+
+        public bool IsAdmin { get; set; }
     }
 }

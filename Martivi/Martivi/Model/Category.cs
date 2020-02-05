@@ -5,12 +5,19 @@ using System.Text;
 
 namespace Martivi.Model
 {
-    public class Category
+    public class Category:PropertyChangedBase
     {
         public int CategoryId { get; set; }
         public string Name { get; set; }
         public string Image { get; set; }
-        public ObservableCollection<Product> Products { get; set; }
+        private ObservableCollection<Product> _Products;
+
+        public ObservableCollection<Product> Products
+        {
+            get { return _Products; }
+            set { _Products = value; OnPropertyChanged(); }
+        }
+
     }
     public class Product:PropertyChangedBase
     {
@@ -44,6 +51,14 @@ namespace Martivi.Model
                 }
             }
         }
+        private int _QuantityInSupply;
+
+        public int QuantityInSupply
+        {
+            get { return _QuantityInSupply; }
+            set { _QuantityInSupply = value; OnPropertyChanged(); }
+        }
+
 
         public double TotalPrice
         {

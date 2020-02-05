@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.SignalR.Client;
 using Plugin.Settings;
 using Plugin.Settings.Abstractions;
 using Syncfusion.ListView.XForms;
+using Syncfusion.SfPullToRefresh.XForms;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -40,6 +41,20 @@ namespace Martivi.ViewModels
             Services = new ApiServices();
             Categories = new ObservableCollection<Category>();
             AddCommand = new Command<object>(AddQuantity);
+            RefreshListing = new Command<object>(async (sender) =>
+            {
+                var ptf = sender as SfPullToRefresh;
+                try
+                {
+                    ptf.IsRefreshing = true;
+                    await GetCategories();
+                }
+                catch { }
+                finally
+                {
+                    ptf.IsRefreshing = false;
+                }
+            });
             OrderListCommand = new Command<object>(NavigateOrdersPage);
             CheckoutCommand = new Command(CheckOut);
             RemoveOrderCommand = new Command<object>(RemoveOrder);
@@ -56,7 +71,13 @@ namespace Martivi.ViewModels
 
 
         #region Properties
-       
+        private Order _SelectedDetailOrder;
+
+        public Order SelectedDetailOrder
+        {
+            get { return _SelectedDetailOrder; }
+            set { _SelectedDetailOrder = value; OnPropertyChanged(); }
+        }
 
 
         private ObservableCollection<ChatMessage> _ChatMessages;
@@ -250,6 +271,7 @@ namespace Martivi.ViewModels
                 OnPropertyChanged();
             }
         }
+        public Command<object> RefreshListing { get; set; }
 
         public Command<object> AddCommand { get; set; }
 
@@ -280,12 +302,12 @@ namespace Martivi.ViewModels
 
 
         public ObservableCollection<Product> Orders { get; set; } = new ObservableCollection<Product>();
+        
         private Category _SelectedCategory;
-
         public Category SelectedCategory
         {
             get { return _SelectedCategory; }
-            set { _SelectedCategory = value; }
+            set { _SelectedCategory = value; OnPropertyChanged(); }
         }
 
      
@@ -420,7 +442,6 @@ namespace Martivi.ViewModels
                 await Application.Current.MainPage.DisplayAlert("შეცდომა", ee.Message, "OK");
             }
         }
-
         private void OnLoaded(object obj)
         {
             var ListView = obj as Syncfusion.ListView.XForms.SfListView;
@@ -442,9 +463,6 @@ namespace Martivi.ViewModels
                 });
             }
         }
-
-
-
         async Task Connect()
         {
             await hubConnection.StartAsync();
@@ -453,9 +471,6 @@ namespace Martivi.ViewModels
             if (hubConnection.State == HubConnectionState.Connected) IsConnected = true;
             else IsConnected = false;
         }
-
-       
-
         async Task Disconnect()
         {
             await hubConnection.InvokeAsync("LeaveChat", Name);
@@ -527,9 +542,40 @@ namespace Martivi.ViewModels
                
             });
 
-            hubConnection.On<string, string>("ReceiveMessage", (user, message) =>
+            hubConnection.On<ChatMessage>("ReceiveMessage", (message) =>
             {
-               
+              if(message.Target== MessageTarget.Global)
+                {
+                    GlobalChatMessages.Add(message);
+                }
+                else
+                {
+                    ChatMessages.Add(message);
+                }
+            });
+            hubConnection.On("UpdateListing", () =>
+            {
+                try
+                {
+                    GetCategories();
+                }
+                catch
+                {
+
+                }
+                
+            });
+            hubConnection.On("UpdateOrderListing", () =>
+            {
+                try
+                {
+                    LoadOrders();
+                }
+                catch
+                {
+
+                }
+
             });
             hubConnection.Closed += HubConnection_Closed;
         }
@@ -557,7 +603,6 @@ namespace Martivi.ViewModels
             {
                 UpdatingOrdersHistory = false;
             }
-            LoadOrders();
         }
         public async Task CancelOrder(Order o)
         {
@@ -566,7 +611,6 @@ namespace Martivi.ViewModels
                 if (UpdatingOrdersHistory) return;
                 UpdatingOrdersHistory = true;
                 await Services.CancelOrder(o, "Bearer " + Token);
-                await LoadOrders();
 
             }
             catch
@@ -595,6 +639,10 @@ namespace Martivi.ViewModels
                     MadeOrders.Clear();
                     foreach(var order in orders)
                     {
+                        if (SelectedDetailOrder != null && SelectedDetailOrder.OrderId == order.OrderId)
+                        {
+                            SelectedDetailOrder = order;
+                        }
                         MadeOrders.Add(order);
                     }
                 });
@@ -713,10 +761,12 @@ namespace Martivi.ViewModels
             try
             {
                 if (IsBusy) return;
+                Categories.Clear();
                 IsBusy = true;
                 var categories = await Services.GetCategories();
                 foreach (var category in categories)
                 {
+                    if (SelectedCategory?.CategoryId == category.CategoryId) SelectedCategory = category;
                     foreach(var p in category.Products)
                     {
                         p.PropertyChanged += (s,e) => 

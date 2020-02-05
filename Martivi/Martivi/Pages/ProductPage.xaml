@@ -7,11 +7,15 @@
              xmlns:ffimageloading="clr-namespace:FFImageLoading.Forms;assembly=FFImageLoading.Forms"
              xmlns:sync="clr-namespace:Syncfusion.ListView.XForms;assembly=Syncfusion.SfListView.XForms"
              xmlns:numeric="clr-namespace:Syncfusion.SfNumericUpDown.XForms;assembly=Syncfusion.SfNumericUpDown.XForms"
+             xmlns:pullToRefresh="clr-namespace:Syncfusion.SfPullToRefresh.XForms;assembly=Syncfusion.SfPullToRefresh.XForms"
              mc:Ignorable="d"
              x:Class="Martivi.Pages.ProductPage" x:Name="productPage" BindingContext="{StaticResource MainViewModel}" Title="{Binding SelectedCategory.Name}">
     
     <ContentPage.Content>
-        <Grid x:Name="ContentGrid">
+        <Grid>
+            <pullToRefresh:SfPullToRefresh x:Name="ptf" RefreshCommand="{Binding RefreshListing}" RefreshCommandParameter="{x:Reference ptf}">
+                <pullToRefresh:SfPullToRefresh.PullableContent>
+                    <Grid x:Name="ContentGrid">
             <Grid x:Name="sampleLayout" RowSpacing="0">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto" />
@@ -73,6 +77,7 @@
                                             <RowDefinition Height="Auto" />
                                             <RowDefinition Height="Auto" />
                                             <RowDefinition Height="Auto" />
+                                            <RowDefinition Height="Auto" />
                                         </Grid.RowDefinitions>
                                         <Label Text="{Binding Name}" HorizontalOptions="Start" Margin="0,0,0,4" FontSize="16"
                                             TextColor="{OnPlatform Default=#333333, Android=#000000}"
@@ -80,10 +85,13 @@
                                         <Label Text="{Binding Weight, Converter={StaticResource WeightConverter}, ConverterParameter=კგ}" FontSize="14" Grid.Row="1" HorizontalOptions="Start"
                                            TextColor="{OnPlatform Default=#757575, Android=#000000, UWP=#4C4C4C}"
                                            Opacity="{OnPlatform Default=1, Android=0.54}" />
-                                        <Label Text="{Binding Description,Converter={StaticResource ShortDescription}, ConverterParameter=70}" FontSize="14" Grid.Row="2" HorizontalOptions="Start"
+                                        <Label Text="{Binding QuantityInSupply,StringFormat='მარაგშია: {0}'}" FontSize="14" Grid.Row="2" HorizontalOptions="Start"
                                            TextColor="{OnPlatform Default=#757575, Android=#000000, UWP=#4C4C4C}"
                                            Opacity="{OnPlatform Default=1, Android=0.54}" />
-                                        <Grid Grid.Row="3" Padding="0" ColumnSpacing="0">
+                                        <Label Text="{Binding Description,Converter={StaticResource ShortDescription}, ConverterParameter=70}" FontSize="14" Grid.Row="3" HorizontalOptions="Start"
+                                           TextColor="{OnPlatform Default=#757575, Android=#000000, UWP=#4C4C4C}"
+                                           Opacity="{OnPlatform Default=1, Android=0.54}" />
+                                        <Grid Grid.Row="4" Padding="0" ColumnSpacing="0">
                                             <Grid.ColumnDefinitions>
                                                 <ColumnDefinition Width="*"/>
                                                 <ColumnDefinition Width="*"/>
@@ -93,7 +101,7 @@
                                                Margin='{OnPlatform Default="0,12,0,0", Android="0,16,0,0"}'
                                                 TextColor="{StaticResource primary}" />
                                             <numeric:SfNumericUpDown Grid.Column="1"  x:Name="numericUpDown" MaximumDecimalDigits="0"
-                                                               IsEditable="False" Minimum="0" Maximum="9" HorizontalOptions="End" VerticalOptions="Center"
+                                                               IsEditable="False" Minimum="0" Maximum="{Binding QuantityInSupply}" HorizontalOptions="End" VerticalOptions="Center"
                                                                 AllowNull="false" FormatString="n" Watermark="Units" TextAlignment="Center"
                                                                SpinButtonAlignment="Both" UpDownButtonColor="White"
                                                                Value="{Binding Quantity, Mode=TwoWay}"
@@ -121,8 +129,12 @@
              Text="კატეგორია ცარიელია!" VerticalOptions="Center" HorizontalOptions="Center"
              IsVisible="{Binding SelectedCategory.Products.Count, Converter={StaticResource zeroVisibilityConverter}}" FontSize="16"
              TextColor="{StaticResource primary}" />
-            </Grid>
-            
+            </Grid>            
         </Grid>
+                </pullToRefresh:SfPullToRefresh.PullableContent>
+                    
+            </pullToRefresh:SfPullToRefresh>
+         <ActivityIndicator HorizontalOptions="Center" VerticalOptions="Center" Color="#FF5722" IsRunning="{Binding IsBusy}"></ActivityIndicator>
+        </Grid>               
     </ContentPage.Content>
 </ContentPage>

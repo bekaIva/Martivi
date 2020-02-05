@@ -45,12 +45,12 @@
                 </Frame>
                 <BoxView x:Name="boxView" Grid.Row="1" BackgroundColor="#EAEAEA"  HeightRequest="{OnPlatform Default=0, UWP=1}" />
                 <sync:SfListView x:Name="listView" Grid.Row="2" 
-                            ItemSize="120"
+                            ItemSize="140"
                             SelectionMode="None"
-                            ItemsSource="{Binding Order.OrderedProducts}">
+                            ItemsSource="{Binding Source={x:StaticResource MainViewModel}, Path=SelectedDetailOrder.OrderedProducts}">
                     <sync:SfListView.ItemTemplate>
                         <DataTemplate>
-                            <Grid HeightRequest="120" Margin="0" Padding="0" RowSpacing="0" BackgroundColor="White">
+                            <Grid  Margin="0" Padding="0" RowSpacing="0" BackgroundColor="White">
                                 <Grid.RowDefinitions>
                                     <RowDefinition Height="*"/>
                                     <RowDefinition Height="1"/>
@@ -63,6 +63,7 @@
                                     <Image Source="{Binding Image}" Aspect="AspectFit" VerticalOptions="Center" HorizontalOptions="Center" />
                                     <Grid Grid.Column="1" Padding="0" RowSpacing="0"  Margin='{OnPlatform Default="12,0,0,0", Android="16,0,0,0"}'>
                                         <Grid.RowDefinitions>
+                                            <RowDefinition Height="Auto" />
                                             <RowDefinition Height="Auto" />
                                             <RowDefinition Height="Auto" />
                                             <RowDefinition Height="Auto" />
@@ -82,7 +83,10 @@
                                         <Label Text="{Binding Weight}" FontSize="14" Grid.Row="1" HorizontalOptions="Start" 
                                        TextColor="{OnPlatform Default=#757575, Android=#000000, UWP=#4C4C4C}"
                                        Opacity="{OnPlatform Default=1, Android=0.54}" />
-                                        <Grid Grid.Row="2" Padding="0" ColumnSpacing="0">
+                                        <Label Text="{Binding Quantity,StringFormat='რაოდენობა: {0}'}" FontSize="14" Grid.Row="2" HorizontalOptions="Start" 
+                                       TextColor="{OnPlatform Default=#757575, Android=#000000, UWP=#4C4C4C}"
+                                       Opacity="{OnPlatform Default=1, Android=0.54}" />
+                                        <Grid Grid.Row="3" Padding="0" ColumnSpacing="0">
                                             <Grid.ColumnDefinitions>
                                                 <ColumnDefinition Width="*"/>
                                                 <ColumnDefinition Width="*"/>
@@ -91,15 +95,7 @@
                                          HorizontalOptions="Start" FontSize="16"
                                          TextColor="{StaticResource primary}"
                                          Margin='{OnPlatform Default="0,12,0,0", Android="0,16,0,0"}' />
-                                            <numeric:SfNumericUpDown Grid.Column="1" IsEditable="False" x:Name="numericUpDown" MaximumDecimalDigits="0" IsEnabled="False"
-                                                           Minimum="0" Maximum="9"
-                                                              HorizontalOptions="End" VerticalOptions="Center" AllowNull="false"
-                                                              FormatString="n" Watermark="Units" TextAlignment="Center"
-                                                              SpinButtonAlignment="Both" UpDownButtonColor="White"
-                                                              Value="{Binding Quantity, Mode=TwoWay}"
-                                                           TextColor="{OnPlatform Default=#1C73F2, Android=#FFFFFF, UWP=#0078D7}"
-                                                           WidthRequest="{OnPlatform Default=150}"
-                                                           BackgroundColor="{StaticResource primary}" />
+                                           
                                         </Grid>
                                     </Grid>
                                 </Grid>
@@ -111,7 +107,7 @@
                 </sync:SfListView>
                 <Frame Grid.Row="3" Padding="4,2,4,2" BackgroundColor="#FFE7E8E9" HorizontalOptions="Start" VerticalOptions="End"
                                        HasShadow="True">
-                    <Label Margin="4" x:Name="TagLabel" LineBreakMode="NoWrap" Text="{Binding Order.Status,Converter={StaticResource OrderStatusConverter}}"
+                    <Label Margin="4" x:Name="TagLabel" LineBreakMode="NoWrap" Text="{Binding Source={x:StaticResource MainViewModel},Path=SelectedDetailOrder.Status,Converter={StaticResource OrderStatusConverter}}"
                           FontSize="16" TextColor="Black"/>
                 </Frame>
 

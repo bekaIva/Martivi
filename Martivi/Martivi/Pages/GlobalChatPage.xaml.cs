@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Martivi.ViewModels;
+using Syncfusion.ListView.XForms;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -12,9 +14,16 @@ namespace Martivi.Pages
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class GlobalChatPage : ContentPage
     {
+        MainViewModel mv;
         public GlobalChatPage()
         {
+            mv = Application.Current.Resources["MainViewModel"] as MainViewModel;
             InitializeComponent();
+        }
+
+        private void ItemAppearing(object sender, Syncfusion.ListView.XForms.ItemAppearingEventArgs e)
+        {
+            (listView.LayoutManager as LinearLayout).ScrollToRowIndex(mv.ChatMessages.Count);
         }
     }
 }

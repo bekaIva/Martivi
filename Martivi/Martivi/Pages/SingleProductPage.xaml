@@ -63,17 +63,22 @@
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="Auto" />
-                    </Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
                     <Label Text="{Binding Name}" HorizontalOptions="Start" Margin="0,0,0,4" FontSize="16"
                                             TextColor="{OnPlatform Default=#333333, Android=#000000}"
                                            Opacity="{OnPlatform Default=1, Android=0.87}" />
+                    
                     <Label Text="{Binding Weight, Converter={StaticResource WeightConverter}, ConverterParameter=კგ}" FontSize="14" Grid.Row="1" HorizontalOptions="Start"
                                            TextColor="{OnPlatform Default=#757575, Android=#000000, UWP=#4C4C4C}"
                                            Opacity="{OnPlatform Default=1, Android=0.54}" />
-                    <Label Text="{Binding Description}" FontSize="14" Grid.Row="2" HorizontalOptions="Start"
+                        <Label Text="{Binding QuantityInSupply,StringFormat='მარაგშია: {0}'}" FontSize="14" Grid.Row="2" HorizontalOptions="Start"
                                            TextColor="{OnPlatform Default=#757575, Android=#000000, UWP=#4C4C4C}"
                                            Opacity="{OnPlatform Default=1, Android=0.54}" />
-                    <Grid Grid.Row="3" Padding="0" ColumnSpacing="0">
+                        <Label Text="{Binding Description}" FontSize="14" Grid.Row="3" HorizontalOptions="Start"
+                                           TextColor="{OnPlatform Default=#757575, Android=#000000, UWP=#4C4C4C}"
+                                           Opacity="{OnPlatform Default=1, Android=0.54}" />
+                    <Grid Grid.Row="4" Padding="0" ColumnSpacing="0">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*"/>
                             <ColumnDefinition Width="*"/>
@@ -83,7 +88,7 @@
                                                Margin='{OnPlatform Default="0,12,0,0", Android="0,16,0,0"}'
                                                 TextColor="{StaticResource primary}" />
                         <numeric:SfNumericUpDown Grid.Column="1"  x:Name="numericUpDown" MaximumDecimalDigits="0"
-                                                               IsEditable="False" Minimum="0" Maximum="9" HorizontalOptions="End" VerticalOptions="Center"
+                                                               IsEditable="False" Minimum="0" Maximum="{Binding QuantityInSupply}" HorizontalOptions="End" VerticalOptions="Center"
                                                                 AllowNull="false" FormatString="n" Watermark="Units" TextAlignment="Center"
                                                                SpinButtonAlignment="Both" UpDownButtonColor="White"
                                                                Value="{Binding Quantity, Mode=TwoWay}"
