@@ -1,4 +1,5 @@
 ﻿using Martivi.ViewModels;
+using Martivi.Views.Forms;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -28,12 +29,12 @@ namespace Martivi.Pages
                 if (!mv.IsSignedIn)
                 {
                     Shell.Current.FlyoutIsPresented = false;
-                    var page = new SignInPage();
+                    var page = new SimpleLoginPage();
                     Shell.Current.Navigation.PushAsync(page);
                 }
                 else
                 {
-                    mv.SingOut();
+                    mv.SignOut();
                 }
             }
             catch(Exception ee)

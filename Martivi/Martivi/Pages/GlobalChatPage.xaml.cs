@@ -1,7 +1,9 @@
-﻿using Martivi.ViewModels;
+﻿using Martivi.Model;
+using Martivi.ViewModels;
 using Syncfusion.ListView.XForms;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -15,15 +17,60 @@ namespace Martivi.Pages
     public partial class GlobalChatPage : ContentPage
     {
         MainViewModel mv;
+        ObservableCollection<ChatMessage> m;
         public GlobalChatPage()
         {
             mv = Application.Current.Resources["MainViewModel"] as MainViewModel;
             InitializeComponent();
         }
-
-        private void ItemAppearing(object sender, Syncfusion.ListView.XForms.ItemAppearingEventArgs e)
+        protected override void OnAppearing()
         {
-            (listView.LayoutManager as LinearLayout).ScrollToRowIndex(mv.ChatMessages.Count);
+            base.OnAppearing();
+            m = listView.ItemsSource as ObservableCollection<ChatMessage>;
+            if (m != null)
+            {
+                m.CollectionChanged += M_CollectionChanged;
+            }
+
+            if (Device.RuntimePlatform == Device.macOS)
+            {
+                Device.BeginInvokeOnMainThread(() =>
+                {
+                    listView.ScrollTo(2500);
+                });
+            }
+            else
+            {
+                Device.BeginInvokeOnMainThread(() =>
+                {
+                    (listView.LayoutManager as LinearLayout).ScrollToRowIndex(m.Count - 1, Syncfusion.ListView.XForms.ScrollToPosition.Start);
+                });
+            }
+        }
+        protected override void OnDisappearing()
+        {
+            base.OnDisappearing();
+            m.CollectionChanged -= M_CollectionChanged;
+        }
+        private void M_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        {
+            if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
+            {
+                if (Device.RuntimePlatform == Device.macOS)
+                {
+                    Device.BeginInvokeOnMainThread(() =>
+                    {
+                        listView.ScrollTo(2500);
+                    });
+                }
+                else
+                {
+                    Device.BeginInvokeOnMainThread(() =>
+                    {
+                        (listView.LayoutManager as LinearLayout).ScrollToRowIndex(m.Count - 1, Syncfusion.ListView.XForms.ScrollToPosition.Start);
+                    });
+                }
+            }
         }
     }
 }

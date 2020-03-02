@@ -1,8 +1,4 @@
-﻿using Imgur.API;
-using Imgur.API.Authentication.Impl;
-using Imgur.API.Endpoints.Impl;
-using Imgur.API.Models;
-using Martivi.Model;
+﻿using Martivi.Model;
 using Martivi.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -115,10 +111,6 @@ namespace Martivi.Pages
                 }
             }
 
-            catch(ImgurException ime)
-            {
-                DisplayAlert("შეცდომა", "ფოტოს ატვირთვა არ შესრულდა.", "Ok");
-            }
             catch(Exception ee) 
             {
                 DisplayAlert("შეცდომა", ee.Message,"Ok");
@@ -130,24 +122,8 @@ namespace Martivi.Pages
         {
             var ds = DependencyService.Get<IPhotoPickerService>();
             Stream stream = await ds.GetImageStreamAsync();
-            await UploadImage(stream);
+            ProfileImageUrl = Services.ApiServices.ServerBaseAddress + "Images/" + await mv.Services.UploadFile(stream, "Bearer " + mv.Token);
 
-        }
-        public async Task UploadImage(Stream iStream)
-        {
-            try
-            {
-                var client = new ImgurClient("d45226de4e13c51", "30e2cdb6de8061b1e003e6a250e3241147029fdb");
-                var endpoint = new ImageEndpoint(client);
-                IImage image;
-                
-                    image = await endpoint.UploadImageStreamAsync(iStream);
-                ProfileImageUrl = image.Link;
-                
-            }
-            catch (ImgurException imgurEx)
-            {
-            }
         }
     }
 }

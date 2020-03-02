@@ -80,8 +80,8 @@
                                            Opacity="{OnPlatform Default=1, Android=0.54}" />
                     <Grid Grid.Row="4" Padding="0" ColumnSpacing="0">
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="1*"/>
+                            <ColumnDefinition Width="auto"/>
                         </Grid.ColumnDefinitions>
                         <Label Text="{Binding Price, Converter={StaticResource currencyFormatConverter}}" VerticalOptions="Start" FontAttributes="Bold" 
                                                HorizontalOptions="Start" FontSize="16"
@@ -95,8 +95,8 @@
                                                                IsVisible="{Binding Quantity, Converter={StaticResource inverseZeroVisibilityConverter}}"
                                                                  TextColor="{OnPlatform Default=#1C73F2, Android=#FFFFFF, UWP=#0078D7}"
                                                                  BackgroundColor="{StaticResource primary}"
-                                                                 WidthRequest="{OnPlatform Default=150}" />
-                        <Button Grid.Column="1" x:Name="addButton" FontSize="16" Text="ADD" BorderWidth="1"  WidthRequest="80"
+                                                                 WidthRequest="{OnPlatform Default=155}" />
+                            <Button Grid.Column="1" x:Name="addButton" FontSize="16" Text="დამატება" BorderWidth="1" WidthRequest="{OnPlatform Default=155}" 
                                                 VerticalOptions="CenterAndExpand" HorizontalOptions="End" 
                                                 Command="{Binding Path=BindingContext.AddCommand, Source={x:Reference Name=page}}"
                                                 CommandParameter="{Binding .}"

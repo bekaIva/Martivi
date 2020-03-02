@@ -5,14 +5,23 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:ffimageloading="clr-namespace:FFImageLoading.Forms;assembly=FFImageLoading.Forms"
              xmlns:pullToRefresh="clr-namespace:Syncfusion.SfPullToRefresh.XForms;assembly=Syncfusion.SfPullToRefresh.XForms"
+             xmlns:model="clr-namespace:Martivi.Model"
              mc:Ignorable="d"
              x:Class="Martivi.Pages.CategoryPage" x:Name="categoryPage" BindingContext="{StaticResource MainViewModel}" Title="კატეგორიები" >
+    <Shell.SearchHandler>
+        <model:CategorySearchHandler SearchBoxVisibility="Collapsible" Placeholder="ძებნა" Query="{Binding CategoryFilter,Mode=TwoWay}" CurrentPage="{x:Reference categoryPage}" ViewModel="{StaticResource MainViewModel}">
+
+            <model:CategorySearchHandler.ItemTemplate>
+                <model:CategoryOrProductTemplateSelector CategoryTemplate="{StaticResource CategoryTemplate}" ProductTemplate="{StaticResource ProductTemplate}"></model:CategoryOrProductTemplateSelector>
+            </model:CategorySearchHandler.ItemTemplate>
+        </model:CategorySearchHandler>
+    </Shell.SearchHandler>
     <ContentPage.Content>
         <Grid>
              <pullToRefresh:SfPullToRefresh x:Name="ptf" RefreshCommand="{Binding RefreshListing}" RefreshCommandParameter="{x:Reference ptf}">
             <pullToRefresh:SfPullToRefresh.PullableContent>
                  <Grid x:Name="ContentGrid" >
-                <ListView x:Name="lv" SeparatorVisibility="None" HasUnevenRows="True"  ItemSelected="lv_ItemSelected" ItemsSource="{Binding Categories}">
+                        <ListView x:Name="lv" SeparatorVisibility="None" HasUnevenRows="True"  ItemSelected="lv_ItemSelected" ItemsSource="{Binding FilteredCategories}">
                     <ListView.ItemTemplate>
                         <DataTemplate>
                             <ViewCell>
@@ -26,7 +35,7 @@
                             </ViewCell>
                         </DataTemplate>
                     </ListView.ItemTemplate>
-                </ListView>
+                </ListView>     
                 <Label  LineBreakMode="WordWrap" FontAttributes="Bold"
              Text="სია ცარიელია!" VerticalOptions="Center" HorizontalOptions="Center"
              IsVisible="{Binding Categories.Count, Converter={StaticResource zeroVisibilityConverter}}" FontSize="16"

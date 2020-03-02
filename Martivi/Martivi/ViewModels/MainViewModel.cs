@@ -25,8 +25,8 @@ namespace Martivi.ViewModels
         #region Constructors
         public MainViewModel()
         {
-            //AppSettings.AddOrUpdateValue("ServerBaseAddress", "https://martiviapi.azurewebsites.net/");
-            AppSettings.AddOrUpdateValue("ServerBaseAddress", "http://192.168.100.11:44379/");
+            AppSettings.AddOrUpdateValue("ServerBaseAddress", "http://martivi.net/");
+            //AppSettings.AddOrUpdateValue("ServerBaseAddress", "http://192.168.100.11:44379/");
             ConnectCommand = new Command(async () => await Connect());
             DisconnectCommand = new Command(async () => await Disconnect());
 
@@ -40,6 +40,13 @@ namespace Martivi.ViewModels
             SelectedCategory = new Category();
             Services = new ApiServices();
             Categories = new ObservableCollection<Category>();
+            Categories.CollectionChanged += (arg1, arg2) =>
+            {
+                FilterCategory();
+            };
+            FilteredCategories = new ObservableCollection<Category>();
+
+
             AddCommand = new Command<object>(AddQuantity);
             RefreshListing = new Command<object>(async (sender) =>
             {
@@ -290,7 +297,19 @@ namespace Martivi.ViewModels
             get { return _Categories; }
             set { _Categories = value; OnPropertyChanged(); }
         }
+        private ObservableCollection<Category> _FilteredCategories;
+        public ObservableCollection<Category> FilteredCategories
+        {
+            get { return _FilteredCategories; }
+            set { _FilteredCategories = value; OnPropertyChanged(); }
+        }
+        private string _CategoryFilter;
 
+        public string CategoryFilter
+        {
+            get { return _CategoryFilter ?? string.Empty; }
+            set { _CategoryFilter = value; OnPropertyChanged(); FilterCategory(); }
+        }
 
 
         private ObservableCollection<Order> _MadeOrders;
@@ -365,6 +384,18 @@ namespace Martivi.ViewModels
         #endregion
 
         #region Methods
+        public void FilterCategory()
+        {
+            FilteredCategories = new ObservableCollection<Category>(Categories.Where((c) =>
+            {
+                if (c.Name.ToLower().Contains(CategoryFilter.ToLower()))
+                {
+                    return true;
+                }
+                if (c.Products.Any((p) => { return p.Name.ToLower().Contains(CategoryFilter); })) return true;
+                return false;
+            }));
+        }
         private void InitializeSendCommand()
         {
             SendIcon = "\ue745";
@@ -490,7 +521,7 @@ namespace Martivi.ViewModels
             await LoadUser();
             return authRes;
         }
-        internal async void SingOut()
+        internal async void SignOut()
         {
             Token =  null;
             UserId = -1;
@@ -502,14 +533,14 @@ namespace Martivi.ViewModels
         }
         public async Task LoadUser()
         {
-           
+
             if (Token?.Length > 0 && UserId > 0)
             {
-                CurrentUser = await Services.GetUser(UserId, "Bearer "+ Token);
+                CurrentUser = await Services.GetUser(UserId, "Bearer " + Token);
                 if (CurrentUser == null)
                 {
                     Token = null; UserId = -1;
-                    
+
                 }
             }
             else
@@ -520,37 +551,49 @@ namespace Martivi.ViewModels
             {
                 IsSignedIn = true;
                 LoadOrders();
-                LoadMessages();
-                await StartHubConnection();
+                LoadMessages();               
                 Connect();
             }
-            else IsSignedIn = false;
+            else
+            {
+                IsSignedIn = false;
+                Disconnect();
+            }
         }
         async Task StartHubConnection()
         {
+
             hubConnection = new HubConnectionBuilder()
-      .WithUrl(AppSettings.GetValueOrDefault("ServerBaseAddress", "") + "chatHub", options => {options.AccessTokenProvider = () => Task.FromResult(Token); }).Build();
+      .WithUrl(AppSettings.GetValueOrDefault("ServerBaseAddress", "") + "chatHub", options => { options.AccessTokenProvider = () => Task.FromResult(Token); }).Build();
 
 
             hubConnection.On<string>("JoinChat", (user) =>
             {
-                
+
             });
 
             hubConnection.On<string>("LeaveChat", (user) =>
             {
-               
+
             });
 
             hubConnection.On<ChatMessage>("ReceiveMessage", (message) =>
             {
-              if(message.Target== MessageTarget.Global)
+                switch (message.Target)
                 {
-                    GlobalChatMessages.Add(message);
-                }
-                else
-                {
-                    ChatMessages.Add(message);
+                    case MessageTarget.Global:
+                        {
+                            GlobalChatMessages.Add(message);
+                            break;
+                        }
+                    case MessageTarget.TargetUser:
+                        {
+                            if (UserId == message.TargetUser)
+                            {
+                                ChatMessages.Add(message);
+                            }
+                            break;
+                        }
                 }
             });
             hubConnection.On("UpdateListing", () =>
@@ -563,7 +606,7 @@ namespace Martivi.ViewModels
                 {
 
                 }
-                
+
             });
             hubConnection.On("UpdateOrderListing", () =>
             {
@@ -578,7 +621,7 @@ namespace Martivi.ViewModels
 
             });
             hubConnection.Closed += HubConnection_Closed;
-        }
+        }       
 
         private async Task HubConnection_Closed(Exception arg)
         {
@@ -668,7 +711,7 @@ namespace Martivi.ViewModels
                     GlobalChatMessages.Clear();
                     foreach (var message in messages)
                     {
-                        if(message.Target== MessageTarget.Global)
+                        if (message.Target == MessageTarget.Global)
                         {
                             GlobalChatMessages.Add(message);
                         }
@@ -676,7 +719,7 @@ namespace Martivi.ViewModels
                         {
                             ChatMessages.Add(message);
                         }
-                        
+
                     }
                 });
             }
@@ -691,15 +734,18 @@ namespace Martivi.ViewModels
         }
         async Task Initialize()
         {
+            await StartHubConnection();
             InitializeSendCommand();
             //await Services.SendMessage(new ChatMessage() {Message="ტესტ ტესტ ტეს",UserId=UserId,Side=MessageSide.Client },Token);
             GetCategories();
             LoadUser();
+           
         }
        
         private void AddQuantity(object obj)
         {
             var p = obj as Product;
+            if (p.QuantityInSupply <= 0) return;
             p.Quantity += 1;
         }
         private void NavigateOrdersPage(object obj)

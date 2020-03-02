@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Text;
+using System.Text.Json.Serialization;
 
 namespace Martivi.Model
 {
@@ -11,13 +13,44 @@ namespace Martivi.Model
         public string Name { get; set; }
         public string Image { get; set; }
         private ObservableCollection<Product> _Products;
-
         public ObservableCollection<Product> Products
         {
             get { return _Products; }
-            set { _Products = value; OnPropertyChanged(); }
+            set { _Products = value; OnPropertyChanged(); FilterProduct(); Products.CollectionChanged += (arg1, arg2) => { FilterProduct(); }; }
         }
 
+        private string _ProductFilter;
+        [JsonIgnore]
+
+        public string ProductFilter
+        {
+            get { return _ProductFilter; }
+            set { _ProductFilter = value; OnPropertyChanged(); FilterProduct(); }
+        }
+
+        private ObservableCollection<Product> _FilteredProducts;
+
+        [JsonIgnore]
+        public ObservableCollection<Product> FilteredProducts
+        {
+            get { return _FilteredProducts; }
+            set
+            {
+                _FilteredProducts = value;
+                OnPropertyChanged();
+            }
+        }
+        public void FilterProduct()
+        {
+            FilteredProducts = new ObservableCollection<Product>(Products?.Where((c) =>
+            {
+                if (c.Name?.ToLower().Contains(ProductFilter?.ToLower() ?? string.Empty) ?? false)
+                {
+                    return true;
+                }
+                return false;
+            }));
+        }
     }
     public class Product:PropertyChangedBase
     {

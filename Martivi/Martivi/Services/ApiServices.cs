@@ -7,7 +7,9 @@ using Plugin.Settings;
 using Plugin.Settings.Abstractions;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -210,6 +212,24 @@ namespace Martivi.Services
                 throw new Exception(response.StatusCode.ToString() + ": " + resStr);
             }
 
+            throw new Exception(response.StatusCode.ToString() + ": " + resStr);
+        }
+        public async Task<string> UploadFile(Stream stream, string Token)
+        {
+            var f = new MultipartFormDataContent();
+            StreamContent fileContent = new StreamContent(stream);
+            fileContent.Headers.ContentType = MediaTypeHeaderValue.Parse("multipart/form-data");
+            f.Add(fileContent, "file", Path.GetFileName("Image"));
+            var response = await sClient.GetResponsePost(ServerBaseAddress + "api/Upload", f, RequestHeaders: new Header[] { new Header() { Name = "Authorization", Value = Token } });
+            string resStr = await response.Content.ReadAsStringAsync();
+            if (response.IsSuccessStatusCode)
+            {
+                return resStr;
+            }
+            if (response.StatusCode == System.Net.HttpStatusCode.BadRequest)
+            {
+                throw new Exception(response.StatusCode.ToString() + ": " + resStr);
+            }
             throw new Exception(response.StatusCode.ToString() + ": " + resStr);
         }
     }

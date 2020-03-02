@@ -1,4 +1,12 @@
-﻿using System;
+using Syncfusion.XForms.iOS.ProgressBar;
+using Syncfusion.XForms.iOS.PopupLayout;
+using Syncfusion.XForms.iOS.ComboBox;
+using Syncfusion.SfRating.XForms.iOS;
+using Syncfusion.XForms.iOS.Core;
+using Syncfusion.XForms.iOS.Graphics;
+using Syncfusion.XForms.iOS.Border;
+using Syncfusion.XForms.iOS.Buttons;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -25,6 +33,13 @@ namespace Martivi.iOS
         public override bool FinishedLaunching(UIApplication app, NSDictionary options)
         {
             global::Xamarin.Forms.Forms.Init();
+            SfLinearProgressBarRenderer.Init();
+            SfRatingRenderer.Init();
+            SfComboBoxRenderer.Init();
+            Core.Init();
+            SfGradientViewRenderer.Init();
+            SfBorderRenderer.Init();
+            SfButtonRenderer.Init();
             Syncfusion.XForms.iOS.PopupLayout.SfPopupLayoutRenderer.Init();
             SfListViewRenderer.Init();
             SfEffectsViewRenderer.Init();

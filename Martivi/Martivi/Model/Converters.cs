@@ -201,4 +201,18 @@ namespace Martivi.Model
             throw new NotImplementedException();
         }
     }
+
+    public class CountToBoolConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            if (value is int v && v > 0) return true;
+            return false;
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            throw new NotImplementedException();
+        }
+    }
 }

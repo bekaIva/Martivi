@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
+    <TargetFramework>netstandard2.1</TargetFramework>
     <ProduceReferenceAssembly>true</ProduceReferenceAssembly>
     <UserSecretsId>64396dda-f0ab-4a2c-8996-61be184ee4dd</UserSecretsId>
   </PropertyGroup>
@@ -12,19 +12,47 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Imgur.API" Version="4.0.1" />
-    <PackageReference Include="Microsoft.AspNetCore.SignalR.Client" Version="3.1.1" />
+    <None Remove="Data\deliverytracking.json" />
+    <None Remove="Data\ecommerce.json" />
+    <None Remove="Images\EmptyCart.svg" />
+    <None Remove="Images\NoInternet.svg" />
+    <None Remove="Images\NoItem.svg" />
+    <None Remove="Images\PaymentFailure.svg" />
+    <None Remove="Images\PaymentSuccess.svg" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Data\deliverytracking.json" />
+    <EmbeddedResource Include="Data\ecommerce.json" />
+    <EmbeddedResource Include="Images\EmptyCart.svg" />
+    <EmbeddedResource Include="Images\NoInternet.svg" />
+    <EmbeddedResource Include="Images\NoItem.svg" />
+    <EmbeddedResource Include="Images\PaymentFailure.svg" />
+    <EmbeddedResource Include="Images\PaymentSuccess.svg" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.SignalR.Client" Version="3.1.2" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
-    <PackageReference Include="Syncfusion.Xamarin.SfListView" Version="17.4.0.46" />
-    <PackageReference Include="Syncfusion.Xamarin.SfNumericUpDown" Version="17.4.0.46" />
-    <PackageReference Include="Syncfusion.Xamarin.SfPopupLayout" Version="17.4.0.46" />
-    <PackageReference Include="Syncfusion.Xamarin.SfPullToRefresh" Version="17.4.0.46" />
+    <PackageReference Include="SkiaSharp.Extended" Version="1.60.0" />
+    <PackageReference Include="SkiaSharp.Svg" Version="1.60.0" />
+    <PackageReference Include="SkiaSharp.Views.Forms" Version="1.68.1.1" />
+    <PackageReference Include="Syncfusion.Xamarin.Buttons" Version="17.4.0.51" />
+    <PackageReference Include="Syncfusion.Xamarin.Cards" Version="17.4.0.51" />
+    <PackageReference Include="Syncfusion.Xamarin.Core" Version="17.4.0.51" />
+    <PackageReference Include="Syncfusion.Xamarin.SfComboBox" Version="17.4.0.51" />
+    <PackageReference Include="Syncfusion.Xamarin.SfListView" Version="17.4.0.51" />
+    <PackageReference Include="Syncfusion.Xamarin.SfNumericUpDown" Version="17.4.0.51" />
+    <PackageReference Include="Syncfusion.Xamarin.SfPopupLayout" Version="17.4.0.51" />
+    <PackageReference Include="Syncfusion.Xamarin.SfProgressBar" Version="17.4.0.51" />
+    <PackageReference Include="Syncfusion.Xamarin.SfPullToRefresh" Version="17.4.0.51" />
+    <PackageReference Include="Syncfusion.Xamarin.SfRating" Version="17.4.0.51" />
     <PackageReference Include="Xam.Plugins.Settings" Version="3.1.1" />
     <PackageReference Include="Xamarin.FFImageLoading.Forms" Version="2.4.11.982" />
     <PackageReference Include="Xamarin.FFImageLoading.Svg.Forms" Version="2.4.11.982" />
     <PackageReference Include="Xamarin.FFImageLoading.Transformations" Version="2.4.11.982" />
-    <PackageReference Include="Xamarin.Forms" Version="4.4.0.991537" />
-    <PackageReference Include="Xamarin.Essentials" Version="1.3.1" />
+    <PackageReference Include="Xamarin.Forms" Version="4.5.0.356" />
+    <PackageReference Include="Xamarin.Essentials" Version="1.5.0" />
   </ItemGroup>
 
   <ItemGroup>
@@ -32,9 +60,6 @@
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="Pages\GlobalChatPage.xaml">
-      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Pages\HomePage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="Pages\InfoPage.xaml">
@@ -84,6 +109,81 @@
     </EmbeddedResource>
     <EmbeddedResource Update="secondpage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Themes\LightTheme.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Views\AboutUs\AboutUsSimplePage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Views\AboutUs\Styles.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Views\Bookmarks\CartPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Views\Bookmarks\PriceDetailView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Views\Bookmarks\Styles.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Views\ErrorandEmpty\EmptyCartPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Views\ErrorandEmpty\NoInternetConnectionPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Views\ErrorandEmpty\NoItemPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Views\ErrorandEmpty\Styles.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Views\Forms\SimpleEmailEntry.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Views\Forms\SimpleLoginPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Views\Forms\SimpleSignUpPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Views\Forms\Styles.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Views\Templates\CartItemListTemplate.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Views\Templates\Styles.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Views\Tracking\ProductDeliveryTrackingPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Views\Tracking\Styles.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Views\Transaction\CheckoutPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Views\Transaction\DeliveryView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Views\Transaction\PaymentFailurePage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Views\Transaction\PaymentSuccessPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Views\Transaction\PaymentView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Views\Transaction\PriceDetailView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Views\Transaction\Styles.xaml">
+      <Generator>MSBuild:Compile</Generator>
     </EmbeddedResource>
   </ItemGroup>
 

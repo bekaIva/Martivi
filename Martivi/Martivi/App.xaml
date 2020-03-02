@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="utf-8" ?>
 <Application xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:d="http://xamarin.com/schemas/2014/forms/design"
@@ -6,9 +6,14 @@
              mc:Ignorable="d"
              xmlns:MainPageViewModel="clr-namespace:Martivi.ViewModels"
              xmlns:model="clr-namespace:Martivi.Model"
+             xmlns:ffimageloading="clr-namespace:FFImageLoading.Forms;assembly=FFImageLoading.Forms"
+             xmlns:themes = "clr-namespace:Martivi.Themes;assembly=Martivi"
              x:Class="Martivi.App">
     <Application.Resources>
         <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <themes:LightTheme />
+            </ResourceDictionary.MergedDictionaries >
            
             <Color x:Key="primary">#FF5722</Color>
             <Color x:Key="primary_dark">#E64A19</Color>
@@ -36,11 +41,76 @@
             </Style>
             <Style TargetType="FlyoutItem">
                 <Setter Property="Shell.BackgroundColor" Value="{StaticResource primary}"/>
-                <Setter Property="Shell.BackgroundColor" Value="{StaticResource primary}"/>
             </Style>
             <Style TargetType="Tab" BasedOn="{StaticResource BaseStyle}" />
             <MainPageViewModel:MainViewModel x:Key="MainViewModel"></MainPageViewModel:MainViewModel>
-           
+            <DataTemplate x:Key="OrdersItemTemplate">
+                <Frame OutlineColor="#b3b3b3" Padding="2" Margin="10,0,10,0" HasShadow="True" >
+                    <Grid BackgroundColor="White" Padding="10">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="auto"/>
+                        </Grid.ColumnDefinitions>
+
+
+                        <Label x:Name="TitleLabel" LineBreakMode="NoWrap" Text="{Binding OrderTime}" 
+                       FontAttributes="Bold" TextColor="Black"
+                                       FontSize="{OnPlatform Android={OnIdiom Phone=16, Tablet=18}, iOS={OnIdiom Phone=16, Tablet=18}, UWP={OnIdiom Phone=18, Tablet=20, Desktop=20}, macOS=18, WPF=20}"/>
+
+                        <StackLayout Grid.Column="1" Orientation="Horizontal">
+                            <Label Text="Id:" TextColor="{StaticResource primary}" VerticalOptions="Center" VerticalTextAlignment="Center"></Label>
+                            <Label x:Name="IdLabel" VerticalOptions="Center" VerticalTextAlignment="Center" TextColor="{StaticResource primary_dark}" Grid.Column="1" LineBreakMode="NoWrap" Text="{Binding OrderId}"
+                       FontAttributes="Bold" 
+                                       FontSize="16"/>
+                        </StackLayout>
+
+
+                        <Label Grid.ColumnSpan="2" Grid.Row="1" x:Name="DescriptionLabel" Text="{Binding OrderedProducts,Converter={StaticResource OrderedProductsToTotalPriceCoverter}}" TextColor="{StaticResource primary}"
+                                       FontSize="{OnPlatform Android={OnIdiom Phone=12, Tablet=14}, iOS={OnIdiom Phone=12, Tablet=14}, UWP={OnIdiom Phone=12, Tablet=12, Desktop=12}, macOS=14, WPF=12}"/>
+
+                        <Frame Grid.Row="2" Grid.ColumnSpan="2" Padding="4,2,4,2" BackgroundColor="#FFE7E8E9" HorizontalOptions="Start" VerticalOptions="End"
+                                       HasShadow="True">
+                            <Label x:Name="TagLabel" LineBreakMode="NoWrap" Text="{Binding Status,Converter={StaticResource OrderStatusConverter}}"
+                          FontSize="10" TextColor="Black"/>
+                        </Frame>
+                    </Grid>
+                </Frame>
+            </DataTemplate>
+            <DataTemplate x:Key="CategoryTemplate">
+                <Grid Padding="12">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="auto"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <ffimageloading:CachedImage Source="{Binding Image}" LoadingPlaceholder="placeholderimage.png" HeightRequest="50" DownsampleToViewSize="true" Aspect="AspectFill" CacheType="All">
+                    </ffimageloading:CachedImage>
+                    <Label Grid.Column="1" Text="{Binding Name}" VerticalOptions="Center" ></Label>
+                </Grid>
+            </DataTemplate>
+            <DataTemplate x:Key="ProductTemplate">
+                <Grid Padding="12">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="auto"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <ffimageloading:CachedImage Source="{Binding Image}" LoadingPlaceholder="placeholderimage.png" HeightRequest="50" DownsampleToViewSize="true" Aspect="AspectFill" CacheType="All">
+                    </ffimageloading:CachedImage>
+                    <StackLayout Grid.Column="1">
+                        <Label Grid.Column="1" Text="{Binding Name}" VerticalOptions="Start" ></Label>
+                        <Label Text="{Binding Price, Converter={StaticResource currencyFormatConverter}}" VerticalOptions="Start" FontAttributes="Bold" 
+                                               HorizontalOptions="Start" FontSize="14" TextColor="{StaticResource primary}" />
+                        <Label Text="{Binding Description,Converter={StaticResource ShortDescription}, ConverterParameter=60}" FontSize="12"  VerticalOptions="Start" HorizontalOptions="Start"
+                                           TextColor="{OnPlatform Default=#757575, Android=#000000, UWP=#4C4C4C}"
+                                           Opacity="{OnPlatform Default=1, Android=0.54}" />
+                    </StackLayout>
+
+                </Grid>
+            </DataTemplate>
             <model:InverseZeroVisibilityConverter x:Key="inverseZeroVisibilityConverter"/>
             <model:ZeroVisibilityConverter x:Key="zeroVisibilityConverter"/>
             <model:CurrencyFormatConverter x:Key="currencyFormatConverter"/>
@@ -50,7 +120,7 @@
             <model:IsSignedInConverter x:Key="IsSignedInConverter"></model:IsSignedInConverter>
             <model:OrderedProductsToTotalPriceCoverter x:Key="OrderedProductsToTotalPriceCoverter"/>
             <model:OrderStatusConverter x:Key="OrderStatusConverter"/>
-            
+            <model:CountToBoolConverter x:Key="CountToBoolConverter"/>
             <OnPlatform x:TypeArguments="x:String" 
                 x:Key="FontAwesomeBrands">
                 <On Platform="Android" 
