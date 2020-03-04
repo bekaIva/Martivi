@@ -1,6 +1,8 @@
 ﻿using Martivi.Model;
 using Martivi.Pages;
+using Martivi.Pages.ContentViews;
 using Martivi.Services;
+using Martivi.Views.ErrorAndEmpty;
 using MartiviSharedLib;
 using MartiviSharedLib.Models.Users;
 using Microsoft.AspNetCore.SignalR.Client;
@@ -24,7 +26,7 @@ namespace Martivi.ViewModels
     {
         #region Constructors
         public MainViewModel()
-        {
+        {            
             AppSettings.AddOrUpdateValue("ServerBaseAddress", "http://martivi.net/");
             //AppSettings.AddOrUpdateValue("ServerBaseAddress", "http://192.168.100.11:44379/");
             ConnectCommand = new Command(async () => await Connect());
@@ -78,12 +80,40 @@ namespace Martivi.ViewModels
 
 
         #region Properties
+        private bool _Loaded;
+
+        public bool Loaded
+        {
+            get { return _Loaded; }
+            set { _Loaded = value; OnPropertyChanged(); }
+        }
+
+        private ContentView _CategoryView;
+        public ContentView CategoryView
+        {
+            get { return _CategoryView; }
+            set { _CategoryView = value; OnPropertyChanged(); }
+        }
+
+        private ContentView _ProductView;
+
+        public ContentView ProductView
+        {
+            get { return _ProductView; }
+            set { _ProductView = value; OnPropertyChanged(); }
+        }
+
+
         private Order _SelectedDetailOrder;
 
         public Order SelectedDetailOrder
         {
             get { return _SelectedDetailOrder; }
-            set { _SelectedDetailOrder = value; OnPropertyChanged(); }
+            set 
+            {
+                _SelectedDetailOrder = value;
+                OnPropertyChanged();
+            }
         }
 
 
@@ -321,12 +351,41 @@ namespace Martivi.ViewModels
 
 
         public ObservableCollection<Product> Orders { get; set; } = new ObservableCollection<Product>();
-        
+
+        ProductView pv;
+        NoItemProductsPage np;
         private Category _SelectedCategory;
         public Category SelectedCategory
         {
             get { return _SelectedCategory; }
-            set { _SelectedCategory = value; OnPropertyChanged(); }
+            set 
+            {
+                _SelectedCategory = value;
+                OnPropertyChanged();
+                if (value?.Products?.Count > 0)
+                {
+                    if (Loaded)
+                    {
+                        if (pv == null)
+                        {
+                            pv = new ProductView();                           
+                        }
+                        ProductView = pv;
+                    }
+
+                }
+                else
+                {
+                    if (Loaded)
+                    {
+                        if (np == null)
+                        {
+                            np = new NoItemProductsPage();                           
+                        }
+                        ProductView = np;
+                    }
+                }
+            }
         }
 
      
@@ -512,6 +571,7 @@ namespace Martivi.ViewModels
         public async Task<User> Auth(AuthenticateModelBase auth)
         {
             var authRes = await Services.Authenticate(auth);
+            if (authRes.Type == UserType.Admin) throw new Exception("გაიარეთ ავტორიზაცია კლიენტის მომხმარებლით");
             Token = authRes.Token;
             UserId = authRes.UserId;
             UserName = authRes.Username;
@@ -801,7 +861,8 @@ namespace Martivi.ViewModels
                 MakingOrder = false;
             }
         }
-
+        CategoryView cv;
+        NoItemCategoryPage ncp;
         public async Task GetCategories()
         {
             try
@@ -809,7 +870,15 @@ namespace Martivi.ViewModels
                 if (IsBusy) return;
                 Categories.Clear();
                 IsBusy = true;
+                while (!Loaded) await Task.Delay(100);
+                if (cv == null) cv = new CategoryView();
+                CategoryView =cv;
                 var categories = await Services.GetCategories();
+                if(categories.Count==0)
+                {
+                    if (ncp == null) ncp = new NoItemCategoryPage();
+                    CategoryView =ncp;
+                }
                 foreach (var category in categories)
                 {
                     if (SelectedCategory?.CategoryId == category.CategoryId) SelectedCategory = category;

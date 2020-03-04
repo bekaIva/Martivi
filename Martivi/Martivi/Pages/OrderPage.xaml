@@ -114,9 +114,8 @@
              IsVisible="{Binding TotalOrderedItems, Converter={StaticResource zeroVisibilityConverter}}" FontSize="16"
              TextColor="{StaticResource primary}" />
 
-            <Button Grid.Row="3" TextColor="#FFFFFF" Text="შეკვეთა" 
-                HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand"
-                Command="{Binding CheckoutCommand}" CommandParameter="{Binding Source={x:Reference Name=orderPage}}" BorderRadius="0"
+            <Button Grid.Row="3" TextColor="#FFFFFF" Text="შეკვეთა" Clicked="Reserve_Click"
+                HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand"                
                 IsVisible="{Binding TotalOrderedItems, Converter={StaticResource inverseZeroVisibilityConverter}}"
                 FontSize="{OnPlatform Default=12, Android=16}"
                 BackgroundColor="{StaticResource primary_dark}" />

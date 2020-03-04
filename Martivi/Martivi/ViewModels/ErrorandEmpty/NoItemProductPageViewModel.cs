@@ -10,7 +10,7 @@ namespace Martivi.ViewModels.ErrorAndEmpty
     /// ViewModel for no item page.
     /// </summary>
     [Preserve(AllMembers = true)]
-    public class NoItemPageViewModel : BaseViewModel
+    public class NoItemProductPageViewModel : BaseViewModel
     {
         #region Fields
 
@@ -25,9 +25,9 @@ namespace Martivi.ViewModels.ErrorAndEmpty
         #region Constructor
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="NoItemPageViewModel" /> class.
+        /// Initializes a new instance of the <see cref="NoItemCategoryPageViewModel" /> class.
         /// </summary>
-        public NoItemPageViewModel()
+        public NoItemProductPageViewModel()
         {
             this.ImagePath = "NoItem.svg";
             this.Header = "NO ITEMS";

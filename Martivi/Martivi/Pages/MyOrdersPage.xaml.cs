@@ -1,6 +1,5 @@
 ﻿using Martivi.Model;
 using Martivi.ViewModels;
-using Martivi.Views.Tracking;
 using Syncfusion.SfPullToRefresh.XForms;
 using System;
 using System.Collections.Generic;
@@ -47,7 +46,7 @@ namespace Martivi.Pages
             if(e.ItemData is Order order)
             {
                 vm.SelectedDetailOrder = order;
-                Navigation.PushAsync(new ProductDeliveryTrackingPage());
+                Navigation.PushAsync(new OrderDetailPage());
             }
         }
     }

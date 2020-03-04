@@ -20,6 +20,7 @@ namespace Martivi.Pages
         {
             InitializeComponent();
             mv = Application.Current.Resources["MainViewModel"] as MainViewModel;
+            mv.Loaded = true;
         }
 
         private void SignInOutClicked(object sender, EventArgs e)

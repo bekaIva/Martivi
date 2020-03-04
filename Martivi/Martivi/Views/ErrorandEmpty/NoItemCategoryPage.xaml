@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
-<ContentPage
-    x:Class="Martivi.Views.ErrorAndEmpty.NoItemPage"
+<ContentView
+    x:Class="Martivi.Views.ErrorAndEmpty.NoItemCategoryPage"
     xmlns="http://xamarin.com/schemas/2014/forms"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:button="clr-namespace:Syncfusion.XForms.Buttons;assembly=Syncfusion.Buttons.XForms"
@@ -8,23 +8,22 @@
     xmlns:svg="clr-namespace:Martivi.Controls"
     xmlns:viewModel="clr-namespace:Martivi.ViewModels.ErrorAndEmpty"
     BackgroundColor="{StaticResource Gray-White}"
-    NavigationPage.HasNavigationBar="False">
+    >
 
     <!--  Binding context for NoItem page  -->
-    <ContentPage.BindingContext>
-        <viewModel:NoItemPageViewModel />
-    </ContentPage.BindingContext>
+    <ContentView.BindingContext>
+        <viewModel:NoItemCategoryPageViewModel ViewModel="{StaticResource MainViewModel}"/>
+    </ContentView.BindingContext>
 
-    <ContentPage.Resources>
+    <ContentView.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="Styles.xaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
-    </ContentPage.Resources>
+    </ContentView.Resources>
 
-    <ContentPage.Content>
-
+    <ContentView.Content>
         <Grid>
 
             <Grid.RowDefinitions>
@@ -78,12 +77,10 @@
             <!--  Try again button  -->
             <button:SfButton
                 Grid.Row="1"
-                Command="{Binding GoBackCommand}"
+                Command="{Binding TryAgainCommand}"
                 Style="{StaticResource SfGradientButtonStyle}"
-                Text="GO BACK" />
-
+                Text="სცადეთ თავიდან" />
         </Grid>
+    </ContentView.Content>
 
-    </ContentPage.Content>
-
-</ContentPage>
+</ContentView>

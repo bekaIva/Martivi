@@ -51,12 +51,44 @@ namespace Martivi.Pages
         MainViewModel mv;
         public OrderDetailPage()
         {
-            InitializeComponent();
-            mv = Application.Current.Resources["MainViewModel"] as MainViewModel;
-            TotalOrderedItems =  mv.SelectedDetailOrder.OrderedProducts.Count;
-            foreach(var p in mv.SelectedDetailOrder.OrderedProducts)
+            try
             {
-                TotalPrice += p.TotalPrice;
+                InitializeComponent();
+                mv = Application.Current.Resources["MainViewModel"] as MainViewModel;
+                TotalOrderedItems = mv.SelectedDetailOrder.OrderedProducts.Count;
+                foreach (var p in mv.SelectedDetailOrder.OrderedProducts)
+                {
+                    TotalPrice += p.TotalPrice;
+                }
+            }
+            catch (Exception e)
+            {
+
+                throw;
+            }
+        }
+
+        private void stepProgress_ChildAdded(object sender, ElementEventArgs e)
+        {
+
+        }
+
+        private void listView_Loaded(object sender, Syncfusion.ListView.XForms.ListViewLoadedEventArgs e)
+        {
+            try
+            {
+                var totalH = mv.SelectedDetailOrder.OrderedProducts.Count * 140;
+                if(totalH>560)
+                {
+                    listView.HeightRequest = 560;
+                    return;
+                }
+                listView.HeightRequest = totalH;
+
+            }
+            catch 
+            {
+
             }
         }
     }

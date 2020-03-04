@@ -9,12 +9,12 @@ namespace Martivi.Views.ErrorAndEmpty
     /// </summary>
     [Preserve(AllMembers = true)]
     [XamlCompilation(XamlCompilationOptions.Compile)]
-    public partial class NoItemPage
+    public partial class NoItemCategoryPage
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="NoItemPage" /> class.
+        /// Initializes a new instance of the <see cref="NoItemCategoryPage" /> class.
         /// </summary>
-        public NoItemPage()
+        public NoItemCategoryPage()
         {
             InitializeComponent();
         }

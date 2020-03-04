@@ -5,16 +5,18 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:sync="clr-namespace:Syncfusion.ListView.XForms;assembly=Syncfusion.SfListView.XForms"
              xmlns:numeric="clr-namespace:Syncfusion.SfNumericUpDown.XForms;assembly=Syncfusion.SfNumericUpDown.XForms"
+             xmlns:progressBar="clr-namespace:Syncfusion.XForms.ProgressBar;assembly=Syncfusion.SfProgressBar.XForms"
              mc:Ignorable="d"
-             x:Class="Martivi.Pages.OrderDetailPage" x:Name="orderDetailPage" BindingContext="{StaticResource MainViewModel}" Title="{Binding Source={x:Reference orderDetailPage},Path=Order.OrderId, StringFormat='შეკვეთა #{0}'}">
+             x:Class="Martivi.Pages.OrderDetailPage" x:Name="orderDetailPage" BindingContext="{StaticResource MainViewModel}" Title="{Binding SelectedDetailOrder.OrderId, StringFormat='შეკვეთა #{0}'}">
+   
     <ContentPage.Content>
-
-        <Grid>
+        <ScrollView>
+            <Grid>
             <Grid x:Name="OrdersLayout" RowSpacing="0" BindingContext="{Binding Source={x:Reference orderDetailPage}}">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="*" />
+                    <RowDefinition Height="auto" />
                     <RowDefinition Height="auto"/>
                 </Grid.RowDefinitions>
                 <Frame BackgroundColor="White" HasShadow="True" Padding="0" Margin="0">
@@ -44,7 +46,7 @@
                     </Grid>
                 </Frame>
                 <BoxView x:Name="boxView" Grid.Row="1" BackgroundColor="#EAEAEA"  HeightRequest="{OnPlatform Default=0, UWP=1}" />
-                <sync:SfListView x:Name="listView" Grid.Row="2" 
+                <sync:SfListView Loaded="listView_Loaded" x:Name="listView" Grid.Row="2"  VerticalOptions="Start"
                             ItemSize="140"
                             SelectionMode="None"
                             ItemsSource="{Binding Source={x:StaticResource MainViewModel}, Path=SelectedDetailOrder.OrderedProducts}">
@@ -105,11 +107,88 @@
                     </sync:SfListView.ItemTemplate>
                    
                 </sync:SfListView>
-                <Frame Grid.Row="3" Padding="4,2,4,2" BackgroundColor="#FFE7E8E9" HorizontalOptions="Start" VerticalOptions="End"
-                                       HasShadow="True">
-                    <Label Margin="4" x:Name="TagLabel" LineBreakMode="NoWrap" Text="{Binding Source={x:StaticResource MainViewModel},Path=SelectedDetailOrder.Status,Converter={StaticResource OrderStatusConverter}}"
-                          FontSize="16" TextColor="Black"/>
-                </Frame>
+               
+                    <!--<Label Margin="4" x:Name="TagLabel" LineBreakMode="NoWrap" Text="{Binding Source={x:StaticResource MainViewModel},Path=SelectedDetailOrder.Status,Converter={StaticResource OrderStatusConverter}}"
+                          FontSize="16" TextColor="Black"/>-->
+                <Grid Grid.Row="3" BackgroundColor="{StaticResource Gray-White}" BindingContext="{Binding Source={StaticResource MainViewModel}, Path=SelectedDetailOrder}">
+                    
+                        <progressBar:SfStepProgressBar
+                    x:Name="stepProgress"
+                    Margin="0,20,0,0"    
+                    Orientation="Horizontal"
+                    TitleAlignment="Start"
+                            VerticalOptions="FillAndExpand"
+                            HorizontalOptions="FillAndExpand"
+                    TitleSpace="12"
+                    BindableLayout.ItemsSource="{Binding ProductDeliveryTrackings}">
+
+                        <!--  Style for step progress not started  -->
+                        <progressBar:SfStepProgressBar.NotStartedStepStyle>
+                            <progressBar:StepStyle
+                            x:TypeArguments="progressBar:NotStartedStepState"
+                            MarkerContentSize="12"
+                            MarkerShapeType="Circle" />
+                        </progressBar:SfStepProgressBar.NotStartedStepStyle>
+
+                        <!--  Style for step progress inprogress  -->
+                        <progressBar:SfStepProgressBar.InProgressStepStyle>
+                            <progressBar:StepStyle
+                            x:TypeArguments="progressBar:InProgressStepState"
+                            MarkerFillColor="{StaticResource PrimaryColor}"
+                            MarkerShapeType="Circle"
+                            MarkerStrokeColor="{StaticResource PrimaryDarkColor}"
+                            ProgressLineColor="{StaticResource PrimaryColor}" />
+                        </progressBar:SfStepProgressBar.InProgressStepStyle>
+
+                        <!--  Style for step progress completed  -->
+                        <progressBar:SfStepProgressBar.CompletedStepStyle>
+                            <progressBar:StepStyle
+                            x:TypeArguments="progressBar:CompletedStepState"
+                            MarkerContentFillColor="{StaticResource Gray-White}"
+                            MarkerContentType="Tick"
+                            MarkerFillColor="{StaticResource PrimaryColor}"
+                            MarkerShapeType="Circle"
+                            MarkerStrokeColor="{StaticResource PrimaryDarkColor}" />
+                        </progressBar:SfStepProgressBar.CompletedStepStyle>
+                        <BindableLayout.ItemTemplate>
+                            <DataTemplate>
+                                <progressBar:StepView
+                                Margin="20,16,0,0"
+                                ProgressValue="{Binding ProgressValue}"
+                                Status="{Binding Status}">
+                                    <progressBar:StepView.PrimaryFormattedText>
+                                        <FormattedString>
+                                            <Span
+                                            FontSize="16"
+                                            Style="{StaticResource SpanStyle}"
+                                            Text="{Binding Title}" />
+                                            <Span Text="&#10;&#10;" />
+                                            <Span Style="{StaticResource SpanStyle}" Text="{Binding TitleStatus}" />
+                                            <Span Text="&#10;" />
+                                            <Span
+                                            FontFamily="{StaticResource Montserrat-Medium}"
+                                            Style="{StaticResource SpanStyle}"
+                                            Text="{Binding Date}"
+                                            TextColor="{StaticResource Gray-700}" />
+                                            <Span Text="&#10;&#10;" />
+                                            
+                                            <Span Text="&#10;" />
+                                            <Span
+                                            FontFamily="{StaticResource Montserrat-Medium}"
+                                            Style="{StaticResource SpanStyle}"
+                                            Text="{Binding OrderDate}"
+                                            TextColor="{StaticResource Gray-700}" />
+                                            <Span Text="&#10;&#10;" />
+                                        </FormattedString>
+                                    </progressBar:StepView.PrimaryFormattedText>
+                                </progressBar:StepView>
+                            </DataTemplate>
+                        </BindableLayout.ItemTemplate>
+                    </progressBar:SfStepProgressBar>
+                    
+                        
+                    </Grid>
+                    
 
                 <!--<Button Grid.Row="3" TextColor="#FFFFFF" Text="შეკვეთა" 
                 HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand"
@@ -122,5 +201,8 @@
             <!--<ActivityIndicator  HorizontalOptions="Center" VerticalOptions="Center" Color="#FF5722" IsRunning="{Binding MakingOrder}"></ActivityIndicator>-->
 
         </Grid>
+        </ScrollView>
+             
+       
     </ContentPage.Content>
 </ContentPage>

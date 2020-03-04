@@ -1,5 +1,4 @@
-﻿using Martivi.Model;
-using Martivi.ViewModels;
+﻿using Martivi.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,23 +8,26 @@ using System.Threading.Tasks;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
-namespace Martivi.Pages
+namespace Martivi.Pages.ContentViews
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
-    public partial class ProductPage : ContentPage
+    public partial class CategoryView : ContentView
     {
         MainViewModel viewModel;
-        public ProductPage()
+        public CategoryView()
         {
             InitializeComponent();
             viewModel = this.BindingContext as MainViewModel;
         }
+        
 
-      
-        protected override void OnAppearing()
+        private async void lv_ItemSelected(object sender, SelectedItemChangedEventArgs e)
         {
-            base.OnAppearing();
-            
+            if (viewModel?.SelectedCategory != null)
+            {
+                Navigation.PushAsync(new ProductPage());
+            }
+             
         }
     }
 }

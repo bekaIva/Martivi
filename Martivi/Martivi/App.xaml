@@ -4,17 +4,20 @@
              xmlns:d="http://xamarin.com/schemas/2014/forms/design"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d"
+             xmlns:progressBar="clr-namespace:Syncfusion.XForms.ProgressBar;assembly=Syncfusion.SfProgressBar.XForms"
              xmlns:MainPageViewModel="clr-namespace:Martivi.ViewModels"
              xmlns:model="clr-namespace:Martivi.Model"
              xmlns:ffimageloading="clr-namespace:FFImageLoading.Forms;assembly=FFImageLoading.Forms"
              xmlns:themes = "clr-namespace:Martivi.Themes;assembly=Martivi"
+             xmlns:gradient="clr-namespace:Syncfusion.XForms.Graphics;assembly=Syncfusion.Core.XForms"
+             xmlns:converter="clr-namespace:Martivi.Converters"
              x:Class="Martivi.App">
-    <Application.Resources>
+    <Application.Resources>        
         <ResourceDictionary>
+
             <ResourceDictionary.MergedDictionaries>
                 <themes:LightTheme />
             </ResourceDictionary.MergedDictionaries >
-           
             <Color x:Key="primary">#FF5722</Color>
             <Color x:Key="primary_dark">#E64A19</Color>
             <Color x:Key="primary_light">#FFCCBC</Color>
@@ -22,9 +25,9 @@
             <Color x:Key="primary_text">#212121</Color>
             <Color x:Key="secondary_text">#757575</Color>
             <Color x:Key="icons">#FFFFFF</Color>
-            <Color x:Key="divider">#BDBDBD</Color>
-
+            <Color x:Key="divider">#BDBDBD</Color>       
            
+
 
 
             <Style x:Key="BaseStyle" TargetType="Element">
@@ -39,6 +42,7 @@
                 
 
             </Style>
+            
             <Style TargetType="FlyoutItem">
                 <Setter Property="Shell.BackgroundColor" Value="{StaticResource primary}"/>
             </Style>
@@ -178,7 +182,111 @@
             </OnPlatform>
             <FontImageSource x:Key="SignInImageSource" Color="{StaticResource primary_text}" Size="16" FontFamily="{StaticResource FontAwesome5ProRegular}" Glyph="&#xf2f5;"></FontImageSource>
             <FontImageSource x:Key="SignOutImageSource" Color="{StaticResource primary_text}" Size="16" FontFamily="{StaticResource FontAwesome5ProRegular}" Glyph="&#xf2f6;"></FontImageSource>
-        </ResourceDictionary>
-       
+            <converter:DatetimeToColorConverter x:Key="DatetimeToColorConverter"/>
+
+            <x:String x:Key="Arrow">&#xe728;</x:String>
+
+            <!--Common header label style-->
+            <Style TargetType="Label" x:Key="HeaderLabelStyle">
+                <Setter Property="TextColor" Value="{DynamicResource Gray-900}"/>
+                <Setter Property="FontFamily" Value="{DynamicResource Montserrat-SemiBold}"/>
+                <Setter Property="FontSize" Value="14"/>
+                <Setter Property="FontAttributes" Value="Bold"/>
+            </Style>
+
+            <!--Common step view style-->
+            <Style TargetType="progressBar:StepView">
+                <Setter Property="ProgressValue" Value="{Binding ProgressedDistance}"/>
+                <Setter Property="Status" Value="{Binding Status}"/>
+            </Style>
+
+            <!--Common station span style -->
+            <Style TargetType="Span" x:Key="StationSpan">
+                <Setter Property="FontSize" Value="16"/>
+                <Setter Property="FontFamily" Value="{DynamicResource Montserrat-SemiBold}"/>
+                <Setter Property="FontAttributes" Value="Bold"/>
+                <Setter Property="TextColor" Value="{DynamicResource Gray-900}"/>
+            </Style>
+
+            <!--Common distance span style-->
+            <Style TargetType="Span" x:Key="DistanceSpan">
+                <Setter Property="FontSize" Value="12"/>
+                <Setter Property="FontFamily" Value="{DynamicResource Montserrat-SemiBold}"/>
+                <Setter Property="TextColor" Value="{DynamicResource Gray-700}"/>
+            </Style>
+
+            <!--Common arrival span style-->
+            <Style TargetType="Span" x:Key="ArraivalSpan">
+                <Setter Property="FontSize" Value="16"/>
+                <Setter Property="FontAttributes" Value="Bold"/>
+                <Setter Property="TextColor" Value="{DynamicResource Gray-900}"/>
+            </Style>
+
+            <!--Common departure span style-->
+            <Style TargetType="Span" x:Key="DepartureSpan">
+                <Setter Property="FontSize" Value="16"/>
+                <Setter Property="FontAttributes" Value="Bold"/>
+                <Setter Property="TextColor" Value="{DynamicResource Gray-900}"/>
+            </Style>
+
+            <!--Common arrival time span style-->
+            <Style TargetType="Span" x:Key="ArraivalTimeSpan">
+                <Setter Property="Text" Value="On Time"/>
+                <Setter Property="FontSize" Value="12"/>
+                <Setter Property="TextColor" Value="{Binding ArrivalDateTime, Converter={StaticResource DatetimeToColorConverter} }"/>
+            </Style>
+
+            <!--Common departure time span style-->
+            <Style TargetType="Span" x:Key="DepartureTimeSpan">
+                <Setter Property="Text" Value="On Time"/>
+                <Setter Property="FontSize" Value="12"/>
+                <Setter Property="TextColor" Value="{Binding DepartureDateTime, Converter={StaticResource DatetimeToColorConverter} }"/>
+            </Style>
+
+            <!--Common space span style-->
+            <Style TargetType="Span" x:Key="SpaceSpan">
+                <Setter Property="Text" Value="&#10;"/>
+                <Setter Property="FontSize" Value="12"/>
+                <Setter Property="TextColor" Value="Transparent"/>
+            </Style>
+
+            <!--Common white space span style-->
+            <Style TargetType="Span" x:Key="WhiteSpaceSpan">
+                <Setter Property="Text" Value="--------"/>
+                <Setter Property="FontSize" Value="12"/>
+                <Setter Property="TextColor" Value="Transparent"/>
+            </Style>
+
+            <!--Common gradient style-->
+            <Style x:Key="SfGradientStyle" TargetType="gradient:SfGradientView">
+                <Setter Property="BackgroundBrush">
+                    <Setter.Value>
+                        <gradient:SfLinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                            <gradient:SfLinearGradientBrush.GradientStops>
+                                <gradient:SfGradientStop Color="{DynamicResource Secondary}" Offset="0.0" />
+                                <gradient:SfGradientStop Color="{DynamicResource SecondaryGradient}" Offset="1.0" />
+                            </gradient:SfLinearGradientBrush.GradientStops>
+                        </gradient:SfLinearGradientBrush>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+
+            <!--  Common label style  -->
+            <Style x:Key="LabelStyle" TargetType="Label">
+                <Setter Property="LineHeight" Value="{OnPlatform Default=1.5, iOS=-1}" />
+                <Setter Property="FontSize" Value="12" />
+                <Setter Property="FontFamily" Value="{StaticResource Montserrat-Medium}" />
+                <Setter Property="HorizontalOptions" Value="StartAndExpand" />
+                <Setter Property="TextColor" Value="{StaticResource Gray-700}" />
+            </Style>
+
+            <!--  Common span style  -->
+            <Style x:Key="SpanStyle" TargetType="Span">
+                <Setter Property="FontSize" Value="12" />
+                <Setter Property="LineHeight" Value="{OnPlatform Default=1.25, iOS=-1}" />
+                <Setter Property="TextColor" Value="{StaticResource Gray-900}" />
+                <Setter Property="FontFamily" Value="{StaticResource Montserrat-SemiBold}" />
+            </Style>
+        </ResourceDictionary>       
     </Application.Resources>
 </Application>

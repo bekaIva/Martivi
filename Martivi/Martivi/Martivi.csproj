@@ -37,16 +37,16 @@
     <PackageReference Include="SkiaSharp.Extended" Version="1.60.0" />
     <PackageReference Include="SkiaSharp.Svg" Version="1.60.0" />
     <PackageReference Include="SkiaSharp.Views.Forms" Version="1.68.1.1" />
-    <PackageReference Include="Syncfusion.Xamarin.Buttons" Version="17.4.0.51" />
-    <PackageReference Include="Syncfusion.Xamarin.Cards" Version="17.4.0.51" />
-    <PackageReference Include="Syncfusion.Xamarin.Core" Version="17.4.0.51" />
-    <PackageReference Include="Syncfusion.Xamarin.SfComboBox" Version="17.4.0.51" />
-    <PackageReference Include="Syncfusion.Xamarin.SfListView" Version="17.4.0.51" />
-    <PackageReference Include="Syncfusion.Xamarin.SfNumericUpDown" Version="17.4.0.51" />
-    <PackageReference Include="Syncfusion.Xamarin.SfPopupLayout" Version="17.4.0.51" />
-    <PackageReference Include="Syncfusion.Xamarin.SfProgressBar" Version="17.4.0.51" />
-    <PackageReference Include="Syncfusion.Xamarin.SfPullToRefresh" Version="17.4.0.51" />
-    <PackageReference Include="Syncfusion.Xamarin.SfRating" Version="17.4.0.51" />
+    <PackageReference Include="Syncfusion.Xamarin.Buttons" Version="17.4.0.53" />
+    <PackageReference Include="Syncfusion.Xamarin.Cards" Version="17.4.0.53" />
+    <PackageReference Include="Syncfusion.Xamarin.Core" Version="17.4.0.53" />
+    <PackageReference Include="Syncfusion.Xamarin.SfComboBox" Version="17.4.0.53" />
+    <PackageReference Include="Syncfusion.Xamarin.SfListView" Version="17.4.0.53" />
+    <PackageReference Include="Syncfusion.Xamarin.SfNumericUpDown" Version="17.4.0.53" />
+    <PackageReference Include="Syncfusion.Xamarin.SfPopupLayout" Version="17.4.0.53" />
+    <PackageReference Include="Syncfusion.Xamarin.SfProgressBar" Version="17.4.0.53" />
+    <PackageReference Include="Syncfusion.Xamarin.SfPullToRefresh" Version="17.4.0.53" />
+    <PackageReference Include="Syncfusion.Xamarin.SfRating" Version="17.4.0.53" />
     <PackageReference Include="Xam.Plugins.Settings" Version="3.1.1" />
     <PackageReference Include="Xamarin.FFImageLoading.Forms" Version="2.4.11.982" />
     <PackageReference Include="Xamarin.FFImageLoading.Svg.Forms" Version="2.4.11.982" />
@@ -57,6 +57,12 @@
 
   <ItemGroup>
     <EmbeddedResource Update="Pages\ContactToAdminPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Pages\ContentViews\CategoryView.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Pages\ContentViews\ProductView.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="Pages\GlobalChatPage.xaml">
@@ -134,7 +140,10 @@
     <EmbeddedResource Update="Views\ErrorandEmpty\NoInternetConnectionPage.xaml">
       <Generator>MSBuild:Compile</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="Views\ErrorandEmpty\NoItemPage.xaml">
+    <EmbeddedResource Update="Views\ErrorandEmpty\NoItemProductsPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Views\ErrorandEmpty\NoItemCategoryPage.xaml">
       <Generator>MSBuild:Compile</Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="Views\ErrorandEmpty\Styles.xaml">
@@ -156,12 +165,6 @@
       <Generator>MSBuild:Compile</Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="Views\Templates\Styles.xaml">
-      <Generator>MSBuild:Compile</Generator>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Views\Tracking\ProductDeliveryTrackingPage.xaml">
-      <Generator>MSBuild:Compile</Generator>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Views\Tracking\Styles.xaml">
       <Generator>MSBuild:Compile</Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="Views\Transaction\CheckoutPage.xaml">
@@ -201,9 +204,16 @@
     <Compile Update="Pages\ProductPage.xaml.cs">
       <DependentUpon>ProductPage.xaml</DependentUpon>
     </Compile>
+    <Compile Update="Views\ErrorandEmpty\NoItemCategoryPage.xaml.cs">
+      <DependentUpon>NoItemCategoryPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="Views\ErrorandEmpty\NoItemProductsPage.xaml.cs">
+      <DependentUpon>NoItemProductsPage.xaml</DependentUpon>
+    </Compile>
   </ItemGroup>
 
   <ItemGroup>
     <Folder Include="Resources\" />
+    <Folder Include="Views\Tracking\" />
   </ItemGroup>
 </Project>
