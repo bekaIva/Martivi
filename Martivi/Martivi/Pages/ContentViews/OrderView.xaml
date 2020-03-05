@@ -1,0 +1,121 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<ContentView xmlns="http://xamarin.com/schemas/2014/forms" 
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:sync="clr-namespace:Syncfusion.ListView.XForms;assembly=Syncfusion.SfListView.XForms"
+             xmlns:numeric="clr-namespace:Syncfusion.SfNumericUpDown.XForms;assembly=Syncfusion.SfNumericUpDown.XForms"
+             mc:Ignorable="d"
+             x:Class="Martivi.Pages.ContentViews.OrderView" BindingContext="{StaticResource MainViewModel}">
+  <ContentView.Content>
+        <Grid x:Name="OrdersLayout" RowSpacing="0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*" />
+                <RowDefinition Height="48"/>
+            </Grid.RowDefinitions>
+            <Frame BackgroundColor="White" HasShadow="True" Padding="0" Margin="0">
+                <Grid Padding="0" HeightRequest="{OnPlatform Default=48, Android=56}">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+                    <Grid x:Name="grid" Grid.Column="0" Margin="16,0,8,0">
+                        <Label Text="კალათა" FontAttributes="Bold" VerticalOptions="Center" FontSize="16"
+                           TextColor="{OnPlatform Default=#333333, Android=#000000}"
+                           Opacity="{OnPlatform Default=1, Android=0.87}" />
+                    </Grid>
+                    <Grid Grid.Column="1" BackgroundColor="White" HorizontalOptions="End" VerticalOptions="Center" Padding="0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <Label FontAttributes="Bold" Margin="0" Text="{Binding TotalOrderedItems, Converter={StaticResource totalItemsCountConverter}}"
+                         VerticalOptions="Center" HorizontalOptions="End" FontSize="16"
+                         TextColor="{StaticResource primary}" />
+                        <Label Grid.Column="1" FontAttributes="Bold"
+                           Text="{Binding TotalPrice, StringFormat='₾{0}'}" 
+                           VerticalOptions="Center" HorizontalOptions="End" Margin="16,0,8,0" FontSize="16"
+                         TextColor="{StaticResource primary}" />
+                    </Grid>
+                </Grid>
+            </Frame>
+            <BoxView x:Name="boxView" Grid.Row="1" BackgroundColor="#EAEAEA"  HeightRequest="{OnPlatform Default=0, UWP=1}" />
+            <sync:SfListView x:Name="listView" Grid.Row="2"
+                            ItemSize="120"
+                            SelectionMode="None"
+                            ItemsSource="{Binding Orders}">
+                <sync:SfListView.ItemTemplate>
+                    <DataTemplate>
+                        <Grid HeightRequest="120" Margin="0" Padding="0" RowSpacing="0" BackgroundColor="White">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="1"/>
+                            </Grid.RowDefinitions>
+                            <Grid Padding="0" ColumnSpacing="0"  Margin='{OnPlatform Default="15,12,15,12", Android=16}' >
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="0.4*" />
+                                    <ColumnDefinition Width="*" />
+                                </Grid.ColumnDefinitions>
+                                <Image Source="{Binding Image}" Aspect="AspectFit" VerticalOptions="Center" HorizontalOptions="Center" />
+                                <Grid Grid.Column="1" Padding="0" RowSpacing="0"  Margin='{OnPlatform Default="12,0,0,0", Android="16,0,0,0"}'>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="Auto" />
+                                    </Grid.RowDefinitions>
+                                    <Grid Margin="0" HorizontalOptions="End" VerticalOptions="Start" WidthRequest="{OnPlatform Default=32, Android=24}" HeightRequest="{OnPlatform Default=32, Android=24}">
+                                        <Grid.GestureRecognizers>
+                                            <TapGestureRecognizer Command="{Binding Path=BindingContext.RemoveOrderCommand, Source={x:Reference listView}}" 
+                                                              CommandParameter="{Binding .}" />
+                                        </Grid.GestureRecognizers>
+                                        <Label Text="&#xe735;" TextColor="#808080" FontFamily="{OnPlatform iOS=Sync FontIcons, Android=Sync FontIcons.ttf#, UWP=Sync FontIcons.ttf#Sync FontIcons}"
+                                           HeightRequest="40" WidthRequest="40" FontSize="Medium"
+                                           VerticalOptions="Center" HorizontalOptions="Center"/>
+                                    </Grid>
+                                    <Label Text="{Binding Name}" HorizontalOptions="Start" Margin="0,0,0,4" FontSize="16"
+                                     TextColor="{OnPlatform Default=#333333, Android=#000000}"
+                                     Opacity="{OnPlatform Default=1, Android=0.87}" />
+                                    <Label Text="{Binding Weight}" FontSize="14" Grid.Row="1" HorizontalOptions="Start" 
+                                       TextColor="{OnPlatform Default=#757575, Android=#000000, UWP=#4C4C4C}"
+                                       Opacity="{OnPlatform Default=1, Android=0.54}" />
+                                    <Grid Grid.Row="2" Padding="0" ColumnSpacing="0">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="auto"/>
+                                        </Grid.ColumnDefinitions>
+                                        <Label Text="{Binding TotalPrice, Converter={StaticResource currencyFormatConverter}}" VerticalOptions="Start" FontAttributes="Bold"
+                                         HorizontalOptions="Start" FontSize="16"
+                                         TextColor="{StaticResource primary}"
+                                         Margin='{OnPlatform Default="0,12,0,0", Android="0,16,0,0"}' />
+                                        <numeric:SfNumericUpDown Grid.Column="1"  x:Name="numericUpDown" MaximumDecimalDigits="0" IsEditable="False"
+                                                           Minimum="0" Maximum="9"
+                                                              HorizontalOptions="End" VerticalOptions="Center" AllowNull="false"
+                                                              FormatString="n" Watermark="Units" TextAlignment="Center"
+                                                              SpinButtonAlignment="Both" UpDownButtonColor="White"
+                                                              Value="{Binding Quantity, Mode=TwoWay}"
+                                                           TextColor="{OnPlatform Default=#1C73F2, Android=#FFFFFF, UWP=#0078D7}"
+                                                           WidthRequest="{OnPlatform Default=155}"
+                                                           BackgroundColor="{StaticResource primary}" />
+                                    </Grid>
+                                </Grid>
+                            </Grid>
+                            <BoxView x:Name="boxView" Grid.Row="1" BackgroundColor="#EAEAEA"/>
+                        </Grid>
+                    </DataTemplate>
+                </sync:SfListView.ItemTemplate>
+            </sync:SfListView>
+            <!--<Label Grid.Row="2" LineBreakMode="WordWrap" FontAttributes="Bold"
+             Text="კალათა ცარიელია!" VerticalOptions="Center" HorizontalOptions="Center"
+             IsVisible="{Binding TotalOrderedItems, Converter={StaticResource zeroVisibilityConverter}}" FontSize="16"
+             TextColor="{StaticResource primary}" />-->
+
+            <Button Grid.Row="3" TextColor="#FFFFFF" Text="შეკვეთა" 
+                HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand"                
+                IsVisible="{Binding TotalOrderedItems, Converter={StaticResource inverseZeroVisibilityConverter}}"
+                FontSize="{OnPlatform Default=12, Android=16}"
+                BackgroundColor="{StaticResource primary_dark}" />
+        </Grid>
+    </ContentView.Content>
+</ContentView>

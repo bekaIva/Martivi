@@ -206,13 +206,34 @@ namespace Martivi.Model
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if (value is int v && v > 0) return true;
-            return false;
+            bool retVal;
+            if (value is int v && v > 0) retVal= true;
+            else retVal = false;
+            if (parameter is string sp && sp == "negative")
+            {
+                return !retVal;
+            }
+            else return retVal;
+            
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
             throw new NotImplementedException();
+        }
+    }
+
+    public class BoolToNegative : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            if (value is bool b) return !b;
+            return value;
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            return value;
         }
     }
 }

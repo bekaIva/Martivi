@@ -125,6 +125,7 @@
             <model:OrderedProductsToTotalPriceCoverter x:Key="OrderedProductsToTotalPriceCoverter"/>
             <model:OrderStatusConverter x:Key="OrderStatusConverter"/>
             <model:CountToBoolConverter x:Key="CountToBoolConverter"/>
+            <model:BoolToNegative x:Key="BoolToNegative"/>
             <OnPlatform x:TypeArguments="x:String" 
                 x:Key="FontAwesomeBrands">
                 <On Platform="Android" 

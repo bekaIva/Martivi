@@ -88,20 +88,50 @@ namespace Martivi.ViewModels
             set { _Loaded = value; OnPropertyChanged(); }
         }
 
-        private ContentView _CategoryView;
-        public ContentView CategoryView
+        private bool _CategoriesAvailable;
+
+        public bool CategoriesAvailable
         {
-            get { return _CategoryView; }
-            set { _CategoryView = value; OnPropertyChanged(); }
+            get { return _CategoriesAvailable; }
+            set { _CategoriesAvailable = value; OnPropertyChanged(); }
         }
 
-        private ContentView _ProductView;
+        private bool _NoCategories;
 
-        public ContentView ProductView
+        public bool NoCategories
         {
-            get { return _ProductView; }
-            set { _ProductView = value; OnPropertyChanged(); }
+            get { return _NoCategories; }
+            set 
+            {
+                _NoCategories = value;
+                OnPropertyChanged(); 
+            }
         }
+
+        private bool _ConnectionError;
+
+        public bool ConnectionError
+        {
+            get { return _ConnectionError; }
+            set { _ConnectionError = value; OnPropertyChanged(); }
+        }
+
+
+
+        //private ContentView _CategoryView;
+        //public ContentView CategoryView
+        //{
+        //    get { return _CategoryView; }
+        //    set { _CategoryView = value; OnPropertyChanged(); }
+        //}
+
+        //private ContentView _ProductView;
+
+        //public ContentView ProductView
+        //{
+        //    get { return _ProductView; }
+        //    set { _ProductView = value; OnPropertyChanged(); }
+        //}
 
 
         private Order _SelectedDetailOrder;
@@ -352,8 +382,6 @@ namespace Martivi.ViewModels
 
         public ObservableCollection<Product> Orders { get; set; } = new ObservableCollection<Product>();
 
-        ProductView pv;
-        NoItemProductsPage np;
         private Category _SelectedCategory;
         public Category SelectedCategory
         {
@@ -362,29 +390,6 @@ namespace Martivi.ViewModels
             {
                 _SelectedCategory = value;
                 OnPropertyChanged();
-                if (value?.Products?.Count > 0)
-                {
-                    if (Loaded)
-                    {
-                        if (pv == null)
-                        {
-                            pv = new ProductView();                           
-                        }
-                        ProductView = pv;
-                    }
-
-                }
-                else
-                {
-                    if (Loaded)
-                    {
-                        if (np == null)
-                        {
-                            np = new NoItemProductsPage();                           
-                        }
-                        ProductView = np;
-                    }
-                }
             }
         }
 
@@ -810,9 +815,8 @@ namespace Martivi.ViewModels
         }
         private void NavigateOrdersPage(object obj)
         {
-            var productsView = obj as Page;
             var ordersPage = new OrderPage();
-            productsView.Navigation.PushAsync(ordersPage);
+            Shell.Current.Navigation.PushAsync(ordersPage);
         }
         private void RemoveOrder(object obj)
         {
@@ -861,8 +865,6 @@ namespace Martivi.ViewModels
                 MakingOrder = false;
             }
         }
-        CategoryView cv;
-        NoItemCategoryPage ncp;
         public async Task GetCategories()
         {
             try
@@ -870,14 +872,18 @@ namespace Martivi.ViewModels
                 if (IsBusy) return;
                 Categories.Clear();
                 IsBusy = true;
-                while (!Loaded) await Task.Delay(100);
-                if (cv == null) cv = new CategoryView();
-                CategoryView =cv;
+                CategoriesAvailable = true;
+                ConnectionError = false;
+                NoCategories = false;
                 var categories = await Services.GetCategories();
                 if(categories.Count==0)
                 {
-                    if (ncp == null) ncp = new NoItemCategoryPage();
-                    CategoryView =ncp;
+                    CategoriesAvailable = false;
+                    NoCategories = true;
+                }
+                else
+                {
+                    CategoriesAvailable = true;
                 }
                 foreach (var category in categories)
                 {
@@ -910,6 +916,9 @@ namespace Martivi.ViewModels
             }
             catch(Exception e)
             {
+                CategoriesAvailable = false;
+                ConnectionError = true;
+                NoCategories = false;
                 IsBusy = false;
             }
            

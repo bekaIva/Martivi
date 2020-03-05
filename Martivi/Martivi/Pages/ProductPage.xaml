@@ -9,6 +9,8 @@
              xmlns:numeric="clr-namespace:Syncfusion.SfNumericUpDown.XForms;assembly=Syncfusion.SfNumericUpDown.XForms"
              xmlns:pullToRefresh="clr-namespace:Syncfusion.SfPullToRefresh.XForms;assembly=Syncfusion.SfPullToRefresh.XForms"
              xmlns:model="clr-namespace:Martivi.Model"
+             xmlns:errorandempty="clr-namespace:Martivi.Views.ErrorAndEmpty"
+             xmlns:contentviews="clr-namespace:Martivi.Pages.ContentViews"
              mc:Ignorable="d"
              x:Class="Martivi.Pages.ProductPage" x:Name="productPage" BindingContext="{StaticResource MainViewModel}" Title="{Binding SelectedCategory.Name}">
     <Shell.SearchHandler>
@@ -18,9 +20,17 @@
     </Shell.SearchHandler>
     <ContentPage.Content>
         <Grid>
-            <pullToRefresh:SfPullToRefresh x:Name="ptf" RefreshCommand="{Binding RefreshListing}" RefreshCommandParameter="{x:Reference ptf}" PullableContent="{Binding ProductView}">
-                
+            <pullToRefresh:SfPullToRefresh x:Name="ptf" RefreshCommand="{Binding RefreshListing}" RefreshCommandParameter="{x:Reference ptf}">
+                <pullToRefresh:SfPullToRefresh.PullableContent>
+                    <Grid>
+                        <errorandempty:NoInternetConnectionPage IsVisible="{Binding Source={StaticResource MainViewModel},Path=ConnectionError}"></errorandempty:NoInternetConnectionPage>
+                        <Grid IsVisible="{Binding Source={StaticResource MainViewModel},Path=ConnectionError, Converter={StaticResource BoolToNegative}}">
+                                <errorandempty:NoItemCategoryPage IsVisible="{Binding Source={StaticResource MainViewModel},Path=SelectedCategory.Products.Count, Converter={StaticResource CountToBoolConverter}, ConverterParameter=negative}"></errorandempty:NoItemCategoryPage>
+                        <contentviews:ProductView IsVisible="{Binding Source={StaticResource MainViewModel},Path=SelectedCategory.Products.Count, Converter={StaticResource CountToBoolConverter}}"></contentviews:ProductView>
+                        </Grid>
                     
+                    </Grid>
+                </pullToRefresh:SfPullToRefresh.PullableContent>                    
             </pullToRefresh:SfPullToRefresh>
          <ActivityIndicator HorizontalOptions="Center" VerticalOptions="Center" Color="#FF5722" IsRunning="{Binding IsBusy}"></ActivityIndicator>
         </Grid>               

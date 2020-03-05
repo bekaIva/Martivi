@@ -7,6 +7,7 @@
              xmlns:pullToRefresh="clr-namespace:Syncfusion.SfPullToRefresh.XForms;assembly=Syncfusion.SfPullToRefresh.XForms"
              xmlns:model="clr-namespace:Martivi.Model"
              xmlns:contentviews="clr-namespace:Martivi.Pages.ContentViews"
+             xmlns:errorandempty="clr-namespace:Martivi.Views.ErrorAndEmpty"
              mc:Ignorable="d"
              x:Class="Martivi.Pages.CategoryPage" x:Name="categoryPage" BindingContext="{StaticResource MainViewModel}" Title="კატეგორიები" >
     <Shell.SearchHandler>
@@ -19,8 +20,15 @@
     </Shell.SearchHandler>
     <ContentPage.Content>
         <Grid>
-            <pullToRefresh:SfPullToRefresh x:Name="ptf" RefreshCommand="{Binding RefreshListing}" RefreshCommandParameter="{x:Reference ptf}" PullableContent="{Binding CategoryView}">
-                
+            <pullToRefresh:SfPullToRefresh x:Name="ptf" RefreshCommand="{Binding RefreshListing}" RefreshCommandParameter="{x:Reference ptf}">
+                <pullToRefresh:SfPullToRefresh.PullableContent>
+                    <Grid>
+                        <errorandempty:NoInternetConnectionPage IsVisible="{Binding Source={StaticResource MainViewModel},Path=ConnectionError}"></errorandempty:NoInternetConnectionPage>
+                        <errorandempty:NoItemCategoryPage IsVisible="{Binding Source={StaticResource MainViewModel},Path=NoCategories}"></errorandempty:NoItemCategoryPage>
+                        <contentviews:CategoryView IsVisible="{Binding Source={StaticResource MainViewModel},Path=CategoriesAvailable}"></contentviews:CategoryView>
+                    </Grid>
+                    
+                </pullToRefresh:SfPullToRefresh.PullableContent>
             </pullToRefresh:SfPullToRefresh>
             <ActivityIndicator HorizontalOptions="Center" VerticalOptions="Center" Color="#FF5722" IsRunning="{Binding IsBusy}"></ActivityIndicator>
         </Grid>

@@ -30,8 +30,8 @@ namespace Martivi.ViewModels.ErrorAndEmpty
         public NoInternetConnectionPageViewModel()
         {
             this.ImagePath = "NoInternet.svg";
-            this.Header = "NO INTERNET";
-            this.Content = "You must be connected to the internet to complete this action";
+            this.Header = "კავშირის პრობლემა";
+            this.Content = "სერვერთან დაკავშირება ვერ მოხერხდა. დარწმუნდით, რომ გაქვთ წვდომა ინტერნეტთან";
             this.TryAgainCommand = new Command(this.TryAgain);
         }
 
@@ -47,6 +47,13 @@ namespace Martivi.ViewModels.ErrorAndEmpty
         #endregion
 
         #region Properties
+        private MainViewModel _ViewModel;
+
+        public MainViewModel ViewModel
+        {
+            get { return _ViewModel; }
+            set { _ViewModel = value; NotifyPropertyChanged(); }
+        }
 
         /// <summary>
         /// Gets or sets the ImagePath.
@@ -109,7 +116,7 @@ namespace Martivi.ViewModels.ErrorAndEmpty
         /// <param name="obj">The Object</param>
         private void TryAgain(object obj)
         {
-            // Do something
+            ViewModel?.GetCategories();
         }
 
         #endregion

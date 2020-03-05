@@ -30,8 +30,8 @@ namespace Martivi.ViewModels.ErrorAndEmpty
         public EmptyCartPageViewModel()
         {
             this.ImagePath = "EmptyCart.svg";
-            this.Header = "CART IS EMPTY";
-            this.Content = "You don’t have any items in your cart";
+            this.Header = "კალათა ცარიელია";
+            this.Content = "კალათში არ გაქვთ არცერთი ნივთი";
             this.GoBackCommand = new Command(this.GoBack);
         }
 
@@ -107,9 +107,16 @@ namespace Martivi.ViewModels.ErrorAndEmpty
         /// Invoked when the Go back button is clicked.
         /// </summary>
         /// <param name="obj">The Object</param>
-        private void GoBack(object obj)
+        private async void GoBack(object obj)
         {
-            // Do something
+            if(Shell.Current.Navigation.NavigationStack.Count>1)
+            {
+                Shell.Current.Navigation.PopAsync();
+            }
+            else
+            {
+                Shell.Current.GoToAsync($"//home/cb/category");
+            }
         }
 
         #endregion

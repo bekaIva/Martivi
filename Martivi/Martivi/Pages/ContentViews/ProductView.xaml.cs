@@ -20,12 +20,9 @@ namespace Martivi.Pages.ContentViews
             InitializeComponent();
             viewModel = this.BindingContext as MainViewModel;
         }
-        
-
         private void PorductTapped(object sender, Syncfusion.ListView.XForms.ItemTappedEventArgs e)
         {
             Navigation.PushAsync(new SingleProductPage(viewModel, e.ItemData as Product));
-        }
-       
+        }       
     }
 }

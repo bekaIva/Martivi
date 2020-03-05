@@ -19,9 +19,7 @@ namespace Martivi.Pages
         {
             InitializeComponent();
             viewModel = this.BindingContext as MainViewModel;
-        }
-
-      
+        }      
         protected override void OnAppearing()
         {
             base.OnAppearing();

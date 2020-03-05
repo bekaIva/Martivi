@@ -1,4 +1,5 @@
-﻿using Martivi.ViewModels;
+﻿using Martivi.Model;
+using Martivi.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,15 +20,12 @@ namespace Martivi.Pages.ContentViews
             InitializeComponent();
             viewModel = this.BindingContext as MainViewModel;
         }
-        
+   
 
-        private async void lv_ItemSelected(object sender, SelectedItemChangedEventArgs e)
+        private void lv_ItemTapped(object sender, ItemTappedEventArgs e)
         {
-            if (viewModel?.SelectedCategory != null)
-            {
-                Navigation.PushAsync(new ProductPage());
-            }
-             
+            viewModel.SelectedCategory = e.Item as Category;
+            Navigation.PushAsync(new ProductPage());
         }
     }
 }

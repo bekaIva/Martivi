@@ -9,12 +9,11 @@
              x:Class="Martivi.Pages.ContentViews.CategoryView" BindingContext="{StaticResource MainViewModel}">
   <ContentView.Content>       
         <Grid x:Name="ContentGrid" >
-            <ListView x:Name="lv" SeparatorVisibility="None" HasUnevenRows="True" SelectedItem="{Binding SelectedCategory, Mode=TwoWay}" ItemSelected="lv_ItemSelected" ItemsSource="{Binding FilteredCategories}">
+            <ListView x:Name="lv" SeparatorVisibility="None" ItemTapped="lv_ItemTapped" HasUnevenRows="True" SelectionMode="None" ItemsSource="{Binding FilteredCategories}">
                 <ListView.ItemTemplate>
                     <DataTemplate>
                         <ViewCell>
-                            <Grid >
-
+                            <Grid>
                                 <ffimageloading:CachedImage Source="{Binding Image}" LoadingPlaceholder="placeholderimage.png" HeightRequest="200" DownsampleToViewSize="true" Aspect="Fill" CacheType="All">
                                 </ffimageloading:CachedImage>
                                 <BoxView BackgroundColor="Black" Opacity="0.4"></BoxView>

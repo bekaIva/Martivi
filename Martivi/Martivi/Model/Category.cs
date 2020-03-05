@@ -21,7 +21,6 @@ namespace Martivi.Model
 
         private string _ProductFilter;
         [JsonIgnore]
-
         public string ProductFilter
         {
             get { return _ProductFilter; }

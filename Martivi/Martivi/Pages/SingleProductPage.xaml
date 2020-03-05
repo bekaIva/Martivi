@@ -21,7 +21,7 @@
                         <ColumnDefinition Width="Auto" />
                     </Grid.ColumnDefinitions>
                     <Grid x:Name="grid" Grid.Column="0" Margin="16,0,8,0">
-                        <Label Text="Product List" FontAttributes="Bold" VerticalOptions="Center" FontSize="16" 
+                        <Label Text="პროდუქტი" FontAttributes="Bold" VerticalOptions="Center" FontSize="16" 
                                TextColor="{OnPlatform Default=#333333, Android=#000000}"
                                Opacity="{OnPlatform Default=1, Android=0.87}" />
                     </Grid>
