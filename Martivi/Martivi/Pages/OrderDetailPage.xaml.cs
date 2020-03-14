@@ -53,18 +53,21 @@ namespace Martivi.Pages
         {
             try
             {
-                InitializeComponent();
                 mv = Application.Current.Resources["MainViewModel"] as MainViewModel;
                 TotalOrderedItems = mv.SelectedDetailOrder.OrderedProducts.Count;
                 foreach (var p in mv.SelectedDetailOrder.OrderedProducts)
                 {
                     TotalPrice += p.TotalPrice;
                 }
+                InitializeComponent();
+              
+           
+                
+               
             }
             catch (Exception e)
             {
 
-                throw;
             }
         }
 

@@ -37,22 +37,24 @@
     <PackageReference Include="SkiaSharp.Extended" Version="1.60.0" />
     <PackageReference Include="SkiaSharp.Svg" Version="1.60.0" />
     <PackageReference Include="SkiaSharp.Views.Forms" Version="1.68.1.1" />
-    <PackageReference Include="Syncfusion.Xamarin.Buttons" Version="17.4.0.53" />
-    <PackageReference Include="Syncfusion.Xamarin.Cards" Version="17.4.0.53" />
-    <PackageReference Include="Syncfusion.Xamarin.Core" Version="17.4.0.53" />
-    <PackageReference Include="Syncfusion.Xamarin.SfComboBox" Version="17.4.0.53" />
-    <PackageReference Include="Syncfusion.Xamarin.SfListView" Version="17.4.0.53" />
-    <PackageReference Include="Syncfusion.Xamarin.SfNumericUpDown" Version="17.4.0.53" />
-    <PackageReference Include="Syncfusion.Xamarin.SfPopupLayout" Version="17.4.0.53" />
-    <PackageReference Include="Syncfusion.Xamarin.SfProgressBar" Version="17.4.0.53" />
-    <PackageReference Include="Syncfusion.Xamarin.SfPullToRefresh" Version="17.4.0.53" />
-    <PackageReference Include="Syncfusion.Xamarin.SfRating" Version="17.4.0.53" />
+    <PackageReference Include="Syncfusion.Xamarin.Buttons" Version="17.4.0.55" />
+    <PackageReference Include="Syncfusion.Xamarin.Cards" Version="17.4.0.55" />
+    <PackageReference Include="Syncfusion.Xamarin.Core" Version="17.4.0.55" />
+    <PackageReference Include="Syncfusion.Xamarin.SfBadgeView" Version="17.4.0.55" />
+    <PackageReference Include="Syncfusion.Xamarin.SfComboBox" Version="17.4.0.55" />
+    <PackageReference Include="Syncfusion.Xamarin.SfListView" Version="17.4.0.55" />
+    <PackageReference Include="Syncfusion.Xamarin.SfNumericUpDown" Version="17.4.0.55" />
+    <PackageReference Include="Syncfusion.Xamarin.SfPopupLayout" Version="17.4.0.55" />
+    <PackageReference Include="Syncfusion.Xamarin.SfProgressBar" Version="17.4.0.55" />
+    <PackageReference Include="Syncfusion.Xamarin.SfPullToRefresh" Version="17.4.0.55" />
+    <PackageReference Include="Syncfusion.Xamarin.SfRating" Version="17.4.0.55" />
     <PackageReference Include="Xam.Plugins.Settings" Version="3.1.1" />
     <PackageReference Include="Xamarin.FFImageLoading.Forms" Version="2.4.11.982" />
     <PackageReference Include="Xamarin.FFImageLoading.Svg.Forms" Version="2.4.11.982" />
     <PackageReference Include="Xamarin.FFImageLoading.Transformations" Version="2.4.11.982" />
     <PackageReference Include="Xamarin.Forms" Version="4.5.0.356" />
-    <PackageReference Include="Xamarin.Essentials" Version="1.5.0" />
+    <PackageReference Include="Xamarin.Essentials" Version="1.5.1" />
+    <PackageReference Include="Xamarin.Forms.Maps" Version="4.5.0.356" />
   </ItemGroup>
 
   <ItemGroup>
@@ -152,6 +154,9 @@
     <EmbeddedResource Update="Views\ErrorandEmpty\Styles.xaml">
       <Generator>MSBuild:Compile</Generator>
     </EmbeddedResource>
+    <EmbeddedResource Update="Views\Forms\AddProfilePage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </EmbeddedResource>
     <EmbeddedResource Update="Views\Forms\SimpleEmailEntry.xaml">
       <Generator>MSBuild:Compile</Generator>
     </EmbeddedResource>
@@ -170,7 +175,7 @@
     <EmbeddedResource Update="Views\Templates\Styles.xaml">
       <Generator>MSBuild:Compile</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="Views\Transaction\CheckoutPage.xaml">
+    <EmbeddedResource Update="Views\Transaction\CheckoutView.xaml">
       <Generator>MSBuild:Compile</Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="Views\Transaction\DeliveryView.xaml">
@@ -212,6 +217,9 @@
     </Compile>
     <Compile Update="Views\ErrorandEmpty\NoItemProductsPage.xaml.cs">
       <DependentUpon>NoItemProductsPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="Views\Transaction\CheckoutView.xaml.cs">
+      <DependentUpon>CheckoutView.xaml</DependentUpon>
     </Compile>
   </ItemGroup>
 

@@ -1,42 +1,30 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<ContentPage
-    x:Class="Martivi.Views.Transaction.CheckoutPage"
+<ContentView
+    x:Class="Martivi.Views.Transaction.CheckoutView"
     xmlns="http://xamarin.com/schemas/2014/forms"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:controls="clr-namespace:Martivi.Controls"
     xmlns:local="clr-namespace:Martivi.Views.Transaction"
     xmlns:viewModel="clr-namespace:Martivi.ViewModels.Transaction"
-    Title="Checkout"
     BackgroundColor="{DynamicResource Gray-100}"
-    NavigationPage.HasNavigationBar="False">
+    NavigationPage.HasNavigationBar="False" x:Name="checkoutView">
 
-    <ContentPage.Resources>
+    <ContentView.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="Styles.xaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
-    </ContentPage.Resources>
+    </ContentView.Resources>
 
     <!--  Binding context for Checkout Page  -->
-    <ContentPage.BindingContext>
-        <viewModel:CheckoutPageViewModel />
-    </ContentPage.BindingContext>
+    <ContentView.BindingContext>
+        <viewModel:CheckoutPageViewModel MainViewModel="{StaticResource MainViewModel}"/>
+    </ContentView.BindingContext>
 
-    <ContentPage.ControlTemplate>
-        <ControlTemplate>
-            <StackLayout Spacing="0">
 
-                <!--  Title View  -->
-                <controls:TitleView Title="Checkout" BackgroundColor="{DynamicResource Gray-White}" />
 
-                <ContentPresenter />
-
-            </StackLayout>
-        </ControlTemplate>
-    </ContentPage.ControlTemplate>
-
-    <ContentPage.Content>
+    <ContentView.Content>
         <ScrollView>
             <Grid
                 Padding="{OnIdiom Default='0',
@@ -57,10 +45,10 @@
                 <local:PaymentView Grid.Row="1" Margin="{OnIdiom Default=0, Tablet='0,24,0,0'}" />
 
                 <!--  Price Details  -->
-                <local:PriceDetailView Grid.Row="2" ActionText="PAY NOW" />
+                <local:PriceDetailView Grid.Row="2" ActionText="შეკვეთა" />
 
             </Grid>
         </ScrollView>
-    </ContentPage.Content>
+    </ContentView.Content>
 
-</ContentPage>
+</ContentView>

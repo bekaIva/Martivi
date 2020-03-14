@@ -5,7 +5,22 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d"
              xmlns:ffimageloading="clr-namespace:FFImageLoading.Forms;assembly=FFImageLoading.Forms"
+             xmlns:badge="clr-namespace:Syncfusion.XForms.BadgeView;assembly=Syncfusion.SfBadgeView.XForms"
+             xmlns:sfavatar="clr-namespace:Syncfusion.XForms.AvatarView;assembly=Syncfusion.Core.XForms"
+             xmlns:converter="clr-namespace:Martivi.Converters"
+             xmlns:border="clr-namespace:Syncfusion.XForms.Border;assembly=Syncfusion.Core.XForms"
+             xmlns:control="clr-namespace:Martivi.Controls"
+             xmlns:buttons="clr-namespace:Syncfusion.XForms.Buttons;assembly=Syncfusion.Buttons.XForms"
+             xmlns:transaction="clr-namespace:Martivi.Views.Transaction"
              x:Class="Martivi.Pages.ProfilePage" Title="პროფილი" BindingContext="{StaticResource MainViewModel}" x:Name="profilepage">
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <converter:BooleanToColorConverter x:Key="ColorConverter" />
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/Views/Forms/Styles.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </ContentPage.Resources>
     <ContentPage.Content>
         <Grid>
             <Frame Margin="4" HasShadow="True">
@@ -16,30 +31,113 @@
                 <RowDefinition/>
             </Grid.RowDefinitions>
             <StackLayout Grid.Row="0">
-                <ffimageloading:CachedImage HorizontalOptions="Center"  ErrorPlaceholder="blankprofile.png" Source="{Binding Source={x:Reference profilepage},Path=ProfileImageUrl, TargetNullValue=blankprofile.png}" HeightRequest="200" DownsampleToViewSize="true" Aspect="Fill" CacheType="All">
+                            <StackLayout.Resources>
+                                <FontImageSource x:Key="avatar"
+                                    FontFamily="{StaticResource FontIcons}"
+                                    Glyph="{StaticResource AvatarIcon}"
+                                    Size="29"
+                                    Color="{DynamicResource Gray-600}" />
+                            </StackLayout.Resources>
+                            
+
+
+                            <Grid>
+                                <Grid.GestureRecognizers>
+                                    <TapGestureRecognizer Tapped="PickImageTapped"></TapGestureRecognizer>
+                                </Grid.GestureRecognizers>
+                                <badge:SfBadgeView
+                    Padding="0"
+                    HeightRequest="180"
+                    HorizontalOptions="Center"
+                    VerticalOptions="Center"
+                    WidthRequest="180">
+                                <badge:SfBadgeView.Content>
+
+                                    <!--  Avatar view to display the profile picture  -->
+                                    <sfavatar:SfAvatarView 
+                            BackgroundColor="{DynamicResource Gray-200}"
+                                        BorderColor="{DynamicResource Gray-200}"
+                            BorderWidth="2"
+                            ContentType="Custom"
+                            CornerRadius="90"
+                            HeightRequest="180"
+                            HorizontalOptions="Center"
+                            VerticalOptions="Center"
+                            WidthRequest="180"  ImageSource="{Binding Source={x:Reference profilepage},Path=ProfileImageUrl, TargetNullValue={StaticResource avatar}}">                                        
+                                    </sfavatar:SfAvatarView>
+                                </badge:SfBadgeView.Content>
+                                <!--  Badge setting to display the add icon above the profile picture  -->
+                                <badge:SfBadgeView.BadgeSettings>
+                                    <badge:BadgeSetting
+                            BackgroundColor="{DynamicResource Gray-100}"
+                            BadgeAnimation="None"
+                            BadgeIcon="Add"
+                            BadgePosition="BottomRight"
+                            BadgeType="None"
+                            FontSize="15"
+                            Stroke="{DynamicResource Gray-White}"
+                            StrokeWidth="4"
+                            TextColor="{DynamicResource Gray-600}"
+                            TextPadding="7"
+                            Offset="-5,-10"/>
+                                </badge:SfBadgeView.BadgeSettings>
+                            </badge:SfBadgeView>
+                            </Grid>
+
+
+
+                            <!--<ffimageloading:CachedImage HorizontalOptions="Center"  ErrorPlaceholder="blankprofile.png" Source="{Binding Source={x:Reference profilepage},Path=ProfileImageUrl, TargetNullValue=blankprofile.png}" HeightRequest="200" DownsampleToViewSize="true" Aspect="Fill" CacheType="All">
                                 <ffimageloading:CachedImage.GestureRecognizers>
                                     <TapGestureRecognizer Tapped="PickImageTapped"></TapGestureRecognizer>
                                 </ffimageloading:CachedImage.GestureRecognizers>
-                </ffimageloading:CachedImage>
+                </ffimageloading:CachedImage>-->
                 <Label HorizontalOptions="Center" Text="{Binding UserName}"></Label>
             </StackLayout>
                 <Grid Grid.Row="1" Margin="4" >
 
-                    <StackLayout Orientation="Vertical" BindingContext="{x:Reference profilepage}">
-                            <Entry  Text="{Binding UserName,Mode=TwoWay}"></Entry>
-                        <BoxView HeightRequest="2"></BoxView>
-                        <Entry Placeholder="პაროლი" Text="{Binding Password, Mode=TwoWay}" IsPassword="True"></Entry>
-                        <BoxView HeightRequest="2"></BoxView>
-                        <Entry Placeholder="სახელი" Text="{Binding FirstName,Mode=TwoWay}"></Entry>
-                        <BoxView HeightRequest="2"></BoxView>
-                        <Entry Placeholder="გვარი" Text="{Binding LastName,Mode=TwoWay}"></Entry>
-                        <BoxView HeightRequest="2"></BoxView>
-                        <Entry Placeholder="ტელეფონი" Text="{Binding Phone, Mode=TwoWay}"></Entry>
-                        <BoxView HeightRequest="2"></BoxView>
-                        <Entry Placeholder="მისამართი" Text="{Binding Address}"></Entry>
-                        <BoxView HeightRequest="2"></BoxView>
-                        <Button Clicked="UpdateClicked" HorizontalOptions="Fill" HeightRequest="40" Text="განახლება" BackgroundColor="{StaticResource primary}"></Button>
-                    </StackLayout>
+                    <StackLayout Orientation="Vertical" BindingContext="{x:Reference profilepage}" Padding="16" Spacing="16">
+                                <border:SfBorder BorderColor="{Binding Source={x:Reference UserNameEntry}, Path=IsFocused, Converter={StaticResource ColorConverter}, ConverterParameter=3}" Style="{StaticResource FormBorderStyle}">
+                                    <control:BorderlessEntry
+                        x:Name="UserNameEntry"
+                        Placeholder="მომხმარებელი"
+                        Style="{StaticResource EntryTextStyle}" Text="{Binding UserName,Mode=TwoWay}"/>
+                                </border:SfBorder>
+
+                        
+
+                                <border:SfBorder BorderColor="{Binding Source={x:Reference PasswordEntry}, Path=IsFocused, Converter={StaticResource ColorConverter}, ConverterParameter=3}" Style="{StaticResource FormBorderStyle}">
+                                    <control:BorderlessEntry IsPassword="True"
+                        x:Name="PasswordEntry"
+                        Placeholder="პაროლი"
+                        Style="{StaticResource EntryTextStyle}" Text="{Binding Password, Mode=TwoWay}"/>
+                                </border:SfBorder>
+
+                              
+
+                                <border:SfBorder BorderColor="{Binding Source={x:Reference FirstNameEntry}, Path=IsFocused, Converter={StaticResource ColorConverter}, ConverterParameter=3}" Style="{StaticResource FormBorderStyle}">
+                                    <control:BorderlessEntry x:Name="FirstNameEntry" Placeholder="სახელი" Style="{StaticResource EntryTextStyle}" Text="{Binding FirstName, Mode=TwoWay}"/>
+                                </border:SfBorder>
+
+                                
+
+                                <border:SfBorder BorderColor="{Binding Source={x:Reference LastNameEntry}, Path=IsFocused, Converter={StaticResource ColorConverter}, ConverterParameter=3}" Style="{StaticResource FormBorderStyle}">
+                                    <control:BorderlessEntry x:Name="LastNameEntry" Placeholder="გვარი" Style="{StaticResource EntryTextStyle}" Text="{Binding LastName, Mode=TwoWay}"/>
+                                </border:SfBorder>
+
+                                <border:SfBorder BorderColor="{Binding Source={x:Reference PhoneEntry}, Path=IsFocused, Converter={StaticResource ColorConverter}, ConverterParameter=3}" Style="{StaticResource FormBorderStyle}">
+                                    <control:BorderlessEntry Keyboard="Numeric" x:Name="PhoneEntry" Placeholder="ტელეფონი" Style="{StaticResource EntryTextStyle}" Text="{Binding Phone, Mode=TwoWay}"/>
+                                </border:SfBorder>
+
+                                <transaction:DeliveryView></transaction:DeliveryView>
+
+                               
+                                <buttons:SfButton
+                    Margin="0,16,0,0"
+                    HorizontalOptions="Center"
+                    Style="{StaticResource SfButtonStyle}"
+                    Text="განახლება"
+                    WidthRequest="200" Clicked="UpdateClicked"/>
+                            </StackLayout>
 
                 </Grid>
             </Grid>

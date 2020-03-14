@@ -1,4 +1,5 @@
-﻿using Xamarin.Forms.Internals;
+﻿using Xamarin.Forms;
+using Xamarin.Forms.Internals;
 using Xamarin.Forms.Xaml;
 
 namespace Martivi.Views.Transaction
@@ -8,12 +9,9 @@ namespace Martivi.Views.Transaction
     /// </summary>
     [Preserve(AllMembers = true)]
     [XamlCompilation(XamlCompilationOptions.Compile)]
-    public partial class CheckoutPage
+    public partial class CheckoutView
     {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="CheckoutPage" /> class.
-        /// </summary>
-        public CheckoutPage()
+        public CheckoutView()
         {
             InitializeComponent();
         }

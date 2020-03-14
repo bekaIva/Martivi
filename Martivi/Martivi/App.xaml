@@ -115,6 +115,8 @@
 
                 </Grid>
             </DataTemplate>
+            <model:StringCoordinateToMapSpan x:Key="StringCoordinateToMapSpan"></model:StringCoordinateToMapSpan>
+            <model:StringCoordinateToPin x:Key="StringCoordinateToPin"></model:StringCoordinateToPin>
             <model:InverseZeroVisibilityConverter x:Key="inverseZeroVisibilityConverter"/>
             <model:ZeroVisibilityConverter x:Key="zeroVisibilityConverter"/>
             <model:CurrencyFormatConverter x:Key="currencyFormatConverter"/>

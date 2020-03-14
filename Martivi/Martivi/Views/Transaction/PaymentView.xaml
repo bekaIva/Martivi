@@ -34,6 +34,7 @@
                     </Grid.ColumnDefinitions>
 
                     <buttons:SfRadioButton
+                        IsChecked="{Binding IsChecked, Mode=TwoWay}"
                         Grid.Row="0"
                         Grid.ColumnSpan="2"
                         Margin="8,12,8,2"
@@ -116,6 +117,7 @@
                     </Grid.RowDefinitions>
 
                     <buttons:SfRadioButton
+                        IsChecked="{Binding IsChecked, Mode=TwoWay}"
                         Grid.Row="0"
                         Margin="8,12,8,0"
                         GroupKey="{StaticResource PaymentOptionGroup}"
@@ -152,7 +154,7 @@
             LineHeight="{OnPlatform Android=1.25,
                                     Default=-1}"
             Style="{StaticResource PriceLabelStyle}"
-            Text="Payment Option"
+            Text="გადახდის მეთოდები"
             TextColor="{DynamicResource Gray-900}" />
 
         <!--  Separator  -->

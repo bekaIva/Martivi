@@ -43,10 +43,17 @@ namespace Martivi.Pages
 
         private void OrderTapped(object sender, Syncfusion.ListView.XForms.ItemTappedEventArgs e)
         {
-            if(e.ItemData is Order order)
+            try
             {
-                vm.SelectedDetailOrder = order;
-                Navigation.PushAsync(new OrderDetailPage());
+                if (e.ItemData is Order order)
+                {
+                    vm.SelectedDetailOrder = order;
+                    Navigation.PushAsync(new OrderDetailPage());
+                }
+            }
+            catch (Exception ee)
+            {
+
             }
         }
     }

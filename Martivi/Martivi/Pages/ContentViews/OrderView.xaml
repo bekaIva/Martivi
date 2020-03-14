@@ -5,15 +5,17 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:sync="clr-namespace:Syncfusion.ListView.XForms;assembly=Syncfusion.SfListView.XForms"
              xmlns:numeric="clr-namespace:Syncfusion.SfNumericUpDown.XForms;assembly=Syncfusion.SfNumericUpDown.XForms"
+             xmlns:transaction="clr-namespace:Martivi.Views.Transaction"
              mc:Ignorable="d"
              x:Class="Martivi.Pages.ContentViews.OrderView" BindingContext="{StaticResource MainViewModel}">
   <ContentView.Content>
-        <Grid x:Name="OrdersLayout" RowSpacing="0">
+        <ScrollView>
+            <StackLayout>
+                 <Grid x:Name="OrdersLayout" RowSpacing="0">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
-                <RowDefinition Height="*" />
-                <RowDefinition Height="48"/>
+                <RowDefinition Height="auto" />
             </Grid.RowDefinitions>
             <Frame BackgroundColor="White" HasShadow="True" Padding="0" Margin="0">
                 <Grid Padding="0" HeightRequest="{OnPlatform Default=48, Android=56}">
@@ -42,7 +44,7 @@
                 </Grid>
             </Frame>
             <BoxView x:Name="boxView" Grid.Row="1" BackgroundColor="#EAEAEA"  HeightRequest="{OnPlatform Default=0, UWP=1}" />
-            <sync:SfListView x:Name="listView" Grid.Row="2"
+            <sync:SfListView x:Name="listView" Grid.Row="2" Loaded="listView_Loaded"
                             ItemSize="120"
                             SelectionMode="None"
                             ItemsSource="{Binding Orders}">
@@ -111,11 +113,16 @@
              IsVisible="{Binding TotalOrderedItems, Converter={StaticResource zeroVisibilityConverter}}" FontSize="16"
              TextColor="{StaticResource primary}" />-->
 
-            <Button Grid.Row="3" TextColor="#FFFFFF" Text="შეკვეთა" 
+            <!--<Button Grid.Row="3" TextColor="#FFFFFF" Text="შეკვეთა" 
                 HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand"                
                 IsVisible="{Binding TotalOrderedItems, Converter={StaticResource inverseZeroVisibilityConverter}}"
-                FontSize="{OnPlatform Default=12, Android=16}"
-                BackgroundColor="{StaticResource primary_dark}" />
+                FontSize="{OnPlatform Default=12, Android=16}" 
+                BackgroundColor="{StaticResource primary_dark}" Clicked="OrderClicked"/>-->
         </Grid>
+                 <transaction:CheckoutView></transaction:CheckoutView>
+            </StackLayout>
+           
+        </ScrollView>
+        
     </ContentView.Content>
 </ContentView>

@@ -1,3 +1,6 @@
+using Martivi.Models.Transaction;
+using System.Collections.Generic;
+
 namespace MartiviSharedLib.Models.Users
 {
   public class UpdateModel
@@ -7,7 +10,7 @@ namespace MartiviSharedLib.Models.Users
         public string LastName { get; set; }
         public string Username { get; set; }
         public string Phone { get; set; }
-        public string UserAddress { get; set; }
         public string Password { get; set; }
+        public virtual ICollection<UserAddress> UserAddresses { get; set; }
     }
 }

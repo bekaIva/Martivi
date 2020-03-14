@@ -1,6 +1,8 @@
-﻿using MartiviSharedLib.Models.Users;
+﻿using Martivi.Models.Transaction;
+using MartiviSharedLib.Models.Users;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -13,6 +15,11 @@ namespace Martivi.Model
     }
     public class User:PropertyChangedBase
     {
+        public User()
+        {
+            UserAddresses = new ObservableCollection<UserAddress>();
+        }
+       
 
         private string _ProfileImageUrl { get; set; }
         public string ProfileImageUrl { get { return _ProfileImageUrl; } set { _ProfileImageUrl = value; OnPropertyChanged(); } }
@@ -37,11 +44,23 @@ namespace Martivi.Model
         private string _Phone { get; set; }
         public string Phone { get { return _Phone; } set { _Phone = value; OnPropertyChanged(); } }
 
-        private string _UserAddress { get; set; }
-        public string UserAddress { get { return _UserAddress; } set { _UserAddress = value; OnPropertyChanged(); } }
+        
 
         public string Token { get; set; }
 
         public virtual ICollection<ChatMessage> Messages { get; set; }
+
+
+
+        private ObservableCollection<UserAddress> _UserAddresses;
+        public ObservableCollection<UserAddress> UserAddresses
+        {
+            get { return _UserAddresses; }
+            set { _UserAddresses = value; OnPropertyChanged(); }
+        }
+
+
+
+
     }
 }

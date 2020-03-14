@@ -46,7 +46,7 @@
                 FontSize="16"
                 LineHeight="{OnPlatform Android=1.25,
                                         Default=-1}"
-                Text="Price Details"
+                Text="ფასი"
                 TextColor="{DynamicResource Gray-900}" />
             <!--  Separator  -->
             <BoxView
@@ -54,74 +54,15 @@
                 Grid.ColumnSpan="2"
                 HeightRequest="1"
                 Style="{StaticResource BoxViewStyle}" />
-            <!--  Total MRP  -->
-            <Label
-                Grid.Row="2"
-                Margin="16,4,16,0"
-                FontFamily="{StaticResource Montserrat-Medium}"
-                Style="{StaticResource PriceLabelStyle}"
-                Text="Total MRP" />
-            <Label
-                Grid.Row="2"
-                Grid.Column="1"
-                Margin="16,4,16,0"
-                FontFamily="{StaticResource Montserrat-Medium}"
-                HorizontalOptions="EndAndExpand"
-                HorizontalTextAlignment="End"
-                Style="{StaticResource PriceLabelStyle}"
-                Text="{Binding TotalPrice, StringFormat='${0}'}" />
-            <!--  Discount Percent  -->
-            <Label
-                Grid.Row="3"
-                FontFamily="{DynamicResource Montserrat-Medium}"
-                FontSize="12"
-                Style="{StaticResource PriceLabelStyle}"
-                Text="Discount" />
-            <Label
-                Grid.Row="3"
-                Grid.Column="1"
-                FontFamily="{DynamicResource Montserrat-Medium}"
-                FontSize="12"
-                HorizontalOptions="EndAndExpand"
-                HorizontalTextAlignment="End"
-                Style="{StaticResource PriceLabelStyle}"
-                Text="{Binding DiscountPercent, StringFormat='{}{0}%'}" />
-            <!--  Coupon Discount  -->
-            <Label
-                Grid.Row="4"
-                FontFamily="{DynamicResource Montserrat-Medium}"
-                FontSize="12"
-                HorizontalOptions="StartAndExpand"
-                Style="{StaticResource PriceLabelStyle}"
-                Text="Coupon Discount" />
-            <buttons:SfButton
-                Grid.Row="4"
-                Grid.Column="1"
-                Margin="4,0"
-                BackgroundColor="Transparent"
-                Command="{Binding ApplyCouponCommand}"
-                CornerRadius="4"
-                HorizontalOptions="End"
-                WidthRequest="110">
-                <buttons:SfButton.Content>
-                    <Label
-                        Margin="0"
-                        FontFamily="{StaticResource Montserrat-SemiBold}"
-                        FontSize="12"
-                        HorizontalOptions="Fill"
-                        HorizontalTextAlignment="Center"
-                        Style="{StaticResource PriceLabelStyle}"
-                        Text="Apply Coupon"
-                        TextColor="{DynamicResource HyperLink}" />
-                </buttons:SfButton.Content>
-            </buttons:SfButton>
-            <!--  Delivery Charges  -->
+      
+          
+           
             <Label
                 Grid.Row="5"
                 Margin="16,0,16,4"
                 FontFamily="{StaticResource Montserrat-Medium}"
                 Style="{StaticResource PriceLabelStyle}"
-                Text="Delivery Charges" />
+                Text="მიწოდების საფასური" />
             <Label
                 Grid.Row="5"
                 Grid.Column="1"
@@ -131,7 +72,7 @@
                 HorizontalOptions="EndAndExpand"
                 HorizontalTextAlignment="End"
                 Style="{StaticResource PriceLabelStyle}"
-                Text="Free"
+                Text="უფასო"
                 TextColor="{DynamicResource Green}" />
             <!--  Separator  -->
             <BoxView
@@ -161,7 +102,7 @@
                 LineHeight="{OnPlatform Android=1.25,
                                         Default=-1}"
                 Style="{StaticResource PriceLabelStyle}"
-                Text="{Binding DiscountPrice, StringFormat='${0}'}"
+                Text="{Binding MainViewModel.TotalPrice, StringFormat='₾{0}'}"
                 TextColor="{DynamicResource Gray-900}" />
 
         </Grid>

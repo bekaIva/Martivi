@@ -1,4 +1,5 @@
-﻿using Xamarin.Forms.Internals;
+﻿using Martivi.Model;
+using Xamarin.Forms.Internals;
 
 namespace Martivi.Models.Transaction
 {
@@ -6,8 +7,16 @@ namespace Martivi.Models.Transaction
     /// Model for list view item in payment view.
     /// </summary>
     [Preserve(AllMembers = true)]
-    public class Payment
+    public class Payment:PropertyChangedBase
     {
+        private bool _IsChecked;
+
+        public bool IsChecked
+        {
+            get { return _IsChecked; }
+            set { _IsChecked = value; OnPropertyChanged(); }
+        }
+
         /// <summary>
         /// Gets or sets the property that has been bound with a label, which displays the payment mode.
         /// </summary>

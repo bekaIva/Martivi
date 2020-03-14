@@ -1,5 +1,6 @@
 ﻿using HttpControl;
 using Martivi.Model;
+using Martivi.Models.Transaction;
 using MartiviSharedLib;
 using MartiviSharedLib.Models.Users;
 using Newtonsoft.Json;
@@ -72,6 +73,63 @@ namespace Martivi.Services
             throw new Exception("Get user failed! \nError Code: " + response.StatusCode + "\n" + resStr);
 
         }
+
+        public async Task<bool> AddAddress(UserAddress address,string token)
+        {
+            var json = JsonConvert.SerializeObject(address);
+            var content = new StringContent(json, Encoding.UTF8, "application/json");
+            var response = await sClient.GetResponsePost(ServerBaseAddress + "Users/AddAddress",content, new Header[] { new Header() { Name = "Authorization", Value = token } });
+
+            string resStr = await response.Content.ReadAsStringAsync();
+            if (response.IsSuccessStatusCode)
+            {
+                return true;
+            }
+            if (response.StatusCode == System.Net.HttpStatusCode.BadRequest)
+            {
+                throw new Exception(resStr);
+            }
+            throw new Exception("Get addresses failed! \nError Code: " + response.StatusCode + "\n" + resStr);
+
+        }
+
+        public async Task<bool> RemoveAddress(UserAddress address, string token)
+        {
+            var json = JsonConvert.SerializeObject(address);
+            var content = new StringContent(json, Encoding.UTF8, "application/json");
+            var response = await sClient.GetResponsePost(ServerBaseAddress + "Users/RemoveAddress", content, new Header[] { new Header() { Name = "Authorization", Value = token } });
+
+            string resStr = await response.Content.ReadAsStringAsync();
+            if (response.IsSuccessStatusCode)
+            {
+                return true;
+            }
+            if (response.StatusCode == System.Net.HttpStatusCode.BadRequest)
+            {
+                throw new Exception(resStr);
+            }
+            throw new Exception("Get addresses failed! \nError Code: " + response.StatusCode + "\n" + resStr);
+
+        }
+
+        public async Task<List<UserAddress>> GetAddresses(string token)
+        {
+            var response = await sClient.GetResponse(ServerBaseAddress + "Users/GetAdresses" , new Header[] { new Header() { Name = "Authorization", Value = token } });
+
+            string resStr = await response.Content.ReadAsStringAsync();
+            if (response.IsSuccessStatusCode)
+            {
+
+                var ubase = JsonConvert.DeserializeObject<List<UserAddress>>(resStr);
+                return ubase;
+            }
+            if (response.StatusCode == System.Net.HttpStatusCode.BadRequest)
+            {
+                throw new Exception(resStr);
+            }
+            throw new Exception("Get addresses failed! \nError Code: " + response.StatusCode + "\n" + resStr);
+
+        }
         public async Task<List<ChatMessage>> GetChatMessages(string token)
         {
             
@@ -122,11 +180,11 @@ namespace Martivi.Services
             if (response.IsSuccessStatusCode) return;
             throw new Exception("Message send Failed! \nError Code: " + response.StatusCode + "\n" + resStr);
         }
-        public async Task<bool> Chekout(Order order)
+        public async Task<bool> Chekout(Order order,string token)
         {
             var json = JsonConvert.SerializeObject(order);
             var content = new StringContent(json, Encoding.UTF8, "application/json");
-            var response = await sClient.GetResponsePost(ServerBaseAddress + "Api/Orders", content, RequestHeaders: new Header[] { new Header() { Name = "Authorization", Value = order.User.Token } });
+            var response = await sClient.GetResponsePost(ServerBaseAddress + "Api/Orders", content, RequestHeaders: new Header[] { new Header() { Name = "Authorization", Value = token } });
             string resStr = await response.Content.ReadAsStringAsync();
             if (response.StatusCode == System.Net.HttpStatusCode.BadRequest)
             {

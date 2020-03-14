@@ -15,10 +15,66 @@ using System.Text;
 using System.Threading.Tasks;
 using Xamarin.Forms;
 using Xamarin.Forms.Internals;
+using Xamarin.Forms.Maps;
 
 namespace Martivi.Model
 {
     [Preserve(AllMembers = true)]
+
+    public class StringCoordinateToMapSpan : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            if (value is string d && d.Length > 0)
+            {
+                var splited = d.Split(',');
+                if (splited.Length == 2)
+                {
+                    MapSpan ms = new MapSpan(new Position(System.Convert.ToDouble(splited[0]), System.Convert.ToDouble(splited[1])), 0.1, 0.1);                                       
+                    return ms;
+                }
+
+            }
+
+            return value;
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            return value;
+        }
+    }
+    public class StringCoordinateToPin : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            if (value is string d && d.Length > 0)
+            {
+                try
+                {
+                    var splited = d.Split(',');
+                    if (splited.Length == 2)
+                    {
+                        Position pos = new Position(System.Convert.ToDouble(splited[0]), System.Convert.ToDouble(splited[1]));
+                        Pin p = new Pin() { Position = pos, Label = "ადგილმდებარეობა" };
+                        return p;
+                    }
+                }
+                catch (Exception e)
+                {
+
+                }
+               
+            }
+            return value;
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            throw new NotImplementedException();
+        }
+    }
+
     public class OrderStatusConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)

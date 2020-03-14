@@ -1,7 +1,9 @@
 ﻿using Martivi.Model;
+using Martivi.Models.Transaction;
 using Martivi.ViewModels;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -15,6 +17,16 @@ namespace Martivi.Pages
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class ProfilePage : ContentPage
     {
+        private ObservableCollection<UserAddress> _UserAddresses;
+
+        public ObservableCollection<UserAddress> UserAddresses
+        {
+            get { return _UserAddresses; }
+            set { _UserAddresses = value; OnPropertyChanged(); }
+        }
+
+
+
         private bool _UserUpdating;
 
         public bool UserUpdating
@@ -90,10 +102,18 @@ namespace Martivi.Pages
         protected override void OnAppearing()
         {
             base.OnAppearing();
+            UserAddresses = new ObservableCollection<UserAddress>();
+            if (mv.CurrentUser?.UserAddresses != null)
+            {
+                foreach (var a in mv.CurrentUser.UserAddresses)
+                {
+                    UserAddresses.Add(a);
+                }
+            }
+           
             FirstName = mv.CurrentUser.FirstName;
             LastName = mv.CurrentUser.LastName;
             Phone = mv.CurrentUser.Phone;
-            Address = mv.CurrentUser.UserAddress;
             UserName = mv.CurrentUser.Username;
             Password = string.Empty;
             ProfileImageUrl = mv.CurrentUser.ProfileImageUrl;
@@ -104,25 +124,36 @@ namespace Martivi.Pages
             {
                 if (UserUpdating) return;
                 UserUpdating = true;
-              var res = await  mv.UpdateUser(new MartiviSharedLib.Models.Users.UpdateModel(){FirstName=FirstName,LastName=LastName,Password=Password,Phone=Phone,UserAddress=Address,Username= UserName,ProfileImageUrl=ProfileImageUrl });
-            if(res)
+                var res = await mv.UpdateUser(new MartiviSharedLib.Models.Users.UpdateModel() {UserAddresses= mv.CurrentUser.UserAddresses, FirstName = FirstName, LastName = LastName, Password = Password, Phone = Phone,  Username = UserName, ProfileImageUrl = ProfileImageUrl });
+                if (res)
                 {
                     DisplayAlert("", "მონაცემები წარმატებით განახლდა", "Ok");
                 }
             }
 
-            catch(Exception ee) 
+            catch (Exception ee)
             {
-                DisplayAlert("შეცდომა", ee.Message,"Ok");
+                DisplayAlert("შეცდომა", ee.Message, "Ok");
             }
             finally { UserUpdating = false; }
         }
 
         private async void PickImageTapped(object sender, EventArgs e)
         {
-            var ds = DependencyService.Get<IPhotoPickerService>();
-            Stream stream = await ds.GetImageStreamAsync();
-            ProfileImageUrl = Services.ApiServices.ServerBaseAddress + "Images/" + await mv.Services.UploadFile(stream, "Bearer " + mv.Token);
+            try
+            {
+                var ds = DependencyService.Get<IPhotoPickerService>();
+                Stream stream = await ds.GetImageStreamAsync();
+                if (stream != null)
+                {
+                    ProfileImageUrl = Services.ApiServices.ServerBaseAddress + "Images/" + await mv.Services.UploadFile(stream, "Bearer " + mv.Token);
+                }
+
+            }
+            catch (Exception ee)
+            {
+                DisplayAlert("შეცდომა", ee.Message, "Ok");
+            }
 
         }
     }

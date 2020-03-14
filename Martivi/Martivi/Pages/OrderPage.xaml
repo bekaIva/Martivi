@@ -13,7 +13,7 @@
     <ContentPage.Content>
 
         <Grid>
-            <contentviews:OrderView IsVisible="{Binding Source={StaticResource MainViewModel},Path=TotalOrderedItems, Converter={StaticResource CountToBoolConverter}}"></contentviews:OrderView>
+            <contentviews:OrderView  IsVisible="{Binding Source={StaticResource MainViewModel},Path=TotalOrderedItems, Converter={StaticResource CountToBoolConverter}}"></contentviews:OrderView>
             <errorandempty:EmptyCartPage IsVisible="{Binding Source={StaticResource MainViewModel},Path=TotalOrderedItems, Converter={StaticResource CountToBoolConverter}, ConverterParameter=negative}"></errorandempty:EmptyCartPage>
             <ActivityIndicator  HorizontalOptions="Center" VerticalOptions="Center" Color="#FF5722" IsRunning="{Binding MakingOrder}"></ActivityIndicator>
           

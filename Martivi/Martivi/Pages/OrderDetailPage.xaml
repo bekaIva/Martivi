@@ -14,11 +14,11 @@
             <Grid>
             <Grid x:Name="OrdersLayout" RowSpacing="0" BindingContext="{Binding Source={x:Reference orderDetailPage}}">
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="auto" />
-                    <RowDefinition Height="auto"/>
-                </Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="auto"/>
+                    </Grid.RowDefinitions>
                 <Frame BackgroundColor="White" HasShadow="True" Padding="0" Margin="0">
                     <Grid Padding="0" HeightRequest="{OnPlatform Default=48, Android=56}">
                         <Grid.ColumnDefinitions>
@@ -107,10 +107,14 @@
                     </sync:SfListView.ItemTemplate>
                    
                 </sync:SfListView>
-               
+                    <Frame Grid.Row="3" Padding="4,2,4,2" BackgroundColor="#FFE7E8E9" HorizontalOptions="Start" VerticalOptions="End"
+                                       HasShadow="True">
+                        <Label Margin="4" x:Name="TagLabel" LineBreakMode="NoWrap" Text="{Binding Source={x:StaticResource MainViewModel},Path=SelectedDetailOrder.Status,Converter={StaticResource OrderStatusConverter}}"
+                          FontSize="16" TextColor="Black"/>
+                    </Frame>
                     <!--<Label Margin="4" x:Name="TagLabel" LineBreakMode="NoWrap" Text="{Binding Source={x:StaticResource MainViewModel},Path=SelectedDetailOrder.Status,Converter={StaticResource OrderStatusConverter}}"
                           FontSize="16" TextColor="Black"/>-->
-                <Grid Grid.Row="3" BackgroundColor="{StaticResource Gray-White}" BindingContext="{Binding Source={StaticResource MainViewModel}, Path=SelectedDetailOrder}">
+                <!--<Grid Grid.Row="3" BackgroundColor="{StaticResource Gray-White}">
                     
                         <progressBar:SfStepProgressBar
                     x:Name="stepProgress"
@@ -120,9 +124,9 @@
                             VerticalOptions="FillAndExpand"
                             HorizontalOptions="FillAndExpand"
                     TitleSpace="12"
-                    BindableLayout.ItemsSource="{Binding ProductDeliveryTrackings}">
+                    >
 
-                        <!--  Style for step progress not started  -->
+                        --><!--  Style for step progress not started  --><!--
                         <progressBar:SfStepProgressBar.NotStartedStepStyle>
                             <progressBar:StepStyle
                             x:TypeArguments="progressBar:NotStartedStepState"
@@ -130,7 +134,7 @@
                             MarkerShapeType="Circle" />
                         </progressBar:SfStepProgressBar.NotStartedStepStyle>
 
-                        <!--  Style for step progress inprogress  -->
+                        --><!--  Style for step progress inprogress  --><!--
                         <progressBar:SfStepProgressBar.InProgressStepStyle>
                             <progressBar:StepStyle
                             x:TypeArguments="progressBar:InProgressStepState"
@@ -140,7 +144,7 @@
                             ProgressLineColor="{StaticResource PrimaryColor}" />
                         </progressBar:SfStepProgressBar.InProgressStepStyle>
 
-                        <!--  Style for step progress completed  -->
+                        --><!--  Style for step progress completed  --><!--
                         <progressBar:SfStepProgressBar.CompletedStepStyle>
                             <progressBar:StepStyle
                             x:TypeArguments="progressBar:CompletedStepState"
@@ -187,7 +191,7 @@
                     </progressBar:SfStepProgressBar>
                     
                         
-                    </Grid>
+                    </Grid>-->
                     
 
                 <!--<Button Grid.Row="3" TextColor="#FFFFFF" Text="შეკვეთა" 

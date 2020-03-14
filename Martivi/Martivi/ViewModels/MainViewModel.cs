@@ -1,4 +1,5 @@
 ﻿using Martivi.Model;
+using Martivi.Models.Transaction;
 using Martivi.Pages;
 using Martivi.Pages.ContentViews;
 using Martivi.Services;
@@ -10,6 +11,7 @@ using Plugin.Settings;
 using Plugin.Settings.Abstractions;
 using Syncfusion.ListView.XForms;
 using Syncfusion.SfPullToRefresh.XForms;
+using Syncfusion.XForms.Buttons;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -26,9 +28,10 @@ namespace Martivi.ViewModels
     {
         #region Constructors
         public MainViewModel()
-        {            
-            AppSettings.AddOrUpdateValue("ServerBaseAddress", "http://martivi.net/");
-            //AppSettings.AddOrUpdateValue("ServerBaseAddress", "http://192.168.100.11:44379/");
+        {
+            AddAddress = new UserAddress();
+            //AppSettings.AddOrUpdateValue("ServerBaseAddress", "http://martivi.net/");
+            AppSettings.AddOrUpdateValue("ServerBaseAddress", "http://192.168.100.11:44379/");
             ConnectCommand = new Command(async () => await Connect());
             DisconnectCommand = new Command(async () => await Disconnect());
 
@@ -50,6 +53,34 @@ namespace Martivi.ViewModels
 
 
             AddCommand = new Command<object>(AddQuantity);
+            AddAddressCommand = new Command<object>(async (arg) =>
+            {
+                try
+                {
+                    var res = await Services.AddAddress(AddAddress, "Bearer " + Token);
+                    LoadAddresses();
+                
+                }
+                catch(Exception e)
+                {
+
+                }
+
+            });
+            RemoveAddressCommand = new Command<SfButton>(async (arg) =>
+            {
+                try
+                {
+                    var res = await Services.RemoveAddress(arg.BindingContext as UserAddress, "Bearer " + Token);
+                    LoadAddresses();
+                
+                }
+                catch(Exception e)
+                {
+
+                }
+
+            });
             RefreshListing = new Command<object>(async (sender) =>
             {
                 var ptf = sender as SfPullToRefresh;
@@ -65,7 +96,6 @@ namespace Martivi.ViewModels
                 }
             });
             OrderListCommand = new Command<object>(NavigateOrdersPage);
-            CheckoutCommand = new Command(CheckOut);
             RemoveOrderCommand = new Command<object>(RemoveOrder);
             LoadMoreItemsCommand = new Command<object>(LoadMoreItems, CanLoadMoreItems);
 
@@ -80,6 +110,14 @@ namespace Martivi.ViewModels
 
 
         #region Properties
+        private UserAddress _AddAddress;
+
+        public UserAddress AddAddress
+        {
+            get { return _AddAddress; }
+            set { _AddAddress = value; OnPropertyChanged(); }
+        }
+
         private bool _Loaded;
 
         public bool Loaded
@@ -208,7 +246,7 @@ namespace Martivi.ViewModels
 
         public Command<object> LoadCommand { get; set; }
 
-
+       
 
         private string _Test;
 
@@ -289,6 +327,14 @@ namespace Martivi.ViewModels
             set { _ChatMessagesLoading = value; OnPropertyChanged(); }
         }
 
+        private bool _AddressesLoading;
+
+        public bool AddressesLoading
+        {
+            get { return _AddressesLoading; }
+            set { _AddressesLoading = value; OnPropertyChanged(); }
+        }
+
 
         private static ISettings AppSettings =>
     CrossSettings.Current;
@@ -339,16 +385,17 @@ namespace Martivi.ViewModels
             }
         }
         public Command<object> RefreshListing { get; set; }
+        public Command<object> AddAddressCommand { get; set; }
 
         public Command<object> AddCommand { get; set; }
-
+        public Command<SfButton> RemoveAddressCommand { get; set; }
         public Command<object> LoadMoreItemsCommand { get; set; }
 
         public Command<object> OrderListCommand { get; set; }
         public Command<object> RemoveOrderCommand { get; set; }
 
 
-        public Command CheckoutCommand { get; set; }
+        
 
         public ApiServices Services { get; set; }
         private ObservableCollection<Category> _Categories;
@@ -605,7 +652,6 @@ namespace Martivi.ViewModels
                 if (CurrentUser == null)
                 {
                     Token = null; UserId = -1;
-
                 }
             }
             else
@@ -616,7 +662,8 @@ namespace Martivi.ViewModels
             {
                 IsSignedIn = true;
                 LoadOrders();
-                LoadMessages();               
+                LoadMessages();
+                LoadAddresses();
                 Connect();
             }
             else
@@ -685,6 +732,18 @@ namespace Martivi.ViewModels
                 }
 
             });
+            hubConnection.On<object>("UpdateOrder", (Order) =>
+            {
+                try
+                {
+                    LoadOrders();
+                }
+                catch
+                {
+
+                }
+
+            });
             hubConnection.Closed += HubConnection_Closed;
         }       
 
@@ -705,7 +764,7 @@ namespace Martivi.ViewModels
             }
             catch
             {
-
+                
             }
             finally
             {
@@ -794,7 +853,35 @@ namespace Martivi.ViewModels
             }
             finally
             {
-                UpdatingOrdersHistory = false;
+                ChatMessagesLoading = false;
+            }
+        }
+
+        
+        public async Task LoadAddresses()
+        {
+            try
+            {
+                AddressesLoading = true;
+                var addresses = await Services.GetAddresses("Bearer " + Token);
+                Device.BeginInvokeOnMainThread(() =>
+                {
+                    if (CurrentUser == null) return;
+                    if (CurrentUser.UserAddresses == null) CurrentUser.UserAddresses = new ObservableCollection<UserAddress>();
+                    CurrentUser.UserAddresses.Clear();
+                    foreach (var address in addresses)
+                    {
+                        CurrentUser.UserAddresses.Add(address);
+                    }
+                });
+            }
+            catch
+            {
+
+            }
+            finally
+            {
+                AddressesLoading = false;
             }
         }
         async Task Initialize()
@@ -823,7 +910,7 @@ namespace Martivi.ViewModels
             var p = obj as Product;
             p.Quantity = 0;
         }
-        private async void CheckOut(object obj)
+        public async void CheckOut(PaymentStatus IsPaid)
         {
             try
             {
@@ -833,9 +920,11 @@ namespace Martivi.ViewModels
                 if (checkout)
                 {
                     if (!IsSignedIn) throw new Exception("გთხოვთ გაიაროთ ავტორიზაცია!");
-                    Order o = new Order() {OrderTimeTicks= DateTime.Now.Ticks, User = new User() { UserId = UserId,Token= "Bearer "+Token }, OrderedProducts = new List<Product>() };
+                    var SelectedAddress = CurrentUser?.UserAddresses?.FirstOrDefault(a => a.IsPrimary);
+                    if (SelectedAddress == null) throw new Exception("გთხოვთ აირჩიოთ მისამართი");
+                    Order o = new Order() {Payment=IsPaid, OrderAddress=SelectedAddress, OrderTimeTicks= DateTime.Now.Ticks, User= CurrentUser,  OrderedProducts = new List<Product>() };
                     o.OrderedProducts.AddRange(Orders.ToArray());
-                   var res =  await Services.Chekout(o);
+                   var res =  await Services.Chekout(o,"Bearer " + Token);
                     if (res)
                     {
                         while (Orders.Count > 0)

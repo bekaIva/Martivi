@@ -1,3 +1,4 @@
+using Syncfusion.XForms.iOS.BadgeView;
 using Syncfusion.XForms.iOS.ProgressBar;
 using Syncfusion.XForms.iOS.PopupLayout;
 using Syncfusion.XForms.iOS.ComboBox;
@@ -33,6 +34,8 @@ namespace Martivi.iOS
         public override bool FinishedLaunching(UIApplication app, NSDictionary options)
         {
             global::Xamarin.Forms.Forms.Init();
+            SfAvatarViewRenderer.Init();
+            SfBadgeViewRenderer.Init();
             SfLinearProgressBarRenderer.Init();
             SfRatingRenderer.Init();
             SfComboBoxRenderer.Init();

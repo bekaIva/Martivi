@@ -10,6 +10,7 @@ using Android.OS;
 using System.Threading.Tasks;
 using System.IO;
 using Android.Content;
+using Android;
 
 namespace Martivi.Droid
 {
@@ -19,6 +20,14 @@ namespace Martivi.Droid
         internal static MainActivity Instance { get; private set; }
         public static readonly int PickImageId = 1000;
         public TaskCompletionSource<Stream> PickImageTaskCompletionSource { set; get; }
+
+        const int RequestLocationId = 0;
+
+        readonly string[] LocationPermissions =
+        {
+            Manifest.Permission.AccessCoarseLocation,
+            Manifest.Permission.AccessFineLocation
+        };
         protected override void OnCreate(Bundle savedInstanceState)
         {
             Instance = this;
@@ -31,7 +40,24 @@ namespace Martivi.Droid
             global::Xamarin.Forms.Forms.Init(this, savedInstanceState);
             FFImageLoading.Forms.Platform.CachedImageRenderer.Init(enableFastRenderer: true);
             Syncfusion.XForms.Android.PopupLayout.SfPopupLayoutRenderer.Init();
+            Xamarin.FormsMaps.Init(this, savedInstanceState);
             LoadApplication(new App());
+        }
+        protected override void OnStart()
+        {
+            base.OnStart();
+
+            if ((int)Build.VERSION.SdkInt >= 23)
+            {
+                if (CheckSelfPermission(Manifest.Permission.AccessFineLocation) != Permission.Granted)
+                {
+                    RequestPermissions(LocationPermissions, RequestLocationId);
+                }
+                else
+                {
+                    Console.WriteLine("Location permissions already granted.");
+                }
+            }
         }
         public override void OnRequestPermissionsResult(int requestCode, string[] permissions, [GeneratedEnum] Android.Content.PM.Permission[] grantResults)
         {
