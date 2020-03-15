@@ -635,23 +635,33 @@ namespace Martivi.ViewModels
         }
         internal async void SignOut()
         {
-            Token =  null;
+            Token = null;
             UserId = -1;
             UserName = "Guest";
             FirstName = null;
             LastName = null;
             CurrentUser = null;
-            await LoadUser();
+            IsSignedIn = false;
+            Disconnect();
+            //await LoadUser();
         }
         public async Task LoadUser()
         {
 
             if (Token?.Length > 0 && UserId > 0)
             {
-                CurrentUser = await Services.GetUser(UserId, "Bearer " + Token);
-                if (CurrentUser == null)
+                try
                 {
-                    Token = null; UserId = -1;
+                    CurrentUser = await Services.GetUser(UserId, "Bearer " + Token);
+                    if (CurrentUser == null)
+                    {
+                        SignOut();
+
+                    }
+                }
+                catch
+                {
+                    SignOut();
                 }
             }
             else
@@ -668,8 +678,7 @@ namespace Martivi.ViewModels
             }
             else
             {
-                IsSignedIn = false;
-                Disconnect();
+                SignOut();
             }
         }
         async Task StartHubConnection()

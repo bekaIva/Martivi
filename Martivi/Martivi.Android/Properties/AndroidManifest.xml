@@ -3,11 +3,11 @@
 	<uses-sdk android:minSdkVersion="21" android:targetSdkVersion="28" />
 	<application android:label="Martivi.Android" android:usesCleartextTraffic="true">
 		<meta-data android:name="com.google.android.maps.v2.API_KEY" android:value="AIzaSyCLCGeW_GR7oRPVAEOJYkqTXxc_YtGRQ-0" />
-    <uses-library android:name="org.apache.http.legacy" android:required="false" />
-  </application>
+		<uses-library android:name="org.apache.http.legacy" android:required="false" />
+	</application>
 	<application android:largeHeap="true"></application>
 	<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 	<uses-permission android:name="android.permission.INTERNET" />
-  <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-  <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+	<uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+	<uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 </manifest>

@@ -36,6 +36,7 @@ namespace Martivi.Pages
                 else
                 {
                     mv.SignOut();
+                    mv.LoadUser();
                 }
             }
             catch(Exception ee)
