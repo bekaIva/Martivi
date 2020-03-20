@@ -24,7 +24,7 @@
         <Tab Title="კატეგორიები" Icon="menu.png" Route="cb">
             <ShellContent Route="category" ContentTemplate="{DataTemplate local:CategoryPage}"/>
         </Tab>
-        <Tab Title="კალათა" Icon="reservation.png">
+        <Tab Title="კალათა" Icon="reservation.png" IsEnabled="{Binding IsSignedIn}">
             <ShellContent  ContentTemplate="{DataTemplate local:OrderPage}" />
 
         </Tab>

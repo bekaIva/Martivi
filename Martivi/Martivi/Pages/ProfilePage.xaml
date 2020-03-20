@@ -129,7 +129,6 @@
                                 </border:SfBorder>
 
                                 <transaction:DeliveryView></transaction:DeliveryView>
-
                                
                                 <buttons:SfButton
                     Margin="0,16,0,0"

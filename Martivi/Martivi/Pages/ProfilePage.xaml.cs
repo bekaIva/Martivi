@@ -101,22 +101,29 @@ namespace Martivi.Pages
         }
         protected override void OnAppearing()
         {
-            base.OnAppearing();
-            UserAddresses = new ObservableCollection<UserAddress>();
-            if (mv.CurrentUser?.UserAddresses != null)
+            try
             {
-                foreach (var a in mv.CurrentUser.UserAddresses)
+                base.OnAppearing();
+                UserAddresses = new ObservableCollection<UserAddress>();
+                if (mv.CurrentUser?.UserAddresses != null)
                 {
-                    UserAddresses.Add(a);
+                    foreach (var a in mv.CurrentUser.UserAddresses)
+                    {
+                        UserAddresses.Add(a);
+                    }
                 }
+
+                FirstName = mv.CurrentUser.FirstName;
+                LastName = mv.CurrentUser.LastName;
+                Phone = mv.CurrentUser.Phone;
+                UserName = mv.CurrentUser.Username;
+                Password = string.Empty;
+                ProfileImageUrl = mv.CurrentUser.ProfileImageUrl;
             }
-           
-            FirstName = mv.CurrentUser.FirstName;
-            LastName = mv.CurrentUser.LastName;
-            Phone = mv.CurrentUser.Phone;
-            UserName = mv.CurrentUser.Username;
-            Password = string.Empty;
-            ProfileImageUrl = mv.CurrentUser.ProfileImageUrl;
+            catch (Exception)
+            {
+
+            }
         }
         private async void UpdateClicked(object sender, EventArgs e)
         {
@@ -144,9 +151,11 @@ namespace Martivi.Pages
             {
                 var ds = DependencyService.Get<IPhotoPickerService>();
                 Stream stream = await ds.GetImageStreamAsync();
+                
                 if (stream != null)
                 {
-                    ProfileImageUrl = Services.ApiServices.ServerBaseAddress + "Images/" + await mv.Services.UploadFile(stream, "Bearer " + mv.Token);
+                    var s = Services.ApiServices.ResizeImageAndroid(stream, 400);
+                    ProfileImageUrl = Services.ApiServices.ServerBaseAddress + "Images/" + await mv.Services.UploadFile(s, "Bearer " + mv.Token);
                 }
 
             }

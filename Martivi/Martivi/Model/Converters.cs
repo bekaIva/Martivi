@@ -27,18 +27,15 @@ namespace Martivi.Model
         {
             if (value is string d && d.Length > 0)
             {
-                var splited = d.Split(',');
+                var splited = d.Split('|');
                 if (splited.Length == 2)
                 {
                     MapSpan ms = new MapSpan(new Position(System.Convert.ToDouble(splited[0]), System.Convert.ToDouble(splited[1])), 0.1, 0.1);                                       
                     return ms;
                 }
-
             }
-
             return value;
         }
-
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
             return value;
@@ -52,7 +49,7 @@ namespace Martivi.Model
             {
                 try
                 {
-                    var splited = d.Split(',');
+                    var splited = d.Split('|');
                     if (splited.Length == 2)
                     {
                         Position pos = new Position(System.Convert.ToDouble(splited[0]), System.Convert.ToDouble(splited[1]));

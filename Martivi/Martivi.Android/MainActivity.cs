@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 using System.IO;
 using Android.Content;
 using Android;
+using Xamarin.Forms;
 
 namespace Martivi.Droid
 {
@@ -59,11 +60,23 @@ namespace Martivi.Droid
                 }
             }
         }
+        
         public override void OnRequestPermissionsResult(int requestCode, string[] permissions, [GeneratedEnum] Android.Content.PM.Permission[] grantResults)
         {
             Xamarin.Essentials.Platform.OnRequestPermissionsResult(requestCode, permissions, grantResults);
 
             base.OnRequestPermissionsResult(requestCode, permissions, grantResults);
+        }
+        public override void OnBackPressed() 
+        {
+            if (Shell.Current.Navigation.NavigationStack.Count > 1)
+            {
+                base.OnBackPressed();
+            }
+            else
+            {
+                
+            }
         }
         protected override void OnActivityResult(int requestCode, Result resultCode, Intent intent)
         {

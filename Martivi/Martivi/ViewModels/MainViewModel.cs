@@ -30,8 +30,8 @@ namespace Martivi.ViewModels
         public MainViewModel()
         {
             AddAddress = new UserAddress();
-            //AppSettings.AddOrUpdateValue("ServerBaseAddress", "http://martivi.net/");
-            AppSettings.AddOrUpdateValue("ServerBaseAddress", "http://192.168.100.11:44379/");
+            AppSettings.AddOrUpdateValue("ServerBaseAddress", "http://martivi.net/");
+            //AppSettings.AddOrUpdateValue("ServerBaseAddress", "http://192.168.100.11:44379/");
             ConnectCommand = new Command(async () => await Connect());
             DisconnectCommand = new Command(async () => await Disconnect());
 
@@ -57,6 +57,7 @@ namespace Martivi.ViewModels
             {
                 try
                 {
+                    if (AddAddress.MobileNumber == string.Empty) throw new Exception("");
                     var res = await Services.AddAddress(AddAddress, "Bearer " + Token);
                     LoadAddresses();
                 

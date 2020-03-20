@@ -81,18 +81,23 @@ namespace Martivi.Pages
             try
             {
                 var totalH = mv.SelectedDetailOrder.OrderedProducts.Count * 140;
-                if(totalH>560)
+                if (totalH > 560)
                 {
-                    listView.HeightRequest = 560;
+                    listView.HeightRequest = 560 + 300;
                     return;
                 }
-                listView.HeightRequest = totalH;
+                listView.HeightRequest = totalH + 300;
 
             }
-            catch 
+            catch
             {
 
             }
+        }
+
+        private void UserFrameTapped(object sender, EventArgs e)
+        {
+
         }
     }
 }

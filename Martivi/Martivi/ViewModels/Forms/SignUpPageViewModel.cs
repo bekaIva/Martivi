@@ -100,12 +100,7 @@ namespace Martivi.ViewModels.Forms
             set { _Phone = value; NotifyPropertyChanged(); }
         }
 
-        private string _Address;
-        public string Address
-        {
-            get { return _Address; }
-            set { _Address = value; NotifyPropertyChanged(); }
-        }
+       
 
         /// <summary>
         /// Gets or sets the property that bounds with an entry that gets the password from users in the Sign Up page.
@@ -167,7 +162,6 @@ namespace Martivi.ViewModels.Forms
             if (!(Name?.Length > 0)) throw new ValidityException("სახელი არ არის შეყვანილი!");
             if (!(LastName?.Length > 0)) throw new ValidityException("გვარი არ არის შეყვანილი!");
             if (!(Phone?.Length > 0)) throw new ValidityException("ტელეფონი არ არის შეყვანილი!");
-            if (!(Address?.Length > 0)) throw new ValidityException("მისამართი არ არის შეყვანილი!");
         }
         bool IsValidEmail(string email)
         {
@@ -204,7 +198,7 @@ namespace Martivi.ViewModels.Forms
             {
                 IsBusy = true;
                 Checkvalidity();
-                var res = await ViewModel.Services.Register(new RegisterModelBase { FirstName = Name, LastName = LastName, Password = Password, Phone = Phone, UserAddress = Address, Username = Email });
+                var res = await ViewModel.Services.Register(new RegisterModelBase { FirstName = Name, LastName = LastName, Password = Password, Phone = Phone,  Username = Email });
                 if (res.UserId > 0)
                 {
                     await SignUpPage.DisplayAlert("შესრულდა", res.FirstName + ", თქვენ წარმატებით გაიარეთ რეგისტრაცია. გთხოვთ გაიაროთ ავტორიზაცია.", "Ok");

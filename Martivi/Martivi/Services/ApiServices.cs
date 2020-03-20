@@ -1,4 +1,5 @@
-﻿using HttpControl;
+﻿using Android.Graphics;
+using HttpControl;
 using Martivi.Model;
 using Martivi.Models.Transaction;
 using MartiviSharedLib;
@@ -29,6 +30,23 @@ namespace Martivi.Services
         }
         public ApiServices()
         {
+        }
+        public static Stream ResizeImageAndroid(Stream stream, float width, float height = -1)
+        {
+            // Load the bitmap
+            Bitmap originalImage = BitmapFactory.DecodeStream(stream);
+            if (height == -1)
+            {
+                height = originalImage.Height / (originalImage.Width / width);
+            }
+            Bitmap resizedImage = Bitmap.CreateScaledBitmap(originalImage, (int)width, (int)height, false);
+
+            MemoryStream ms = new MemoryStream();
+
+            resizedImage.Compress(Bitmap.CompressFormat.Jpeg, 80, ms);
+            ms.Position = 0;
+            return ms;
+
         }
         public async Task<List<Category>> GetCategories()
         {
@@ -277,7 +295,7 @@ namespace Martivi.Services
             var f = new MultipartFormDataContent();
             StreamContent fileContent = new StreamContent(stream);
             fileContent.Headers.ContentType = MediaTypeHeaderValue.Parse("multipart/form-data");
-            f.Add(fileContent, "file", Path.GetFileName("Image"));
+            f.Add(fileContent, "file", System.IO.Path.GetFileName("Image"));
             var response = await sClient.GetResponsePost(ServerBaseAddress + "api/Upload", f, RequestHeaders: new Header[] { new Header() { Name = "Authorization", Value = Token } });
             string resStr = await response.Content.ReadAsStringAsync();
             if (response.IsSuccessStatusCode)

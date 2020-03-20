@@ -100,7 +100,7 @@
                     </border:SfBorder>
 
                     <!--  Forgot password link  -->
-                    <Label
+                    <!--<Label
                         x:Name="ForgotPasswordLabel"
                         Grid.Row="4"
                         Margin="0,16"
@@ -112,7 +112,7 @@
                         <Label.GestureRecognizers>
                             <TapGestureRecognizer Command="{Binding ForgotPasswordCommand}" CommandParameter="{x:Reference ForgotPasswordLabel}" />
                         </Label.GestureRecognizers>
-                    </Label>
+                    </Label>-->
 
                     <!--  Login button  -->
                     <buttons:SfButton

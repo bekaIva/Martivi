@@ -129,19 +129,7 @@
                             Style="{StaticResource EntryStyle}"
                             Text="{Binding Phone}"
                             TextColor="{DynamicResource Gray-900}" />
-                    </border:SfBorder>
-                    <border:SfBorder
-                        BackgroundColor="{DynamicResource Gray-White}"
-                        BorderColor="{Binding Source={x:Reference NameEntry}, Path=IsFocused, Converter={StaticResource ColorConverter}, ConverterParameter=3}"
-                        Style="{StaticResource SfBorderStyle}">
-                        <control:BorderlessEntry
-                            x:Name="AddressEntry"
-                            Placeholder="მისამართი"
-                            PlaceholderColor="{DynamicResource Gray-700}"
-                            Style="{StaticResource EntryStyle}"
-                            Text="{Binding Address}"
-                            TextColor="{DynamicResource Gray-900}" />
-                    </border:SfBorder>
+                    </border:SfBorder>                   
 
                     <!--  Sign-up button  -->
                     <buttons:SfButton

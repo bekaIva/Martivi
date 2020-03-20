@@ -130,7 +130,7 @@ namespace Martivi.ViewModels.Transaction
             {
                 case "Debit / Credit Card":
                     {
-
+                        await Application.Current.MainPage.DisplayAlert("", "ბარათით გადახდა არ არის ხელმისაწვდომი", "OK");
                         break;
                     }
                 case "გადახდა მიწოდებისას":

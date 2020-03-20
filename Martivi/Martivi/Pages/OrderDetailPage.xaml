@@ -5,10 +5,25 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:sync="clr-namespace:Syncfusion.ListView.XForms;assembly=Syncfusion.SfListView.XForms"
              xmlns:numeric="clr-namespace:Syncfusion.SfNumericUpDown.XForms;assembly=Syncfusion.SfNumericUpDown.XForms"
-             xmlns:progressBar="clr-namespace:Syncfusion.XForms.ProgressBar;assembly=Syncfusion.SfProgressBar.XForms"
+             xmlns:progressBar="clr-namespace:Syncfusion.XForms.ProgressBar;assembly=Syncfusion.SfProgressBar.XForms" xmlns:border="clr-namespace:Syncfusion.XForms.Border;assembly=Syncfusion.Core.XForms" xmlns:model="clr-namespace:Martivi.Model"
              mc:Ignorable="d"
              x:Class="Martivi.Pages.OrderDetailPage" x:Name="orderDetailPage" BindingContext="{StaticResource MainViewModel}" Title="{Binding SelectedDetailOrder.OrderId, StringFormat='შეკვეთა #{0}'}">
-   
+    <ContentPage.Resources>
+        <Style x:Key="CommonLabelStyle" TargetType="Label">
+            <Setter Property="TextColor" Value="{DynamicResource Gray-700}" />
+            <Setter Property="FontFamily" Value="Montserrat-Regular" />
+            <Setter Property="FontSize" Value="14" />
+            <Setter Property="LineHeight" Value="{OnPlatform Android=1.5, Default=-1}" />
+            <Setter Property="HorizontalTextAlignment" Value="Start" />
+            <Setter Property="VerticalTextAlignment" Value="Center" />
+            <Setter Property="VerticalOptions" Value="Center" />
+            <Setter Property="HorizontalOptions" Value="Start" />
+        </Style>
+        <Style x:Key="BoxViewStyle" TargetType="BoxView">
+            <Setter Property="Color" Value="{DynamicResource Gray-200}" />
+            <Setter Property="VerticalOptions" Value="Center" />
+        </Style>
+    </ContentPage.Resources>
     <ContentPage.Content>
         <ScrollView>
             <Grid>
@@ -18,15 +33,16 @@
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="*" />
                         <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto"/>
                     </Grid.RowDefinitions>
                 <Frame BackgroundColor="White" HasShadow="True" Padding="0" Margin="0">
-                    <Grid Padding="0" HeightRequest="{OnPlatform Default=48, Android=56}">
+                    <Grid Padding="0" HeightRequest="60">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*" />
                             <ColumnDefinition Width="Auto" />
                         </Grid.ColumnDefinitions>
                         <Grid x:Name="grid" Grid.Column="0" Margin="16,0,8,0">
-                            <Label Text="პროდუქტების სია" FontAttributes="Bold" VerticalOptions="Center" FontSize="16"
+                            <Label Text="პროდუქტების სია" FontAttributes="Bold" VerticalOptions="Center" FontSize="14"
                            TextColor="{OnPlatform Default=#333333, Android=#000000}"
                            Opacity="{OnPlatform Default=1, Android=0.87}" />
                         </Grid>
@@ -46,7 +62,7 @@
                     </Grid>
                 </Frame>
                 <BoxView x:Name="boxView" Grid.Row="1" BackgroundColor="#EAEAEA"  HeightRequest="{OnPlatform Default=0, UWP=1}" />
-                <sync:SfListView Loaded="listView_Loaded" x:Name="listView" Grid.Row="2"  VerticalOptions="Start"
+                    <sync:SfListView Loaded="listView_Loaded" x:Name="listView" Grid.Row="2"  VerticalOptions="Start" FooterSize="300"
                             ItemSize="140"
                             SelectionMode="None"
                             ItemsSource="{Binding Source={x:StaticResource MainViewModel}, Path=SelectedDetailOrder.OrderedProducts}">
@@ -105,8 +121,110 @@
                             </Grid>
                         </DataTemplate>
                     </sync:SfListView.ItemTemplate>
-                   
-                </sync:SfListView>
+                        <sync:SfListView.FooterTemplate>
+                            <DataTemplate>
+                                <Grid  BindingContext="{Binding Source={x:Reference orderDetailPage}}" >
+                                    <Frame Margin="4" HasShadow="True" >
+                                        <Frame.GestureRecognizers>
+                                            <TapGestureRecognizer Tapped="UserFrameTapped"></TapGestureRecognizer>
+                                        </Frame.GestureRecognizers>
+                                        <Grid>
+                                            <StackLayout BindingContext="{StaticResource MainViewModel}">
+                                                <border:SfBorder HorizontalOptions="Center" WidthRequest="50" HeightRequest="50" VerticalOptions="Center" CornerRadius="50" BorderWidth="2" BorderColor="{StaticResource primary}">
+                                                    <Image Source="{Binding SelectedDetailOrder.User.ProfileImageUrl,TargetNullValue=blankprofile.png}" />
+                                                </border:SfBorder>
+                                                <Label Text="{Binding SelectedDetailOrder.User.Username}" VerticalOptions="Center" HorizontalOptions="Center"></Label>
+                                                <Label Text="{Binding SelectedDetailOrder.User.FirstName, StringFormat='სახელი: {0}'}"  HorizontalOptions="Start"></Label>
+                                                <Label Text="{Binding SelectedDetailOrder.User.LastName, StringFormat='გვარი: {0}'}"  HorizontalOptions="Start"></Label>
+                                                <Label Text="{Binding SelectedDetailOrder.User.Phone, StringFormat='ტელეფონი: {0}'}"  HorizontalOptions="Start"></Label>
+                                                <Label Text="{Binding SelectedDetailOrder.Payment, StringFormat='გადახდა: {0}'}"></Label>
+                                            </StackLayout>
+                                        </Grid>
+
+                                    </Frame>
+                                </Grid>
+                            </DataTemplate>
+                        </sync:SfListView.FooterTemplate>
+                    </sync:SfListView>
+                    <Grid Padding="2" Grid.Row="3" BindingContext="{Binding Source={x:StaticResource MainViewModel}, Path=SelectedDetailOrder.OrderAddress}">
+                        <Grid RowSpacing="0" VerticalOptions="{OnIdiom Default=Start, Desktop=Fill}">
+
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="*" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="1" />
+                                <RowDefinition Height="auto" />
+                            </Grid.RowDefinitions>
+
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="{OnIdiom Default=*, Phone=0}" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+
+
+
+                            <!--  Customer Name  -->
+                            <Label
+                            Grid.Row="0"
+                            Grid.Column="1"
+                            FontFamily="{StaticResource Montserrat-Medium}"
+                            FontSize="14"
+                            HorizontalOptions="StartAndExpand"
+                            Style="{StaticResource CommonLabelStyle}">
+                                <Label.FormattedText>
+                                    <FormattedString>
+                                        <Span Text="{Binding CustomerName}" TextColor="{DynamicResource Gray-900}" />
+                                        <Span
+                                        FontSize="12"
+                                        Text="{Binding AddressType, StringFormat='  {0}'}"
+                                        TextColor="{DynamicResource Gray-700}" />
+                                    </FormattedString>
+                                </Label.FormattedText>
+                            </Label>
+
+
+                            <!--  Address Label  -->
+                            <Label
+                            Grid.Row="1"
+                            Grid.Column="1"
+                            FontSize="12"
+                            LineHeight="{OnPlatform Android=1.25,
+                                                    Default=-1}"
+                            Style="{StaticResource CommonLabelStyle}"
+                            Text="{Binding Address}"
+                            TextColor="{DynamicResource Gray-700}" />
+
+                            <!--  Mobile Number  -->
+                            <Label
+                            Grid.Row="2"
+                            Grid.Column="1"
+                            FontSize="12"
+                            HorizontalOptions="StartAndExpand"
+                            Style="{StaticResource CommonLabelStyle}">
+                                <Label.FormattedText>
+                                    <FormattedString>
+                                        <Span Text="Mobile: " />
+                                        <Span Text="{Binding MobileNumber}" TextColor="{DynamicResource Gray-900}" />
+                                    </FormattedString>
+                                </Label.FormattedText>
+                            </Label>
+
+                            <!--  Separator  -->
+                            <BoxView
+                            Grid.Row="3"
+                            Grid.ColumnSpan="4"
+                            Style="{StaticResource BoxViewStyle}"
+                            VerticalOptions="End" />
+
+                            <Frame x:Name="MapFrame" HasShadow="True" Grid.Row="4" Grid.ColumnSpan="4" HeightRequest="100">
+                                <model:BindableMap MapSpan="{Binding Coordinates, Converter={StaticResource StringCoordinateToMapSpan}}"  PinSource="{Binding Coordinates, Converter={StaticResource StringCoordinateToPin}}"></model:BindableMap>
+                            </Frame>
+
+                        </Grid>
+                    </Grid>
                     <Frame Grid.Row="3" Padding="4,2,4,2" BackgroundColor="#FFE7E8E9" HorizontalOptions="Start" VerticalOptions="End"
                                        HasShadow="True">
                         <Label Margin="4" x:Name="TagLabel" LineBreakMode="NoWrap" Text="{Binding Source={x:StaticResource MainViewModel},Path=SelectedDetailOrder.Status,Converter={StaticResource OrderStatusConverter}}"

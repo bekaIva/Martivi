@@ -22,6 +22,14 @@ namespace Martivi.Views.Transaction
         {
             InitializeComponent();
             geoCoder = new Geocoder();
+            try
+            {
+
+            }
+            catch
+            {
+
+            }
         }
         Geocoder geoCoder;
         private void AddAddressClicked(object sender, System.EventArgs e)
@@ -31,7 +39,7 @@ namespace Martivi.Views.Transaction
 
         private async void map_MapClicked(object sender, Xamarin.Forms.Maps.MapClickedEventArgs e)
         {
-           ((sender as BindableMap).BindingContext as UserAddress).Coordinates = e.Position.Latitude.ToString()+","+e.Position.Longitude.ToString();
+           ((sender as BindableMap).BindingContext as UserAddress).Coordinates = e.Position.Latitude.ToString()+"|"+e.Position.Longitude.ToString();
             try
             {
                 CoordinatesLabel.Text = "(" + e.Position.Latitude.ToString() + " " + e.Position.Longitude.ToString() + ")";

@@ -87,7 +87,7 @@ namespace Martivi.Pages
             {
                 IsBusy = true;
                 Checkvalidity();
-               var res = await vm.Services.Register(new RegisterModelBase { FirstName = Name, LastName = LastName, Password = Password, Phone = Phone, UserAddress = Address, Username = Email });
+               var res = await vm.Services.Register(new RegisterModelBase { FirstName = Name, LastName = LastName, Password = Password, Phone = Phone,  Username = Email });
                 if(res.UserId>0)
                 {
                     await DisplayAlert("შესრულდა", res.FirstName + ", თქვენ წარმატებით გაიარეთ რეგისტრაცია. გთხოვთ გაიაროთ ავტორიზაცია.", "Ok");

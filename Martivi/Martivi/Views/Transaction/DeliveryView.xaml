@@ -118,8 +118,6 @@
                         <Label
                             Grid.Row="0"
                             Grid.Column="1"
-                            helper:RTLHelper.Margin="{OnIdiom Default='0,16,0,0',
-                                                              Phone='10,2,0,2'}"
                             FontFamily="{StaticResource Montserrat-Medium}"
                             FontSize="14"
                             HorizontalOptions="StartAndExpand"
@@ -139,8 +137,6 @@
                         <buttons:SfButton x:Name="RemoveButton"
                             Grid.Row="0"
                             Grid.Column="3"
-                            Margin="{OnIdiom Default='16,16,16,0',
-                                             Phone='16,2,16,2'}"
                             BorderWidth="0"
                             Command="{Binding RemoveAddressCommand, Source={StaticResource MainViewModel}}" CommandParameter="{x:Reference RemoveButton}"
                             CornerRadius="4"
@@ -159,8 +155,7 @@
                         <Label
                             Grid.Row="1"
                             Grid.Column="1"
-                            helper:RTLHelper.Margin="{OnIdiom Default='0',
-                                                              Phone='10,0,0,0'}"
+                           
                             FontFamily="{StaticResource Montserrat-Medium}"
                             FontSize="12"
                             LineHeight="{OnPlatform Android=1.25,
@@ -173,8 +168,7 @@
                         <Label
                             Grid.Row="2"
                             Grid.Column="1"
-                            helper:RTLHelper.Margin="{OnIdiom Default='0',
-                                                              Phone='10,8,0,16'}"
+                            
                             FontFamily="{StaticResource Montserrat-Medium}"
                             FontSize="12"
                             HorizontalOptions="StartAndExpand"
@@ -203,8 +197,7 @@
        
 
         <buttons:SfButton
-                            Margin="{OnIdiom Default='16,16,16,0',
-                                             Phone='16,2,16,2'}"
+                            Margin="4"
                             BorderWidth="0"
                             CornerRadius="4"
                             FontFamily="{StaticResource Montserrat-SemiBold}"

@@ -12,6 +12,5 @@ namespace MartiviSharedLib.Models.Users
         public virtual string Password { get; set; }
 
         public string Phone { get; set; }
-        public string UserAddress { get; set; }
     }
 }

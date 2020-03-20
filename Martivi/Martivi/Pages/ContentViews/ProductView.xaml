@@ -96,7 +96,7 @@
                                                 TextColor="{StaticResource primary}" />
                                             <numeric:SfNumericUpDown Grid.Column="1"  x:Name="numericUpDown" MaximumDecimalDigits="0"
                                                                IsEditable="False" Minimum="0" Maximum="{Binding QuantityInSupply}" HorizontalOptions="End" VerticalOptions="Center"
-                                                                AllowNull="false" FormatString="n" Watermark="Units" TextAlignment="Center"
+                                                                AllowNull="false" FormatString="n" Watermark="Units" TextAlignment="Center" 
                                                                SpinButtonAlignment="Both" UpDownButtonColor="White"
                                                                Value="{Binding Quantity, Mode=TwoWay}"
                                                                IsVisible="{Binding Quantity, Converter={StaticResource inverseZeroVisibilityConverter}}"
