@@ -21,6 +21,7 @@ namespace Martivi.Services
     {
         HttpClient client = new HttpClient();
         SimpleHttpControl sClient = new SimpleHttpControl();
+        UnipayMerchant unipayMerchant = new UnipayMerchant();
         private static ISettings AppSettings =>
     CrossSettings.Current;
         public static string ServerBaseAddress
@@ -200,6 +201,11 @@ namespace Martivi.Services
         }
         public async Task<bool> Chekout(Order order,string token)
         {
+            if(order.Payment== PaymentStatus.Paid)
+            {
+                bool paid = await unipayMerchant.Chekout(order);
+                if (!paid) throw new Exception("Payment failed!");
+            }
             var json = JsonConvert.SerializeObject(order);
             var content = new StringContent(json, Encoding.UTF8, "application/json");
             var response = await sClient.GetResponsePost(ServerBaseAddress + "Api/Orders", content, RequestHeaders: new Header[] { new Header() { Name = "Authorization", Value = token } });

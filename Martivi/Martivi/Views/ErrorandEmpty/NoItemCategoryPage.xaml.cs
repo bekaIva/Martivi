@@ -40,5 +40,6 @@ namespace Martivi.Views.ErrorAndEmpty
                 ErrorImage.IsVisible = true;
             }
         }
+
     }
 }

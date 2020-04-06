@@ -12,7 +12,7 @@
 
     <!--  Binding context for NoInternetConnection page  -->
     <ContentView.BindingContext>
-        <viewModel:NoInternetConnectionPageViewModel />
+        <viewModel:NoInternetConnectionPageViewModel ViewModel="{StaticResource MainViewModel}"/>
     </ContentView.BindingContext>
 
     <ContentView.Resources>

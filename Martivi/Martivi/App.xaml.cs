@@ -10,7 +10,7 @@ namespace Martivi
         public static string BaseImageUrl { get; } = "https://cdn.syncfusion.com/essential-ui-kit-for-xamarin.forms/common/uikitimages/";
         public App()
         {
-            Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense("MTk3MTE5QDMxMzcyZTM0MmUzMG1IdW5xQ3E1L2xxeFl5c1hVMlZ2T2p4UktmdDFkT3RKNWxxZnl1bkNiSGs9");
+            Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense("MjM0MzYxQDMxMzgyZTMxMmUzMGhib01pcWd3QnJzSWJvcThKYUhVejJQOG1xbUpQSmp2eTg5UEY2Yml3UXc9");
             InitializeComponent();
             MainPage = new MainShell();
             //MainPage = new NavigationPage(new SignInPage());
