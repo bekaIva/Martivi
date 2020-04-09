@@ -3,10 +3,10 @@
     x:Class="Martivi.Views.AboutUs.AboutUsSimplePage"
     xmlns="http://xamarin.com/schemas/2014/forms"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    xmlns:viewModel="clr-namespace:Martivi.ViewModels.AboutUs"
+    xmlns:viewModel="clr-namespace:Martivi.ViewModels.AboutUs" xmlns:pullToRefresh="clr-namespace:Syncfusion.SfPullToRefresh.XForms;assembly=Syncfusion.SfPullToRefresh.XForms"
     Title="About"
     BackgroundColor="{DynamicResource Gray-White}"
-    NavigationPage.HasNavigationBar="False">
+    NavigationPage.HasNavigationBar="False" BindingContext="{StaticResource MainViewModel}">
     <ContentPage.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -17,24 +17,18 @@
 
     <ContentPage.Content>
         <Grid ColumnSpacing="0" RowSpacing="0">
-            <ScrollView HorizontalOptions="Center" VerticalOptions="Center">
+            <pullToRefresh:SfPullToRefresh ProgressStrokeColor="{StaticResource primary_dark}" x:Name="ptf" RefreshCommand="{Binding RefreshInfo}" RefreshCommandParameter="{x:Reference ptf}">
+                <pullToRefresh:SfPullToRefresh.PullableContent>
+                  <ScrollView HorizontalOptions="Center" VerticalOptions="Center">
                 <StackLayout
                     HorizontalOptions="Center"
                     Spacing="0"
                     VerticalOptions="Center">
 
-                    <StackLayout.BindingContext>
-                        <viewModel:AboutUsViewModel />
-                    </StackLayout.BindingContext>
+                 
 
                     <!--  Product image  -->
-                    <Image HeightRequest="110" WidthRequest="124">
-                        <Image.Source>
-                            <UriImageSource
-                                CacheValidity="14"
-                                CachingEnabled="true"
-                                Uri="{Binding ProductIcon}" />
-                        </Image.Source>
+                    <Image HeightRequest="110" WidthRequest="124" Source="logo">
                     </Image>
 
                     <!--  Product version  -->
@@ -42,14 +36,14 @@
                         Margin="0,8.7,0,0"
                         HorizontalOptions="CenterAndExpand"
                         Style="{StaticResource VersionLabelStyle}"
-                        Text="{Binding ProductVersion, StringFormat='Version {0}'}" />
+                        Text="{Binding Info.Version, StringFormat='Version {0}'}" />
 
                     <!--  Product title  -->
                     <Label
                         FontFamily="{StaticResource Montserrat-SemiBold}"
                         HorizontalOptions="CenterAndExpand"
                         Style="{StaticResource HeaderLabelStyle}"
-                        Text="Acme Products">
+                        Text="{Binding Info.Name}">
                         <Label.Margin>
                             <OnIdiom
                                 x:TypeArguments="Thickness"
@@ -64,9 +58,13 @@
                         HorizontalOptions="Center"
                         HorizontalTextAlignment="Center"
                         Style="{StaticResource DescriptionLabelStyle}"
-                        Text="{Binding ProductDescription}" />
+                        Text="{Binding Info.Description}" />
                 </StackLayout>
             </ScrollView>
+                </pullToRefresh:SfPullToRefresh.PullableContent>
+            </pullToRefresh:SfPullToRefresh>
+            
+            <ActivityIndicator HorizontalOptions="Center" VerticalOptions="Center" IsRunning="{Binding InfoUpdating}" Color="{StaticResource primary_dark}"></ActivityIndicator>
         </Grid>
     </ContentPage.Content>
 </ContentPage>

@@ -5,8 +5,8 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
        xmlns:local="clr-namespace:Martivi.Pages"
        xmlns:ffimageloadingsvg="clr-namespace:FFImageLoading.Svg.Forms;assembly=FFImageLoading.Svg.Forms"
-       xmlns:fftransf="clr-namespace:FFImageLoading.Transformations;assembly=FFImageLoading.Transformations"
-             mc:Ignorable="d"
+       xmlns:fftransf="clr-namespace:FFImageLoading.Transformations;assembly=FFImageLoading.Transformations" xmlns:aboutus="clr-namespace:Martivi.Views.AboutUs"
+       mc:Ignorable="d"
              x:Class="Martivi.Pages.MainShell" BindingContext="{StaticResource MainViewModel}" x:Name="shellPage">
     
     <Shell.FlyoutHeader>
@@ -26,10 +26,10 @@
         </Tab>
         <Tab Title="კალათა" Icon="reservation.png" IsEnabled="{Binding IsSignedIn}">
             <ShellContent  ContentTemplate="{DataTemplate local:OrderPage}" />
-
+            
         </Tab>
         <Tab Title="შესახებ" Icon="information.png">
-            <ShellContent ContentTemplate="{DataTemplate local:InfoPage}" />
+            <ShellContent ContentTemplate="{DataTemplate aboutus:AboutUsSimplePage}" />
 
         </Tab>
     </FlyoutItem>

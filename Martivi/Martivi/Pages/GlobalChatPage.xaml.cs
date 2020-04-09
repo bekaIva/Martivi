@@ -43,7 +43,14 @@ namespace Martivi.Pages
             {
                 Device.BeginInvokeOnMainThread(() =>
                 {
-                    (listView.LayoutManager as LinearLayout).ScrollToRowIndex(m.Count - 1, Syncfusion.ListView.XForms.ScrollToPosition.Start);
+                    try
+                    {
+                        (listView.LayoutManager as LinearLayout).ScrollToRowIndex(m.Count - 1, Syncfusion.ListView.XForms.ScrollToPosition.Start);
+                    }
+                    catch (Exception e)
+                    {
+
+                    }
                 });
             }
         }
@@ -67,7 +74,14 @@ namespace Martivi.Pages
                 {
                     Device.BeginInvokeOnMainThread(() =>
                     {
-                        (listView.LayoutManager as LinearLayout).ScrollToRowIndex(m.Count - 1, Syncfusion.ListView.XForms.ScrollToPosition.Start);
+                        try
+                        {
+                            (listView.LayoutManager as LinearLayout).ScrollToRowIndex(m.Count - 1, Syncfusion.ListView.XForms.ScrollToPosition.Start);
+                        }
+                        catch (Exception ee)
+                        {
+
+                        }
                     });
                 }
             }

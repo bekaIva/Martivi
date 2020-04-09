@@ -5,6 +5,7 @@ using Martivi.Models.Transaction;
 using MartiviSharedLib;
 using MartiviSharedLib.Models.Users;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using Plugin.Settings;
 using Plugin.Settings.Abstractions;
 using System;
@@ -141,6 +142,23 @@ namespace Martivi.Services
 
                 var ubase = JsonConvert.DeserializeObject<List<UserAddress>>(resStr);
                 return ubase;
+            }
+            if (response.StatusCode == System.Net.HttpStatusCode.BadRequest)
+            {
+                throw new Exception(resStr);
+            }
+            throw new Exception("Get addresses failed! \nError Code: " + response.StatusCode + "\n" + resStr);
+
+        }
+        public async Task<Info> GetAboutInfo()
+        {
+            var response = await sClient.GetResponse(ServerBaseAddress + "api/Info/GetInfo");
+
+            string resStr = await response.Content.ReadAsStringAsync();
+            if (response.IsSuccessStatusCode)
+            {
+                var info = JsonConvert.DeserializeObject<Info>(resStr);
+                return info;
             }
             if (response.StatusCode == System.Net.HttpStatusCode.BadRequest)
             {

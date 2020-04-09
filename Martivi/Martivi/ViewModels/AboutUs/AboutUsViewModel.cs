@@ -102,6 +102,13 @@ namespace Martivi.ViewModels.AboutUs
                 this.NotifyPropertyChanged();
             }
         }
+        private MainViewModel _MainVM;
+
+        public MainViewModel MainVM
+        {
+            get { return _MainVM; }
+            set { _MainVM = value; }
+        }
 
         /// <summary>
         /// Gets or sets the description of a product or a company.
@@ -120,6 +127,14 @@ namespace Martivi.ViewModels.AboutUs
                 this.NotifyPropertyChanged();
             }
         }
+        private string _ProductName;
+
+        public string ProductName
+        {
+            get { return _ProductName; }
+            set { _ProductName = value; NotifyPropertyChanged(); }
+        }
+
 
         /// <summary>
         /// Gets or sets the product icon.

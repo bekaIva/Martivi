@@ -116,7 +116,10 @@ namespace Martivi.Model
         protected override void OnItemSelected(object item)
         {
             base.OnItemSelected(item);
-           
+            if (item is Product p)
+            {
+                CurrentPage.Navigation.PushAsync(new SingleProductPage(ViewModel, p));
+            }
 
         }
         protected override async void OnQueryConfirmed()

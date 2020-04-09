@@ -14,7 +14,7 @@
              mc:Ignorable="d"
              x:Class="Martivi.Pages.ProductPage" x:Name="productPage" BindingContext="{StaticResource MainViewModel}" Title="{Binding SelectedCategory.Name}">
     <Shell.SearchHandler>
-        <model:ProductSearchHandler ViewModel="{StaticResource MainViewModel}" Query="{Binding SelectedCategory.ProductFilter,Mode=TwoWay}"  ItemTemplate="{StaticResource ProductTemplate}" SearchBoxVisibility="Collapsible">
+        <model:ProductSearchHandler CurrentPage="{x:Reference productPage}" ViewModel="{StaticResource MainViewModel}" Query="{Binding SelectedCategory.ProductFilter,Mode=TwoWay}"  ItemTemplate="{StaticResource ProductTemplate}" SearchBoxVisibility="Collapsible">
 
         </model:ProductSearchHandler>
     </Shell.SearchHandler>

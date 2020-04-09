@@ -19,6 +19,7 @@ using System.Globalization;
 using System.Linq;
 using System.Net;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using Xamarin.Forms;
 
@@ -32,6 +33,8 @@ namespace Martivi.ViewModels
             AddAddress = new UserAddress();
             AppSettings.AddOrUpdateValue("ServerBaseAddress", "http://martivi.net/");
             //AppSettings.AddOrUpdateValue("ServerBaseAddress", "http://192.168.100.11:44379/");
+            AppSettings.AddOrUpdateValue("CheckoutBackLink", AppSettings.GetValueOrDefault("ServerBaseAddress",string.Empty)+ "CheckoutResult");
+           
             ConnectCommand = new Command(async () => await Connect());
             DisconnectCommand = new Command(async () => await Disconnect());
 
@@ -89,6 +92,20 @@ namespace Martivi.ViewModels
                 {
                     ptf.IsRefreshing = true;
                     await GetCategories();
+                }
+                catch { }
+                finally
+                {
+                    ptf.IsRefreshing = false;
+                }
+            });
+            RefreshInfo = new Command<object>(async (sender) =>
+            {
+                var ptf = sender as SfPullToRefresh;
+                try
+                {
+                    ptf.IsRefreshing = true;
+                    UpdateInfo();
                 }
                 catch { }
                 finally
@@ -185,6 +202,12 @@ namespace Martivi.ViewModels
             }
         }
 
+        private Info _Info;
+        public Info Info
+        {
+            get { return _Info; }
+            set { _Info = value; OnPropertyChanged(); }
+        }
 
         private ObservableCollection<ChatMessage> _ChatMessages;
         private string newText;
@@ -267,6 +290,12 @@ namespace Martivi.ViewModels
             set { _IsSignedIn = value; OnPropertyChanged(); }
         }
 
+        private bool _InfoUpdating;
+        public bool InfoUpdating
+        {
+            get { return _InfoUpdating; }
+            set { _InfoUpdating = value; OnPropertyChanged(); }
+        }
 
         private int totalOrderedItems = 0;
         private double totalPrice = 0;
@@ -389,6 +418,7 @@ namespace Martivi.ViewModels
         public Command<object> AddAddressCommand { get; set; }
 
         public Command<object> AddCommand { get; set; }
+        public Command<object> RefreshInfo { get; set; }
         public Command<SfButton> RemoveAddressCommand { get; set; }
         public Command<object> LoadMoreItemsCommand { get; set; }
 
@@ -608,6 +638,7 @@ namespace Martivi.ViewModels
         }
         async Task Connect()
         {
+            if (hubConnection.State == HubConnectionState.Connected) Disconnect();
             await hubConnection.StartAsync();
             await hubConnection.InvokeAsync("JoinChat", UserName);
 
@@ -694,6 +725,7 @@ namespace Martivi.ViewModels
 
             });
 
+
             hubConnection.On<string>("LeaveChat", (user) =>
             {
 
@@ -701,28 +733,48 @@ namespace Martivi.ViewModels
 
             hubConnection.On<ChatMessage>("ReceiveMessage", (message) =>
             {
-                switch (message.Target)
+                Device.BeginInvokeOnMainThread(() =>
                 {
-                    case MessageTarget.Global:
-                        {
-                            GlobalChatMessages.Add(message);
-                            break;
-                        }
-                    case MessageTarget.TargetUser:
-                        {
-                            if (UserId == message.TargetUser)
+                    switch (message.Target)
+                    {
+                        case MessageTarget.Global:
                             {
-                                ChatMessages.Add(message);
+                                GlobalChatMessages.Add(message);
+                                break;
                             }
-                            break;
-                        }
-                }
+                        case MessageTarget.TargetUser:
+                            {
+                                if (UserId == message.TargetUser)
+                                {
+                                    ChatMessages.Add(message);
+                                }
+                                break;
+                            }
+                    }
+                });
+                
             });
             hubConnection.On("UpdateListing", () =>
             {
                 try
                 {
                     GetCategories();
+                }
+                catch
+                {
+
+                }
+
+            });
+            hubConnection.On<string>("JoinChat", (user) =>
+            {
+
+            });
+            hubConnection.On("UpdateInfo", () =>
+            {
+                try
+                {
+                    UpdateInfo();
                 }
                 catch
                 {
@@ -755,6 +807,21 @@ namespace Martivi.ViewModels
 
             });
             hubConnection.Closed += HubConnection_Closed;
+            Timer timer = new Timer((arg) => 
+            {
+                try
+                {
+                    if (hubConnection.State == HubConnectionState.Disconnected)
+                    {
+                        Connect();
+                    }
+                }
+                catch 
+                {
+
+                }
+            },null,0,15000);
+            
         }       
 
         private async Task HubConnection_Closed(Exception arg)
@@ -901,9 +968,25 @@ namespace Martivi.ViewModels
             //await Services.SendMessage(new ChatMessage() {Message="ტესტ ტესტ ტეს",UserId=UserId,Side=MessageSide.Client },Token);
             GetCategories();
             LoadUser();
-           
+            UpdateInfo();
         }
-       
+        public async Task UpdateInfo()
+        {
+            try
+            {
+                InfoUpdating = true;
+                Info = await Services.GetAboutInfo();
+               
+            }
+            catch
+            {
+
+            }
+            finally
+            {
+                InfoUpdating = false;
+            }
+        }
         private void AddQuantity(object obj)
         {
             var p = obj as Product;

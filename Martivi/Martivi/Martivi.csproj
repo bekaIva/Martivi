@@ -19,6 +19,7 @@
     <None Remove="Images\NoItem.svg" />
     <None Remove="Images\PaymentFailure.svg" />
     <None Remove="Images\PaymentSuccess.svg" />
+    <None Remove="Resources\ic_launcher.png" />
   </ItemGroup>
 
   <ItemGroup>
@@ -29,6 +30,7 @@
     <EmbeddedResource Include="Images\NoItem.svg" />
     <EmbeddedResource Include="Images\PaymentFailure.svg" />
     <EmbeddedResource Include="Images\PaymentSuccess.svg" />
+    <EmbeddedResource Include="Resources\ic_launcher.png" />
   </ItemGroup>
 
   <ItemGroup>
@@ -221,7 +223,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Resources\" />
     <Folder Include="Views\Tracking\" />
   </ItemGroup>
 
