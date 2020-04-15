@@ -1003,7 +1003,13 @@ namespace Martivi.ViewModels
             var p = obj as Product;
             p.Quantity = 0;
         }
-        public async void CheckOut(PaymentStatus IsPaid)
+        public async Task Checkout(Order o)
+        {
+            var res = await Services.Checkout(o, "Bearer " + Token);
+           await Application.Current.MainPage.Navigation.PushAsync(new UnipayCheckoutPage() { BindingContext = res }); ;
+            //go to checkout
+        }
+        public async void MakeOrder(bool PayNow)
         {
             try
             {
@@ -1015,21 +1021,30 @@ namespace Martivi.ViewModels
                     if (!IsSignedIn) throw new Exception("გთხოვთ გაიაროთ ავტორიზაცია!");
                     var SelectedAddress = CurrentUser?.UserAddresses?.FirstOrDefault(a => a.IsPrimary);
                     if (SelectedAddress == null) throw new Exception("გთხოვთ აირჩიოთ მისამართი");
-                    Order o = new Order() {Payment=IsPaid, OrderAddress=SelectedAddress, OrderTimeTicks= DateTime.Now.Ticks, User= CurrentUser,  OrderedProducts = new List<Product>() };
+                    Order o = new Order() {Payment= PaymentStatus.NotPaid, OrderAddress=SelectedAddress, OrderTimeTicks= DateTime.Now.Ticks, User= CurrentUser,  OrderedProducts = new List<Product>() };
                     o.OrderedProducts.AddRange(Orders.ToArray());
-                   var res =  await Services.Chekout(o,"Bearer " + Token);
-                    if (res)
+                    o =  await Services.MakeOrder(o,"Bearer " + Token);
+                    if (o!=null)
                     {
+                        LoadOrders();
                         while (Orders.Count > 0)
                         {
                             Orders[Orders.Count - 1].Quantity = 0;
                         }
-                        await Application.Current.MainPage.DisplayAlert("", "შეკვეთა წარმატებით შესრულდა!", "OK");
-                        LoadOrders();
-                        Device.BeginInvokeOnMainThread(() =>
+                        if(PayNow)
                         {
-                            Shell.Current.GoToAsync($"//profile/orderstab/orderspage");
-                        });
+                           await Checkout(o);
+                            
+                        }
+                        else
+                        {
+                            await Application.Current.MainPage.DisplayAlert("", "შეკვეთა წარმატებით შესრულდა!", "OK");
+                            Device.BeginInvokeOnMainThread(() =>
+                            {
+                                Shell.Current.GoToAsync($"//home/orderstab/orderspage");
+                            });
+                        }
+                       
                         return;
                     }
                     await Application.Current.MainPage.DisplayAlert("", "შეკვეთა არ შესრულდა!", "OK");

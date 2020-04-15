@@ -21,6 +21,51 @@ namespace Martivi.Model
 {
     [Preserve(AllMembers = true)]
 
+    public class PaymentStatusToTextOrColorConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            if(parameter is string s&&value is PaymentStatus ps)
+            {
+                switch(s)
+                {
+                    case "Visibility":
+                        {
+                            if (ps == PaymentStatus.NotPaid) return true;
+                            else return false;
+                        }
+                    case "Color":
+                        {
+                            switch (ps)
+                            {
+                                case PaymentStatus.NotPaid: return Color.FromRgb(184, 32, 32);
+
+                                
+
+                                default: return Color.Gray;
+                            }
+                            break;
+                        }
+                    case "Text":
+                        {
+                            switch (ps)
+                            {
+                                case PaymentStatus.NotPaid: return "გადაუხდელია";
+
+                                default: return value;
+                            }
+                        }
+                }
+            }
+            return value;
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            return value;
+        }
+    }
+
     public class StringCoordinateToMapSpan : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)

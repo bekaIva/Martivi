@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d"
+             x:Class="Martivi.Pages.UnipayCheckoutPage" x:Name="unipayPage" Title="გადახდა">
+    <ContentPage.Content>
+        <Grid>
+            <WebView Source="{Binding Data.Checkout}" Navigating="WebView_Navigating" Navigated="WebView_Navigated"></WebView>
+            <ActivityIndicator HorizontalOptions="Center" VerticalOptions="Center" Color="{StaticResource primary_dark}" IsRunning="{Binding Source={x:Reference unipayPage}, Path=Navigating}"></ActivityIndicator>
+        </Grid>
+    </ContentPage.Content>
+</ContentPage>

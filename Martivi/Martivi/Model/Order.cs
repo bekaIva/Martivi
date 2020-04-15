@@ -18,18 +18,27 @@ namespace Martivi.Model
     }
     public enum PaymentStatus
     {
-        Paid,
-        NotPaid
+        NotPaid,
+        PENDING,
+        PROCESS,
+        ON_HOLD,
+        COMPLETED,
+        CANCELED,
+        NOT_FINISHED,
+        SAVED,
+        PREPARED,
+        CLEARED,
+        DENIED,
+        EXPIRED,
+        FAILED,
+        REFUNDED,
+        DECLINED,
+        RETURNED
     }
+
     public class Order : PropertyChangedBase
     {
-      
-
-      
-
-
         private OrderStatus _Status;
-
         public OrderStatus Status
         {
             get { return _Status; }
@@ -41,7 +50,8 @@ namespace Martivi.Model
         public User User { get; set; }
         public UserAddress OrderAddress { get; set; }
         public virtual List<Product> OrderedProducts { get; set; }
-
+        public string Hash { get; set; }
+        public string TransactionID { get; set; }
         private long _OrderTimeTicks;
 
         public long OrderTimeTicks

@@ -28,21 +28,26 @@
             <ShellContent  ContentTemplate="{DataTemplate local:OrderPage}" />
             
         </Tab>
-        <Tab Title="შესახებ" Icon="information.png">
-            <ShellContent ContentTemplate="{DataTemplate aboutus:AboutUsSimplePage}" />
+
+
+        <Tab Title="შეკვეთები"
+             Route="orderstab">
+            <Tab.Icon>
+                <FontImageSource Color="{StaticResource primary_text}"
+                                 Size="24"
+                                 FontFamily="{StaticResource FontAwesome5ProSolid}"
+                                 Glyph="&#xf218;"></FontImageSource>
+            </Tab.Icon>
+        <ShellContent Route="orderspage"
+                          ContentTemplate="{DataTemplate local:MyOrdersPage}"></ShellContent>
 
         </Tab>
+
     </FlyoutItem>
     <FlyoutItem Title="პროფილი" Route="profile" IsEnabled="{Binding IsSignedIn}">
         <FlyoutItem.Icon>
             <FontImageSource Color="{StaticResource primary_text}" Size="24" FontFamily="{StaticResource FontAwesome5ProRegular}"  Glyph="&#xf007;"></FontImageSource>
-        </FlyoutItem.Icon>
-        <Tab Title="ჩემი შეკვეთები" Route="orderstab">
-            <Tab.Icon>
-                <FontImageSource Color="{StaticResource primary_text}" Size="24" FontFamily="{StaticResource FontAwesome5ProSolid}"  Glyph="&#xf218;"></FontImageSource>
-            </Tab.Icon>
-            <ShellContent Route="orderspage"  ContentTemplate="{DataTemplate local:MyOrdersPage}"></ShellContent>
-        </Tab>
+        </FlyoutItem.Icon>      
         <Tab Route="profiletab" Title="პროფილი">
             <Tab.Icon>
                 <FontImageSource Color="{StaticResource primary_text}" Size="24" FontFamily="{StaticResource FontAwesome5ProRegular}"  Glyph="&#xf007;"></FontImageSource>
@@ -69,6 +74,19 @@
             <ShellContent Route="contacttoadminpage" ContentTemplate="{DataTemplate local:ContactToAdminPage}"></ShellContent>
         </Tab>
         
+    </FlyoutItem>
+    <FlyoutItem Title="შესახებ"
+                Route="contacttoadminflyout"
+                IsEnabled="{Binding IsSignedIn}"
+                Icon="information.png">
+       
+       
+
+       
+            <ShellContent ContentTemplate="{DataTemplate aboutus:AboutUsSimplePage}" />
+
+       
+
     </FlyoutItem>
     <MenuItem  Clicked="SignInOutClicked" IconImageSource="{Binding IsSignedIn,Converter={StaticResource IsSignedInConverter},ConverterParameter=Icon}">
         <Shell.MenuItemTemplate>

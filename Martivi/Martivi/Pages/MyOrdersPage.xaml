@@ -33,24 +33,33 @@
 
 
                                             <Label x:Name="TitleLabel" LineBreakMode="NoWrap" Text="{Binding OrderTime}" 
-                       FontAttributes="Bold" TextColor="Black"
-                                       FontSize="{OnPlatform Android={OnIdiom Phone=16, Tablet=18}, iOS={OnIdiom Phone=16, Tablet=18}, UWP={OnIdiom Phone=18, Tablet=20, Desktop=20}, macOS=18, WPF=20}"/>
-
-                                            <StackLayout Grid.Column="1" Orientation="Horizontal">
+                                                   FontAttributes="Bold" TextColor="Black"
+                                                   FontSize="{OnPlatform Android={OnIdiom Phone=16, Tablet=18}, iOS={OnIdiom Phone=16, Tablet=18}, UWP={OnIdiom Phone=18, Tablet=20, Desktop=20}, macOS=18, WPF=20}"/>
+                                            <StackLayout Grid.Column="1" Orientation="Horizontal" HorizontalOptions="End">
                                                 <Label Text="Id:" TextColor="{StaticResource primary}" VerticalOptions="Center" VerticalTextAlignment="Center"></Label>
                                                 <Label x:Name="IdLabel" VerticalOptions="Center" VerticalTextAlignment="Center" TextColor="{StaticResource primary_dark}" Grid.Column="1" LineBreakMode="NoWrap" Text="{Binding OrderId}"
-                       FontAttributes="Bold" 
-                                       FontSize="16"/>
+                                                       FontAttributes="Bold" 
+                                                       FontSize="16"/>
                                             </StackLayout>
-
-
                                             <Label Grid.ColumnSpan="2" Grid.Row="1" x:Name="DescriptionLabel" Text="{Binding OrderedProducts,Converter={StaticResource OrderedProductsToTotalPriceCoverter}}" TextColor="{StaticResource primary}"
-                                       FontSize="{OnPlatform Android={OnIdiom Phone=12, Tablet=14}, iOS={OnIdiom Phone=12, Tablet=14}, UWP={OnIdiom Phone=12, Tablet=12, Desktop=12}, macOS=14, WPF=12}"/>
-
-                                            <Frame Grid.Row="2" Grid.ColumnSpan="2" Padding="4,2,4,2" BackgroundColor="#FFE7E8E9" HorizontalOptions="Start" VerticalOptions="End"
-                                       HasShadow="True">
+                                                   FontSize="{OnPlatform Android={OnIdiom Phone=12, Tablet=14}, iOS={OnIdiom Phone=12, Tablet=14}, UWP={OnIdiom Phone=12, Tablet=12, Desktop=12}, macOS=14, WPF=12}"/>
+                                            <Frame Grid.Row="2" Grid.ColumnSpan="1" Padding="4,2,4,2" BackgroundColor="#FFE7E8E9" HorizontalOptions="Start" VerticalOptions="End"
+                                                   HasShadow="True">
                                                 <Label x:Name="TagLabel" LineBreakMode="NoWrap" Text="{Binding Status,Converter={StaticResource OrderStatusConverter}}"
-                          FontSize="10" TextColor="Black"/>
+                                                       FontSize="10" TextColor="Black"/>
+                                            </Frame>
+                                            <Frame Grid.Row="2"
+                                                   Grid.Column="1"
+                                                   Padding="4,2,4,2"
+                                                   BackgroundColor="#FFE7E8E9"
+                                                   HorizontalOptions="Start"
+                                                   VerticalOptions="End"
+                                                   HasShadow="True">
+                                                <Label 
+                                                       LineBreakMode="NoWrap"
+                                                       Text="{Binding Payment,Converter={StaticResource PaymentStatusToTextOrColorConverter}, ConverterParameter=Text}"
+                                                       FontSize="10"
+                                                       TextColor="{Binding Payment,Converter={StaticResource PaymentStatusToTextOrColorConverter}, ConverterParameter=Color}" />
                                             </Frame>
                                         </Grid>
                                     </Frame>
@@ -58,9 +67,9 @@
                             </sync:SfListView.ItemTemplate>
                         </sync:SfListView>
                         <Label  LineBreakMode="WordWrap" FontAttributes="Bold"
-             Text="კალათა ცარიელია!" VerticalOptions="Center" HorizontalOptions="Center"
-             IsVisible="{Binding MadeOrders.Count, Converter={StaticResource zeroVisibilityConverter}}" FontSize="16"
-             TextColor="{StaticResource primary}" />
+                                Text="თქვენ არ გაქვთ არცერთი შეკვეთა!" VerticalOptions="Center" HorizontalOptions="Center"
+                                IsVisible="{Binding MadeOrders.Count, Converter={StaticResource zeroVisibilityConverter}}" FontSize="16"
+                                TextColor="{StaticResource primary}" />
                     </Grid>
                 </pullToRefresh:SfPullToRefresh.PullableContent>
             </pullToRefresh:SfPullToRefresh>            

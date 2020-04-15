@@ -217,13 +217,32 @@ namespace Martivi.Services
             if (response.IsSuccessStatusCode) return;
             throw new Exception("Message send Failed! \nError Code: " + response.StatusCode + "\n" + resStr);
         }
-        public async Task<bool> Chekout(Order order,string token)
+        public async Task<CreateOrderResult> Checkout(Order order,string token)
         {
-            if(order.Payment== PaymentStatus.Paid)
+            
+            var json = JsonConvert.SerializeObject(order);
+            var content = new StringContent(json, Encoding.UTF8, "application/json");
+            var response = await sClient.GetResponsePost(ServerBaseAddress + "Api/Orders/Checkout", content, RequestHeaders: new Header[] { new Header() { Name = "Authorization", Value = token } });
+            string resStr = await response.Content.ReadAsStringAsync();
+            if (response.StatusCode == System.Net.HttpStatusCode.BadRequest)
             {
-                bool paid = await unipayMerchant.Chekout(order);
-                if (!paid) throw new Exception("Payment failed!");
+                throw new Exception(resStr);
             }
+            if (response.IsSuccessStatusCode)
+            {
+               var res = JsonConvert.DeserializeObject<CreateOrderResult>(resStr);
+                if (res == null) throw new Exception("Unknown response: " + resStr);
+                return res;
+            }
+            throw new Exception("Message send Failed! \nError Code: " + response.StatusCode + "\n" + resStr);
+        }
+        public async Task<Order> MakeOrder(Order order,string token)
+        {
+            //if(order.Payment== PaymentStatus.Paid)
+            //{
+            //    bool paid = await unipayMerchant.Chekout(order);
+            //    if (!paid) throw new Exception("Payment failed!");
+            //}
             var json = JsonConvert.SerializeObject(order);
             var content = new StringContent(json, Encoding.UTF8, "application/json");
             var response = await sClient.GetResponsePost(ServerBaseAddress + "Api/Orders", content, RequestHeaders: new Header[] { new Header() { Name = "Authorization", Value = token } });
@@ -232,7 +251,11 @@ namespace Martivi.Services
             {
                 throw new Exception(resStr);
             }
-            if (response.IsSuccessStatusCode) return true;
+            if (response.IsSuccessStatusCode)
+            {
+               return JsonConvert.DeserializeObject<Order>(resStr);
+                
+            }
             throw new Exception("Message send Failed! \nError Code: " + response.StatusCode + "\n" + resStr);
         }
 

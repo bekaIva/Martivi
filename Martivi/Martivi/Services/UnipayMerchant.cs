@@ -26,7 +26,7 @@ namespace Martivi.Services
         public ChekoutData Data { get; set; }
     }
 
-    public class Data
+    public class CheckoutData
     {
         public string Checkout { get; set; }
         public string UnipayOrderHashID { get; set; }
@@ -36,7 +36,7 @@ namespace Martivi.Services
     {
         public int Errorcode { get; set; }
         public string Message { get; set; }
-        public Data Data { get; set; }
+        public CheckoutData Data { get; set; }
     }
     public class Transaction
     {

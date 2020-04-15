@@ -56,7 +56,7 @@ namespace Martivi.Model
         {
             item = e.ItemData as Order;
             popupLayout = new SfPopupLayout();
-            
+
             popupLayout.PopupView.WidthRequest = 100;
             popupLayout.PopupView.ContentTemplate = new DataTemplate(() =>
             {
@@ -79,10 +79,21 @@ namespace Martivi.Model
                     TextColor = Color.Black
                 };
                 sortButton.Clicked += SortButton_Clicked;
-
-                if (item.Status == OrderStatus.Accepted)
+                
+                if(item.Payment== PaymentStatus.NotPaid)
                 {
-                    popupLayout.PopupView.HeightRequest = 160;
+                    var PayButton = new Button()
+                    {
+                        Text = "გადახდა",
+                        HeightRequest = 50,
+                        BackgroundColor = Color.White,
+                        TextColor = Color.Black
+                    };
+                    PayButton.Clicked += PayButton_Clicked;
+                    mainStack.Children.Add(PayButton);
+                }
+                if (item.Status == OrderStatus.Accepted)
+                {                    
                     var CancelButton = new Button()
                     {
                         Text = "გაუქმება",
@@ -93,14 +104,12 @@ namespace Martivi.Model
                     CancelButton.Clicked += CancelButton_Clicked;
                     mainStack.Children.Add(CancelButton);
                 }
-                else
-                {
-                    popupLayout.PopupView.HeightRequest = 100;
-                }
 
                 mainStack.Children.Add(deletedButton);
                 mainStack.Children.Add(sortButton);
-                
+
+                popupLayout.PopupView.HeightRequest = mainStack.Children.Count*50+10;
+
                 return mainStack;
 
             });
@@ -116,25 +125,39 @@ namespace Martivi.Model
                 popupLayout.Show((double)e.Position.X, (double)(e.Position.Y));
         }
 
+        private async void PayButton_Clicked(object sender, EventArgs e)
+        {
+            if (ListView == null)
+                return;
+            try { popupLayout.Dismiss(); } catch { }
+            try
+            {
+                if (item.Status == OrderStatus.Accepted)
+                {
+                    await mv.Checkout(item);
+                }
+                popupLayout.Dismiss();
+            }
+            catch(Exception ee)
+            {
+                await App.Current.MainPage.DisplayAlert("", ee.Message, "Ok");
+            }
+            
+        }
+
         private async void CancelButton_Clicked(object sender, EventArgs e)
         {
             if (ListView == null)
                 return;
+            try { popupLayout.Dismiss(); } catch { }
             if (item.Status == OrderStatus.Accepted)
             {
                 if (await App.Current.MainPage.DisplayAlert("", "დარწმუნებული ხართ, რომ გსურთ შეკვეთის გაუქმება?", "კი", "არა"))
                 {
-                   mv.CancelOrder(item);
+                    mv.CancelOrder(item);
                 }
             }
-            try
-            {
-                popupLayout.Dismiss();
-            }
-            catch
-            {
-
-            }
+         
         }
 
         private void SortButton_Clicked(object sender, EventArgs e)
@@ -168,6 +191,7 @@ namespace Martivi.Model
             {
                 if (ListView == null)
                     return;
+                try { popupLayout.Dismiss(); } catch { }
                 if (item.Status == OrderStatus.Accepted)
                 {
 
@@ -184,31 +208,19 @@ namespace Martivi.Model
 
                 if (source != null && source.Contains(item))
                 {
-                    source.Remove(item);
-                    mv.DeleteOrder(item);
+                   await mv.DeleteOrder(item);
                 }
                 else
                     App.Current.MainPage.DisplayAlert("Alert", "Unable to delete the item", "OK");
 
-                item = null;
                 source = null;
 
             }
-            catch(Exception ee)
+            catch (Exception ee)
             {
                 App.Current.MainPage.DisplayAlert("შეცდომა", ee.Message, "OK");
             }
-            finally
-            {
-                try
-                {
-                    popupLayout.Dismiss();
-                }
-                catch
-                {
-
-                }
-            }
+         
 
         }
     }

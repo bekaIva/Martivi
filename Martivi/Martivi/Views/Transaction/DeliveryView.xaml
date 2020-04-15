@@ -56,7 +56,7 @@
             </Grid.RowDefinitions>
 
             <Label
-                Grid.Column="0"
+                Grid.Column="0" Grid.ColumnSpan="2"
                 FontFamily="{StaticResource Montserrat-SemiBold}"
                 FontSize="16"
                 LineHeight="{OnPlatform Android=1.25,
@@ -84,7 +84,7 @@
             Spacing="0">
             <BindableLayout.ItemTemplate>
                 <DataTemplate>
-                    <Grid RowSpacing="0" VerticalOptions="{OnIdiom Default=Start, Desktop=Fill}">
+                    <Grid RowSpacing="1" VerticalOptions="{OnIdiom Default=Start, Desktop=Fill}" Margin="2">
 
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto" />
@@ -103,7 +103,6 @@
                         <buttons:SfRadioButton
                             IsChecked="{Binding IsPrimary}"
                             Grid.Row="0"
-                            helper:RTLHelper.Margin="16,16,8,0"
                             BackgroundColor="Transparent"
                             CheckedColor="{DynamicResource PrimaryColor}"
                             GroupKey="{StaticResource DeliveryAddressGroup}"
@@ -155,7 +154,7 @@
                         <Label
                             Grid.Row="1"
                             Grid.Column="1"
-                           
+                           Margin="2"
                             FontFamily="{StaticResource Montserrat-Medium}"
                             FontSize="12"
                             LineHeight="{OnPlatform Android=1.25,
@@ -175,7 +174,7 @@
                             Style="{StaticResource CommonLabelStyle}">
                             <Label.FormattedText>
                                 <FormattedString>
-                                    <Span Text="Mobile: " />
+                                    <Span Text="ტელეფონი: " />
                                     <Span Text="{Binding MobileNumber}" TextColor="{DynamicResource Gray-900}" />
                                 </FormattedString>
                             </Label.FormattedText>

@@ -130,12 +130,12 @@ namespace Martivi.ViewModels.Transaction
             {
                 case "Debit / Credit Card":
                     {
-                        MainViewModel.CheckOut(PaymentStatus.Paid);
+                        MainViewModel.MakeOrder(true);
                         break;
                     }
                 case "გადახდა მიწოდებისას":
                     {
-                        MainViewModel.CheckOut(PaymentStatus.NotPaid);
+                        MainViewModel.MakeOrder(false);
                         break;
                     }
 

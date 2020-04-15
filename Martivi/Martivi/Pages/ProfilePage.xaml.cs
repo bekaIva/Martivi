@@ -129,9 +129,20 @@ namespace Martivi.Pages
         {
             try
             {
+                await UpdateProfile();
+            }
+            catch(Exception ee)
+            {
+                DisplayAlert("შეცდომა", ee.Message, "Ok");
+            }
+        }
+        public async Task UpdateProfile()
+        {
+            try
+            {
                 if (UserUpdating) return;
                 UserUpdating = true;
-                var res = await mv.UpdateUser(new MartiviSharedLib.Models.Users.UpdateModel() {UserAddresses= mv.CurrentUser.UserAddresses, FirstName = FirstName, LastName = LastName, Password = Password, Phone = Phone,  Username = UserName, ProfileImageUrl = ProfileImageUrl });
+                var res = await mv.UpdateUser(new MartiviSharedLib.Models.Users.UpdateModel() { UserAddresses = mv.CurrentUser.UserAddresses, FirstName = FirstName, LastName = LastName, Password = Password, Phone = Phone, Username = UserName, ProfileImageUrl = ProfileImageUrl });
                 if (res)
                 {
                     DisplayAlert("", "მონაცემები წარმატებით განახლდა", "Ok");
@@ -140,11 +151,10 @@ namespace Martivi.Pages
 
             catch (Exception ee)
             {
-                DisplayAlert("შეცდომა", ee.Message, "Ok");
+                throw ee;
             }
             finally { UserUpdating = false; }
         }
-
         private async void PickImageTapped(object sender, EventArgs e)
         {
             try
@@ -156,6 +166,7 @@ namespace Martivi.Pages
                 {
                     var s = Services.ApiServices.ResizeImageAndroid(stream, 400);
                     ProfileImageUrl = Services.ApiServices.ServerBaseAddress + "Images/" + await mv.Services.UploadFile(s, "Bearer " + mv.Token);
+                    await UpdateProfile();
                 }
 
             }

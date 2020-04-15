@@ -6,6 +6,7 @@
              xmlns:sync="clr-namespace:Syncfusion.ListView.XForms;assembly=Syncfusion.SfListView.XForms"
              xmlns:numeric="clr-namespace:Syncfusion.SfNumericUpDown.XForms;assembly=Syncfusion.SfNumericUpDown.XForms"
              xmlns:progressBar="clr-namespace:Syncfusion.XForms.ProgressBar;assembly=Syncfusion.SfProgressBar.XForms" xmlns:border="clr-namespace:Syncfusion.XForms.Border;assembly=Syncfusion.Core.XForms" xmlns:model="clr-namespace:Martivi.Model"
+             xmlns:buttons="clr-namespace:Syncfusion.XForms.Buttons;assembly=Syncfusion.Buttons.XForms"
              mc:Ignorable="d"
              x:Class="Martivi.Pages.OrderDetailPage" x:Name="orderDetailPage" BindingContext="{StaticResource MainViewModel}" Title="{Binding SelectedDetailOrder.OrderId, StringFormat='შეკვეთა #{0}'}">
     <ContentPage.Resources>
@@ -22,6 +23,17 @@
         <Style x:Key="BoxViewStyle" TargetType="BoxView">
             <Setter Property="Color" Value="{DynamicResource Gray-200}" />
             <Setter Property="VerticalOptions" Value="Center" />
+        </Style>
+        <Style x:Key="SfButtonStyle"
+               TargetType="buttons:SfButton">
+            <Setter Property="BackgroundColor"
+                    Value="Transparent" />
+            <Setter Property="TextColor"
+                    Value="{DynamicResource Gray-700}" />
+            <Setter Property="FontFamily"
+                    Value="Montserrat-Regular" />
+            <Setter Property="FontSize"
+                    Value="16" />
         </Style>
     </ContentPage.Resources>
     <ContentPage.Content>
@@ -98,10 +110,10 @@
                                         <Label Text="{Binding Name}" HorizontalOptions="Start" Margin="0,0,0,4" FontSize="16"
                                      TextColor="{OnPlatform Default=#333333, Android=#000000}"
                                      Opacity="{OnPlatform Default=1, Android=0.87}" />
-                                        <Label Text="{Binding Weight}" FontSize="14" Grid.Row="1" HorizontalOptions="Start" 
+                                        <Label Text="{Binding Weight, StringFormat='წონა {0}'}" FontSize="14" Grid.Row="1" HorizontalOptions="Start" 
                                        TextColor="{OnPlatform Default=#757575, Android=#000000, UWP=#4C4C4C}"
                                        Opacity="{OnPlatform Default=1, Android=0.54}" />
-                                        <Label Text="{Binding Quantity,StringFormat='რაოდენობა: {0}'}" FontSize="14" Grid.Row="2" HorizontalOptions="Start" 
+                                        <Label Text="{Binding Quantity,StringFormat='რაოდენობა {0}'}" FontSize="14" Grid.Row="2" HorizontalOptions="Start" 
                                        TextColor="{OnPlatform Default=#757575, Android=#000000, UWP=#4C4C4C}"
                                        Opacity="{OnPlatform Default=1, Android=0.54}" />
                                         <Grid Grid.Row="3" Padding="0" ColumnSpacing="0">
@@ -137,7 +149,21 @@
                                                 <Label Text="{Binding SelectedDetailOrder.User.FirstName, StringFormat='სახელი: {0}'}"  HorizontalOptions="Start"></Label>
                                                 <Label Text="{Binding SelectedDetailOrder.User.LastName, StringFormat='გვარი: {0}'}"  HorizontalOptions="Start"></Label>
                                                 <Label Text="{Binding SelectedDetailOrder.User.Phone, StringFormat='ტელეფონი: {0}'}"  HorizontalOptions="Start"></Label>
-                                                <Label Text="{Binding SelectedDetailOrder.Payment, StringFormat='გადახდა: {0}'}"></Label>
+                                                <Label HorizontalOptions="Center" Text="{Binding SelectedDetailOrder.Payment, Converter={StaticResource PaymentStatusToTextOrColorConverter}, ConverterParameter=Text}"
+                                                       TextColor="{Binding SelectedDetailOrder.Payment,Converter={StaticResource PaymentStatusToTextOrColorConverter}, ConverterParameter=Color}"></Label>
+                                                <buttons:SfButton IsVisible="{Binding SelectedDetailOrder.Payment,Converter={StaticResource PaymentStatusToTextOrColorConverter}, ConverterParameter=Visibility}"
+                                                    Margin="4"
+                                                                  BorderWidth="0"
+                                                                  CornerRadius="4"
+                                                                  FontFamily="{StaticResource Montserrat-SemiBold}"
+                                                                  FontSize="14"
+                                                                  Clicked="PayClicked"
+                                                                  HeightRequest="{OnIdiom Desktop=18,
+                                                    Default=35}"
+                                                                  HorizontalOptions="Center"
+                                                                  Style="{StaticResource SfButtonStyle}"
+                                                                  Text="გადახდა"
+                                                                  TextColor="{StaticResource primary}" />
                                             </StackLayout>
                                         </Grid>
 
@@ -206,7 +232,7 @@
                             Style="{StaticResource CommonLabelStyle}">
                                 <Label.FormattedText>
                                     <FormattedString>
-                                        <Span Text="Mobile: " />
+                                        <Span Text="ტელეფონი: " />
                                         <Span Text="{Binding MobileNumber}" TextColor="{DynamicResource Gray-900}" />
                                     </FormattedString>
                                 </Label.FormattedText>

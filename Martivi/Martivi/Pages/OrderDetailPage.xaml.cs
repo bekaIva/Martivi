@@ -99,5 +99,17 @@ namespace Martivi.Pages
         {
 
         }
+
+        private async void PayClicked(object sender, EventArgs e)
+        {
+            try
+            {
+               await mv.Checkout(mv.SelectedDetailOrder);
+            }
+            catch(Exception ee)
+            {
+                DisplayAlert("შეცდომა", ee.Message,"Ok");
+            }
+        }
     }
 }
