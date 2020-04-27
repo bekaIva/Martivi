@@ -20,7 +20,7 @@
     </Shell.SearchHandler>
     <ContentPage.Content>
         <Grid>
-            <pullToRefresh:SfPullToRefresh x:Name="ptf" RefreshCommand="{Binding RefreshListing}" RefreshCommandParameter="{x:Reference ptf}">
+            <pullToRefresh:SfPullToRefresh x:Name="ptf" RefreshCommand="{Binding RefreshListing}" RefreshCommandParameter="{x:Reference ptf}" ProgressBackgroundColor="Transparent" ProgressStrokeColor="{StaticResource primary_dark}">
                 <pullToRefresh:SfPullToRefresh.PullableContent>
                     <Grid>
                         <errorandempty:NoInternetConnectionPage IsVisible="{Binding Source={StaticResource MainViewModel},Path=ConnectionError}"></errorandempty:NoInternetConnectionPage>

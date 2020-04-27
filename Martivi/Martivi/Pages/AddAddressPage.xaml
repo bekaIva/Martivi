@@ -1,0 +1,127 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:border="clr-namespace:Syncfusion.XForms.Border;assembly=Syncfusion.Core.XForms"
+             xmlns:control="clr-namespace:Martivi.Controls"
+             xmlns:model="clr-namespace:Martivi.Model"
+             xmlns:popuplayout="clr-namespace:Syncfusion.XForms.PopupLayout;assembly=Syncfusion.SfPopupLayout.XForms"
+             xmlns:converter="clr-namespace:Martivi.Converters"
+             xmlns:transaction="clr-namespace:Martivi.Models.Transaction"
+             xmlns:buttons="clr-namespace:Syncfusion.XForms.Buttons;assembly=Syncfusion.Buttons.XForms"
+             xmlns:maps="clr-namespace:Xamarin.Forms.Maps;assembly=Xamarin.Forms.Maps"
+             mc:Ignorable="d"
+             x:Class="Martivi.Pages.AddAddressPage" BindingContext="{StaticResource MainViewModel}" Title="ახალი მისამართი" x:Name="addAddressPage">
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/Views/Transaction/Styles.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+            <converter:BooleanToColorConverter x:Key="ColorConverter" />
+          
+
+
+        </ResourceDictionary>
+    </ContentPage.Resources>
+    <ContentPage.Content>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="1*" />
+                <RowDefinition Height="1*" />
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="auto" />
+                
+            </Grid.RowDefinitions>
+            <ScrollView Grid.Row="0">
+                <Grid Margin="12"
+                      Padding="4"
+                      BindingContext="{Binding AddAddress}">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="auto" />
+                        <RowDefinition Height="auto" />
+                        <RowDefinition Height="auto" />
+                        <RowDefinition Height="auto" />
+                    </Grid.RowDefinitions>
+                    <border:SfBorder Grid.Row="0"
+                                     BorderColor="{Binding Source={x:Reference NameEntry}, Path=IsFocused, Converter={StaticResource ColorConverter}, ConverterParameter=3}"
+                                     Style="{StaticResource FormBorderStyle}">
+                        <control:BorderlessEntry  x:Name="NameEntry"
+                                                  Placeholder="სახელი"
+                                                  Text="{Binding CustomerName,Mode=TwoWay}"
+                                                  Style="{StaticResource EntryTextStyle}" />
+                    </border:SfBorder>
+                    <border:SfBorder Grid.Row="1"
+                                     BorderColor="{Binding Source={x:Reference AddressTypeEntry}, Path=IsFocused, Converter={StaticResource ColorConverter}, ConverterParameter=3}"
+                                     Style="{StaticResource FormBorderStyle}">
+                        <control:BorderlessEntry  x:Name="AddressTypeEntry"
+                                                  Text="{Binding AddressType, Mode=TwoWay}"
+                                                  Placeholder="ტიპი (სახლი, სამსახური...)"
+                                                  Style="{StaticResource EntryTextStyle}" />
+                    </border:SfBorder>
+                    <border:SfBorder Grid.Row="2"
+                                     BorderColor="{Binding Source={x:Reference AddressEntry}, Path=IsFocused, Converter={StaticResource ColorConverter}, ConverterParameter=3}"
+                                     Style="{StaticResource FormBorderStyle}">
+                        <control:BorderlessEntry  x:Name="AddressEntry"
+                                                  Placeholder="მისამართი"
+                                                  Text="{Binding Address, Mode=TwoWay}"
+                                                  Style="{StaticResource EntryTextStyle}" />
+                    </border:SfBorder>
+                    <border:SfBorder Grid.Row="3"
+                                     BorderColor="{Binding Source={x:Reference PhoneEntry}, Path=IsFocused, Converter={StaticResource ColorConverter}, ConverterParameter=3}"
+                                     Style="{StaticResource FormBorderStyle}">
+                        <control:BorderlessEntry Keyboard="Numeric"
+                                                 x:Name="PhoneEntry"
+                                                 Text="{Binding MobileNumber, Mode=TwoWay}"
+                                                 Placeholder="ტელეფონი"
+                                                 Style="{StaticResource EntryTextStyle}" />
+                    </border:SfBorder>
+
+
+
+
+                </Grid>
+            </ScrollView>
+
+           
+            <border:SfBorder Grid.Row="1"
+                             
+                             Margin="16,0,16,0"
+                             BorderColor="{Binding Source={x:Reference viewMap}, Path=IsFocused, Converter={StaticResource ColorConverter}, ConverterParameter=3}"
+                             Style="{StaticResource FormBorderStyle}">
+                <Grid>
+                    <model:BindableMap MapType="Street"  MapClicked="AddMappClicked" 
+                                       BindingContext="{Binding AddAddress}"
+                                       x:Name="viewMap"
+                                       IsShowingUser="True"
+                                       MapSpan="{Binding Coordinates, Converter={StaticResource CoordinateToMapSpan}}"
+                                       PinSource="{Binding Coordinates, Converter={StaticResource CoordinateToPin}}">  
+                        
+                    </model:BindableMap>
+                    <buttons:SfButton 
+                                      TextColor="#6D6D6D" Margin="4,4,4,30" HeightRequest="40" CornerRadius="8" Clicked="SwitchMapTypeClicked" VerticalOptions="End" HorizontalOptions="Start" Style="{StaticResource SfFlatButtonStyle}" Text="{Binding Source={x:Reference viewMap}, Path=MapType}"></buttons:SfButton>
+                </Grid>
+            </border:SfBorder>
+            <border:SfBorder Grid.Row="2"
+                             Margin="14,0,14,0"
+                             Style="{StaticResource FormBorderStyle}">
+                <control:BorderlessEntry  ReturnCommand="{Binding Source={x:Reference addAddressPage}, Path=SearchPositionReturnCommand}"
+                                          ReturnCommandParameter="{Binding Source={x:Reference SearchPositionEntry}}" x:Name="SearchPositionEntry"
+                                         TextChanged="SearchPositionEntry_TextChanged"
+                                         ReturnType="Search"
+                                         Placeholder="ძებნა"
+                                         BindingContext="{x:Reference viewMap}"
+                                         Style="{StaticResource EntryTextStyle}" />
+            </border:SfBorder>
+            <ActivityIndicator Color="{StaticResource primary}" IsRunning="{Binding Source={x:Reference addAddressPage}, Path=Searching}" Margin="0,0,16,0" Grid.Row="2" HorizontalOptions="End" VerticalOptions="Center" WidthRequest="12" HeightRequest="12"></ActivityIndicator>
+            <buttons:SfButton FontFamily="{StaticResource Montserrat-SemiBold}"
+                              FontSize="16"
+                              VerticalOptions="Center"
+                              Clicked="AddClicked"
+                              BackgroundColor="Transparent"
+                              Grid.Row="3"
+                              Text="დამატება"
+                              TextColor="{StaticResource primary_dark}"></buttons:SfButton>
+        </Grid>
+    </ContentPage.Content>
+</ContentPage>

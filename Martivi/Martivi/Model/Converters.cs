@@ -5,6 +5,7 @@
 // licensing@syncfusion.com. Any infringement will be prosecuted under
 // applicable laws. 
 #endregion
+using Martivi.Models.Transaction;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -20,7 +21,7 @@ using Xamarin.Forms.Maps;
 namespace Martivi.Model
 {
     [Preserve(AllMembers = true)]
-
+   
     public class PaymentStatusToTextOrColorConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
@@ -66,54 +67,60 @@ namespace Martivi.Model
         }
     }
 
-    public class StringCoordinateToMapSpan : IValueConverter
+    public class CoordinateToPin : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if (value is string d && d.Length > 0)
+            if (value is Coordinate c)
             {
-                var splited = d.Split('|');
-                if (splited.Length == 2)
-                {
-                    MapSpan ms = new MapSpan(new Position(System.Convert.ToDouble(splited[0]), System.Convert.ToDouble(splited[1])), 0.1, 0.1);                                       
-                    return ms;
-                }
+                Position pos = new Position(c.Latitude, c.Longitude);
+                Pin p = new Pin() { Position = pos, Label = "ადგილმდებარეობა" };
+                return p;
             }
-            return value;
-        }
-        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            return value;
-        }
-    }
-    public class StringCoordinateToPin : IValueConverter
-    {
-        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            if (value is string d && d.Length > 0)
-            {
-                try
-                {
-                    var splited = d.Split('|');
-                    if (splited.Length == 2)
-                    {
-                        Position pos = new Position(System.Convert.ToDouble(splited[0]), System.Convert.ToDouble(splited[1]));
-                        Pin p = new Pin() { Position = pos, Label = "ადგილმდებარეობა" };
-                        return p;
-                    }
-                }
-                catch (Exception e)
-                {
 
-                }
-               
-            }
             return value;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
             throw new NotImplementedException();
+        }
+    }
+    public class CoordinateToMapSpan : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            if (value is Coordinate c)
+            {
+                MapSpan ms = new MapSpan(new Position(c.Latitude, c.Longitude), 0.1, 0.1);
+                return ms;
+            }
+            return value;
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            return value;
+        }
+    }
+    public class CoordinateToString : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            if (value is Coordinate c)
+            {
+                return c.Latitude.ToString() + ", " + c.Longitude.ToString();
+            }
+
+
+
+
+            return value;
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            return value;
         }
     }
 

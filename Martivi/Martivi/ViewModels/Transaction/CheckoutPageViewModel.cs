@@ -120,26 +120,37 @@ namespace Martivi.ViewModels.Transaction
        
         private async void PlaceOrderClicked(object obj)
         {
-            var pm = paymentModes.FirstOrDefault(p => p.IsChecked);
-            if (pm == null)
+            try
             {
-                await Application.Current.MainPage.DisplayAlert("", "გთხოვთ აირჩიოთ გადახდის მეთოდი", "Cancel");
-                return;
+                var pm = paymentModes.FirstOrDefault(p => p.IsChecked);
+                if (pm == null)
+                {
+                    await Application.Current.MainPage.DisplayAlert("", "გთხოვთ აირჩიოთ გადახდის მეთოდი", "Cancel");
+                    return;
+                }
+                switch (pm.PaymentMode)
+                {
+                    case "Debit / Credit Card":
+                        {
+                            MainViewModel.MakeOrder(true);
+                            break;
+                        }
+                    case "გადახდა მიწოდებისას":
+                        {
+                            MainViewModel.MakeOrder(false);
+                            break;
+                        }
+
+
+                }
             }
-            switch(pm.PaymentMode)
+            catch (System.Exception ee)
             {
-                case "Debit / Credit Card":
-                    {
-                        MainViewModel.MakeOrder(true);
-                        break;
-                    }
-                case "გადახდა მიწოდებისას":
-                    {
-                        MainViewModel.MakeOrder(false);
-                        break;
-                    }
-
-
+                try
+                {
+                    await Application.Current.MainPage.DisplayAlert("", ee.Message, "ok");
+                }
+                catch { }
             }
         }
 

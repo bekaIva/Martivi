@@ -18,6 +18,21 @@
             <ResourceDictionary.MergedDictionaries>
                 <themes:LightTheme />
             </ResourceDictionary.MergedDictionaries >
+            <model:CoordinateToMapSpan x:Key="CoordinateToMapSpan"></model:CoordinateToMapSpan>
+            <model:CoordinateToString x:Key="CoordinateToString"></model:CoordinateToString>
+            <model:CoordinateToPin x:Key="CoordinateToPin"></model:CoordinateToPin>
+            <model:InverseZeroVisibilityConverter x:Key="inverseZeroVisibilityConverter" />
+            <model:ZeroVisibilityConverter x:Key="zeroVisibilityConverter" />
+            <model:CurrencyFormatConverter x:Key="currencyFormatConverter" />
+            <model:TotalItemsCountConverter x:Key="totalItemsCountConverter" />
+            <model:ShortDescription x:Key="ShortDescription"></model:ShortDescription>
+            <model:PaymentStatusToTextOrColorConverter x:Key="PaymentStatusToTextOrColorConverter" />
+            <model:WeightConverter x:Key="WeightConverter"></model:WeightConverter>
+            <model:IsSignedInConverter x:Key="IsSignedInConverter"></model:IsSignedInConverter>
+            <model:OrderedProductsToTotalPriceCoverter x:Key="OrderedProductsToTotalPriceCoverter" />
+            <model:OrderStatusConverter x:Key="OrderStatusConverter" />
+            <model:CountToBoolConverter x:Key="CountToBoolConverter" />
+            <model:BoolToNegative x:Key="BoolToNegative" />
             <Color x:Key="primary">#FF5722</Color>
             <Color x:Key="primary_dark">#E64A19</Color>
             <Color x:Key="primary_light">#FFCCBC</Color>
@@ -25,11 +40,26 @@
             <Color x:Key="primary_text">#212121</Color>
             <Color x:Key="secondary_text">#757575</Color>
             <Color x:Key="icons">#FFFFFF</Color>
-            <Color x:Key="divider">#BDBDBD</Color>       
+            <Color x:Key="divider">#BDBDBD</Color>
+
+
+            <Style x:Key="FloutItemStyle"
+                   TargetType="Grid">
+                <Setter Property="VisualStateManager.VisualStateGroups">
+                    <VisualStateGroupList>
+                        <VisualStateGroup x:Name="CommonStates">
+                            <VisualState x:Name="Normal" />
+                            <VisualState x:Name="Selected">
+                                <VisualState.Setters>
+                                    <Setter Property="BackgroundColor"
+                                            Value="#3EA0A0A0" />
+                                </VisualState.Setters>
+                            </VisualState>
+                        </VisualStateGroup>
+                    </VisualStateGroupList>
+                </Setter>
+            </Style>
            
-
-
-
             <Style x:Key="BaseStyle" TargetType="Element">
                 <Setter Property="Shell.BackgroundColor" Value="{StaticResource primary}" />
                 <Setter Property="Shell.ForegroundColor" Value="White" />
@@ -115,20 +145,7 @@
 
                 </Grid>
             </DataTemplate>
-            <model:StringCoordinateToMapSpan x:Key="StringCoordinateToMapSpan"></model:StringCoordinateToMapSpan>
-            <model:StringCoordinateToPin x:Key="StringCoordinateToPin"></model:StringCoordinateToPin>
-            <model:InverseZeroVisibilityConverter x:Key="inverseZeroVisibilityConverter"/>
-            <model:ZeroVisibilityConverter x:Key="zeroVisibilityConverter"/>
-            <model:CurrencyFormatConverter x:Key="currencyFormatConverter"/>
-            <model:TotalItemsCountConverter x:Key="totalItemsCountConverter"/>
-            <model:ShortDescription x:Key="ShortDescription"></model:ShortDescription>
-            <model:PaymentStatusToTextOrColorConverter x:Key="PaymentStatusToTextOrColorConverter" />
-            <model:WeightConverter x:Key="WeightConverter"></model:WeightConverter>
-            <model:IsSignedInConverter x:Key="IsSignedInConverter"></model:IsSignedInConverter>
-            <model:OrderedProductsToTotalPriceCoverter x:Key="OrderedProductsToTotalPriceCoverter"/>
-            <model:OrderStatusConverter x:Key="OrderStatusConverter"/>
-            <model:CountToBoolConverter x:Key="CountToBoolConverter"/>
-            <model:BoolToNegative x:Key="BoolToNegative"/>
+          
             <OnPlatform x:TypeArguments="x:String" 
                 x:Key="FontAwesomeBrands">
                 <On Platform="Android" 
@@ -184,8 +201,10 @@
                 <On Platform="WPF" Value="Assets/Fonts/UIFontIcons.ttf#UIFontIcons" />
                 <On Platform="iOS" Value="UIFontIcons" />
             </OnPlatform>
-            <FontImageSource x:Key="SignInImageSource" Color="{StaticResource primary_text}" Size="16" FontFamily="{StaticResource FontAwesome5ProRegular}" Glyph="&#xf2f5;"></FontImageSource>
-            <FontImageSource x:Key="SignOutImageSource" Color="{StaticResource primary_text}" Size="16" FontFamily="{StaticResource FontAwesome5ProRegular}" Glyph="&#xf2f6;"></FontImageSource>
+            <FontImageSource x:Key="SignInImageSource"
+                             Color="{StaticResource primary_dark}" Size="16" FontFamily="{StaticResource FontAwesome5ProRegular}" Glyph="&#xf2f5;"></FontImageSource>
+            <FontImageSource x:Key="SignOutImageSource"
+                             Color="{StaticResource primary_dark}" Size="16" FontFamily="{StaticResource FontAwesome5ProRegular}" Glyph="&#xf2f6;"></FontImageSource>
             <converter:DatetimeToColorConverter x:Key="DatetimeToColorConverter"/>
 
             <x:String x:Key="Arrow">&#xe728;</x:String>

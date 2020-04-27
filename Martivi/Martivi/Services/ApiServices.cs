@@ -30,8 +30,10 @@ namespace Martivi.Services
             get => AppSettings.GetValueOrDefault(nameof(ServerBaseAddress), string.Empty);
             set => AppSettings.AddOrUpdateValue(nameof(ServerBaseAddress), value);
         }
-        public ApiServices()
+        public static string CheckoutBackLink
         {
+            get => AppSettings.GetValueOrDefault(nameof(CheckoutBackLink), string.Empty);
+            set => AppSettings.AddOrUpdateValue(nameof(CheckoutBackLink), value);
         }
         public static Stream ResizeImageAndroid(Stream stream, float width, float height = -1)
         {
@@ -203,6 +205,51 @@ namespace Martivi.Services
             }
             throw new AuthenticateException("ავტორიზაცია არ შესრულდა! \nშეცდომის კოდი: " + response.StatusCode + "\n" + resStr);
         }
+        public async Task<PasswordChangeResult> RequestPasswordRecoveryCode(RequestPasswordRecoveryCodeModel email)
+        {
+            var json = JsonConvert.SerializeObject(email);
+            var content = new StringContent(json, Encoding.UTF8, "application/json");
+            var response = await sClient.GetResponsePost(ServerBaseAddress + "Users/RequestPasswordRecoveryCode", content);
+            string resStr = await response.Content.ReadAsStringAsync();
+            if (response.IsSuccessStatusCode)
+            {
+                return JsonConvert.DeserializeObject<PasswordChangeResult>(resStr);
+            }
+            else
+            {
+                throw new Exception(resStr);
+            }
+            
+        }
+        public async Task<PasswordChangeResult> RecoverPassword(PasswordChangeRequestModel changeRequest)
+        {
+            var json = JsonConvert.SerializeObject(changeRequest);
+            var content = new StringContent(json, Encoding.UTF8, "application/json");
+            var response = await sClient.GetResponsePost(ServerBaseAddress + "Users/RecoverPassword", content);
+            string resStr = await response.Content.ReadAsStringAsync();
+            if (response.IsSuccessStatusCode)
+            {
+                return JsonConvert.DeserializeObject<PasswordChangeResult>(resStr);
+            }
+            else
+            {
+                throw new Exception(resStr);
+            }
+        }
+        public async Task<Setting[]> GetSettings()
+        {
+            var response = await sClient.GetResponse(ServerBaseAddress + "api/info/GetSettings");
+            string resStr = await response.Content.ReadAsStringAsync();
+            if (response.IsSuccessStatusCode)
+            {
+                return JsonConvert.DeserializeObject<Setting[]>(resStr);
+            }
+            if (response.StatusCode == System.Net.HttpStatusCode.BadRequest)
+            {
+                throw new Exception(resStr);
+            }
+            throw new Exception("Get settings failed! \nError Code: " + response.StatusCode + "\n" + resStr);
+        }
         public async Task SendMessage(ChatMessage message,string token)
         {
             var json = JsonConvert.SerializeObject(message);
@@ -217,6 +264,7 @@ namespace Martivi.Services
             if (response.IsSuccessStatusCode) return;
             throw new Exception("Message send Failed! \nError Code: " + response.StatusCode + "\n" + resStr);
         }
+
         public async Task<CreateOrderResult> Checkout(Order order,string token)
         {
             
@@ -235,6 +283,21 @@ namespace Martivi.Services
                 return res;
             }
             throw new Exception("Message send Failed! \nError Code: " + response.StatusCode + "\n" + resStr);
+        }
+        public async Task CheckPaymentStatus(Order order)
+        {
+            var response = await sClient.GetResponse(CheckoutBackLink + "?MerchantOrderID=" + order.OrderId);
+            string resStr = await response.Content.ReadAsStringAsync();
+            if (response.IsSuccessStatusCode)
+            {
+                PaymentStatus status;
+                if (Enum.TryParse(resStr, out status)) order.Payment = status;
+            }
+            if (response.StatusCode == System.Net.HttpStatusCode.BadRequest)
+            {
+                throw new Exception(resStr);
+            }
+            throw new Exception("Check payment status failed! \nError Code: " + response.StatusCode + "\n" + resStr);
         }
         public async Task<Order> MakeOrder(Order order,string token)
         {

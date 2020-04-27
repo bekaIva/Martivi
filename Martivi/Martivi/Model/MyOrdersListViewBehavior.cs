@@ -79,9 +79,9 @@ namespace Martivi.Model
                     TextColor = Color.Black
                 };
                 sortButton.Clicked += SortButton_Clicked;
+
                 
-                if(item.Payment== PaymentStatus.NotPaid)
-                {
+
                     var PayButton = new Button()
                     {
                         Text = "გადახდა",
@@ -91,7 +91,10 @@ namespace Martivi.Model
                     };
                     PayButton.Clicked += PayButton_Clicked;
                     mainStack.Children.Add(PayButton);
-                }
+                
+
+                
+                
                 if (item.Status == OrderStatus.Accepted)
                 {                    
                     var CancelButton = new Button()
@@ -132,17 +135,18 @@ namespace Martivi.Model
             try { popupLayout.Dismiss(); } catch { }
             try
             {
-                if (item.Status == OrderStatus.Accepted)
-                {
-                    await mv.Checkout(item);
-                }
+
+
+                await mv.Checkout(item);
+
+
                 popupLayout.Dismiss();
             }
-            catch(Exception ee)
+            catch (Exception ee)
             {
                 await App.Current.MainPage.DisplayAlert("", ee.Message, "Ok");
             }
-            
+
         }
 
         private async void CancelButton_Clicked(object sender, EventArgs e)

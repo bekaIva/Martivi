@@ -1,10 +1,18 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.SignalR.Client;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace Martivi.Model
 {
+    public class RetryPolicy : IRetryPolicy
+    {
+        public TimeSpan? NextRetryDelay(RetryContext retryContext)
+        {
+            return TimeSpan.FromSeconds(3);
+        }
+    }
     public enum MessageSide
     {
         Support,

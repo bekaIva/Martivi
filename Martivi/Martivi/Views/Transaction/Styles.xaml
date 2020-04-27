@@ -10,6 +10,19 @@
     xmlns:border="clr-namespace:Syncfusion.XForms.Border;assembly=Syncfusion.Core.XForms">
 
     <Color x:Key="Transparent">Transparent</Color>
+    <Style x:Key="SfFlatButtonStyle"
+           TargetType="buttons:SfButton">
+        <Setter Property="BackgroundColor"
+                Value="Transparent" />
+        <Setter Property="TextColor"
+                Value="{DynamicResource PrimaryColor}" />
+        <Setter Property="FontFamily"
+                Value="{StaticResource Montserrat-SemiBold}" />
+        <Setter Property="FontSize"
+                Value="14" />
+        <Setter Property="VerticalTextAlignment"
+                Value="Center" />
+    </Style>
     <Style x:Key="FormBorderStyle" TargetType="border:SfBorder">
         <Setter Property="BorderColor" Value="{DynamicResource Gray-300}"/>
         <Setter Property="CornerRadius" Value="4"/>

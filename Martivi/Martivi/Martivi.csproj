@@ -20,6 +20,8 @@
     <None Remove="Images\PaymentFailure.svg" />
     <None Remove="Images\PaymentSuccess.svg" />
     <None Remove="Resources\ic_launcher.png" />
+    <None Remove="Sounds\OrderRecieved.mp3" />
+    <None Remove="Sounds\stairs.mp3" />
   </ItemGroup>
 
   <ItemGroup>
@@ -31,6 +33,8 @@
     <EmbeddedResource Include="Images\PaymentFailure.svg" />
     <EmbeddedResource Include="Images\PaymentSuccess.svg" />
     <EmbeddedResource Include="Resources\ic_launcher.png" />
+    <EmbeddedResource Include="Sounds\OrderRecieved.mp3" />
+    <EmbeddedResource Include="Sounds\stairs.mp3" />
   </ItemGroup>
 
   <ItemGroup>
@@ -39,27 +43,33 @@
     <PackageReference Include="SkiaSharp.Extended" Version="1.60.0" />
     <PackageReference Include="SkiaSharp.Svg" Version="1.60.0" />
     <PackageReference Include="SkiaSharp.Views.Forms" Version="1.68.1.1" />
-    <PackageReference Include="Syncfusion.Xamarin.Buttons" Version="18.1.0.42" />
-    <PackageReference Include="Syncfusion.Xamarin.Cards" Version="18.1.0.42" />
-    <PackageReference Include="Syncfusion.Xamarin.Core" Version="18.1.0.42" />
-    <PackageReference Include="Syncfusion.Xamarin.SfBadgeView" Version="18.1.0.42" />
-    <PackageReference Include="Syncfusion.Xamarin.SfComboBox" Version="18.1.0.42" />
-    <PackageReference Include="Syncfusion.Xamarin.SfListView" Version="18.1.0.42" />
-    <PackageReference Include="Syncfusion.Xamarin.SfNumericUpDown" Version="18.1.0.42" />
-    <PackageReference Include="Syncfusion.Xamarin.SfPopupLayout" Version="18.1.0.42" />
-    <PackageReference Include="Syncfusion.Xamarin.SfProgressBar" Version="18.1.0.42" />
-    <PackageReference Include="Syncfusion.Xamarin.SfPullToRefresh" Version="18.1.0.42" />
-    <PackageReference Include="Syncfusion.Xamarin.SfRating" Version="18.1.0.42" />
+    <PackageReference Include="Syncfusion.Xamarin.Buttons" Version="18.1.0.45" />
+    <PackageReference Include="Syncfusion.Xamarin.Cards" Version="18.1.0.45" />
+    <PackageReference Include="Syncfusion.Xamarin.Core" Version="18.1.0.45" />
+    <PackageReference Include="Syncfusion.Xamarin.SfBadgeView" Version="18.1.0.45" />
+    <PackageReference Include="Syncfusion.Xamarin.SfComboBox" Version="18.1.0.45" />
+    <PackageReference Include="Syncfusion.Xamarin.SfListView" Version="18.1.0.45" />
+    <PackageReference Include="Syncfusion.Xamarin.SfNumericUpDown" Version="18.1.0.45" />
+    <PackageReference Include="Syncfusion.Xamarin.SfPopupLayout" Version="18.1.0.45" />
+    <PackageReference Include="Syncfusion.Xamarin.SfProgressBar" Version="18.1.0.45" />
+    <PackageReference Include="Syncfusion.Xamarin.SfPullToRefresh" Version="18.1.0.45" />
+    <PackageReference Include="Syncfusion.Xamarin.SfRating" Version="18.1.0.45" />
+    <PackageReference Include="Syncfusion.Xamarin.SfTabView" Version="18.1.0.45" />
+    <PackageReference Include="Xam.Plugin.Geolocator" Version="4.5.0.6" />
+    <PackageReference Include="Xam.Plugin.SimpleAudioPlayer" Version="1.4.0" />
     <PackageReference Include="Xam.Plugins.Settings" Version="3.1.1" />
     <PackageReference Include="Xamarin.FFImageLoading.Forms" Version="2.4.11.982" />
     <PackageReference Include="Xamarin.FFImageLoading.Svg.Forms" Version="2.4.11.982" />
     <PackageReference Include="Xamarin.FFImageLoading.Transformations" Version="2.4.11.982" />
-    <PackageReference Include="Xamarin.Forms" Version="4.5.0.530" />
-    <PackageReference Include="Xamarin.Essentials" Version="1.5.2" />
-    <PackageReference Include="Xamarin.Forms.Maps" Version="4.5.0.530" />
+    <PackageReference Include="Xamarin.Forms" Version="4.7.0.688-nightly" />
+    <PackageReference Include="Xamarin.Essentials" Version="1.5.3" />
+    <PackageReference Include="Xamarin.Forms.Maps" Version="4.7.0.688-nightly" />
   </ItemGroup>
 
   <ItemGroup>
+    <EmbeddedResource Update="Pages\AddAddressPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
     <EmbeddedResource Update="Pages\ContactToAdminPage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
@@ -158,6 +168,9 @@
     </EmbeddedResource>
     <EmbeddedResource Update="Views\Forms\AddProfilePage.xaml">
       <Generator>MSBuild:Compile</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Views\Forms\PasswordRecoverPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="Views\Forms\SimpleEmailEntry.xaml">
       <Generator>MSBuild:Compile</Generator>

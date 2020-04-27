@@ -12,7 +12,7 @@
     xmlns:transaction="clr-namespace:Martivi.Models.Transaction"
     xmlns:maps="clr-namespace:Xamarin.Forms.Maps;assembly=Xamarin.Forms.Maps"
     xmlns:model="clr-namespace:Martivi.Model"
-    BackgroundColor="{DynamicResource Gray-White}" BindingContext="{StaticResource MainViewModel}">
+    BackgroundColor="{DynamicResource Gray-White}" BindingContext="{StaticResource MainViewModel}" x:Name="deliveriView">
 
     <ContentView.Resources>
         <ResourceDictionary>            
@@ -22,233 +22,152 @@
             <converter:BooleanToColorConverter x:Key="ColorConverter" />
             <transaction:UserAddress x:Key="AddAdressModel"></transaction:UserAddress>
             <buttons:SfRadioGroupKey x:Key="DeliveryAddressGroup" />
-            <ContentView x:Key="mapC">
-                <ContentView.Content>
-                    <StackLayout>
-                        <Label x:Name="CoordinatesLabel"></Label>
-                        <model:BindableMap x:Name="map" MapClicked="map_MapClicked"  IsShowingUser="True" PinSource="{Binding Coordinates, Converter={StaticResource StringCoordinateToPin}}" >
-
-                    </model:BindableMap>
-                    </StackLayout>
-                    
-                </ContentView.Content>
-            </ContentView>
+           
 
         </ResourceDictionary>
     </ContentView.Resources>
     <Grid>
         <StackLayout Spacing="0">
 
-        <!--  Header  -->
-        <Grid
-            Padding="0,12,0,0"
-            BackgroundColor="{DynamicResource Gray-White}"
-            RowSpacing="16">
+            <!--  Header  -->
+            <Grid
+                Padding="0,12,0,0"
+                BackgroundColor="{DynamicResource Gray-White}"
+                RowSpacing="16">
 
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition />
-                <ColumnDefinition />
-            </Grid.ColumnDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition />
+                    <ColumnDefinition />
+                </Grid.ColumnDefinitions>
 
-            <Grid.RowDefinitions>
-                <RowDefinition />
-                <RowDefinition Height="1" />
-            </Grid.RowDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition />
+                    <RowDefinition Height="1" />
+                </Grid.RowDefinitions>
 
-            <Label
-                Grid.Column="0" Grid.ColumnSpan="2"
-                FontFamily="{StaticResource Montserrat-SemiBold}"
-                FontSize="16"
-                LineHeight="{OnPlatform Android=1.25,
-                                        Default=-1}"
-                Style="{StaticResource PriceLabelStyle}"
-                Text="მისამართები: "
-                TextColor="{DynamicResource Gray-900}" />
+                <Label
+                    Grid.Column="0" Grid.ColumnSpan="2"
+                    FontFamily="{StaticResource Montserrat-SemiBold}"
+                    FontSize="16"
+                    LineHeight="{OnPlatform Android=1.25,
+                    Default=-1}"
+                    Style="{StaticResource PriceLabelStyle}"
+                    Text="მისამართები: "
+                    TextColor="{DynamicResource Gray-900}" />
 
-            <!--  Total Price Label  -->
+                <!--  Total Price Label  -->
           
 
-            <!--  Separator  -->
-            <BoxView
-                Grid.Row="1"
-                Grid.ColumnSpan="2"
-                HeightRequest="1"
-                Style="{StaticResource BoxViewStyle}" />
+                <!--  Separator  -->
+                <BoxView
+                    Grid.Row="1"
+                    Grid.ColumnSpan="2"
+                    HeightRequest="1"
+                    Style="{StaticResource BoxViewStyle}" />
 
-        </Grid>
+            </Grid>
 
-        <!--  Delivery Address  -->
-        <buttons:SfRadioGroup BindingContext="{StaticResource MainViewModel}"
-            x:Name="RadioGroup"
-            BindableLayout.ItemsSource="{Binding CurrentUser.UserAddresses}"
-            Spacing="0">
-            <BindableLayout.ItemTemplate>
-                <DataTemplate>
-                    <Grid RowSpacing="1" VerticalOptions="{OnIdiom Default=Start, Desktop=Fill}" Margin="2">
+            <!--  Delivery Address  -->
+            <buttons:SfRadioGroup Margin="4" BindingContext="{StaticResource MainViewModel}"
+                                  x:Name="RadioGroup"
+                                  BindableLayout.ItemsSource="{Binding CurrentUser.UserAddresses}"
+                                  Spacing="0">
+                <BindableLayout.ItemTemplate>
+                    <DataTemplate>
+                        <StackLayout Margin="0,10,0,0" Orientation="Horizontal" VerticalOptions="FillAndExpand">
+                            <buttons:SfRadioButton IsChecked="{Binding IsPrimary}"
+                                                   BackgroundColor="Transparent"
+                                                   CheckedColor="{DynamicResource PrimaryColor}"
+                                                   GroupKey="{StaticResource DeliveryAddressGroup}"
+                                                   HorizontalOptions="Center"
+                                                   UncheckedColor="{DynamicResource Gray-300}"
+                                                   VerticalOptions="Center" />
+                            <StackLayout  x:Name="stL" Orientation="Vertical" Grid.Column="1" VerticalOptions="Start" HorizontalOptions="StartAndExpand">
+                                <Label
+                                       FontFamily="{StaticResource Montserrat-Medium}"
+                                       FontSize="14"
+                                       HorizontalOptions="Start"
+                                       Style="{StaticResource CommonLabelStyle}">
+                                    <Label.FormattedText>
+                                        <FormattedString>
+                                            <Span Text="{Binding CustomerName}"
+                                                  TextColor="{DynamicResource Gray-900}" />
+                                            <Span FontSize="12"
+                                                  Text="{Binding AddressType, StringFormat='  {0}'}"
+                                                  TextColor="{DynamicResource Gray-700}" />
+                                        </FormattedString>
+                                    </Label.FormattedText>
+                                </Label>
 
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto" />
-                            <RowDefinition Height="*" />
-                            <RowDefinition Height="Auto" />
-                            <RowDefinition Height="1" />
-                        </Grid.RowDefinitions>
 
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="Auto" />
-                            <ColumnDefinition Width="*" />
-                            <ColumnDefinition Width="{OnIdiom Default=*, Phone=0}" />
-                            <ColumnDefinition Width="Auto" />
-                        </Grid.ColumnDefinitions>
+                                <!--  Address Label  -->
+                                <Label
+                                    VerticalOptions="Start"
+                                       Margin="2"
+                                       FontFamily="{StaticResource Montserrat-Medium}"
+                                       FontSize="12"
+                                       LineHeight="{OnPlatform Android=1.25,
+                                Default=-1}"
+                                       Style="{StaticResource CommonLabelStyle}"
+                                       Text="{Binding Address}"
+                                       TextColor="{DynamicResource Gray-700}" />
 
-                        <buttons:SfRadioButton
-                            IsChecked="{Binding IsPrimary}"
-                            Grid.Row="0"
-                            BackgroundColor="Transparent"
-                            CheckedColor="{DynamicResource PrimaryColor}"
-                            GroupKey="{StaticResource DeliveryAddressGroup}"
-                           
-                            HorizontalOptions="Center"
-                            
-                            UncheckedColor="{DynamicResource Gray-300}"
-                            VerticalOptions="Center"
-                          />
+                                <!--  Mobile Number  -->
+                                <Label Margin="0,0,0,10"
+                                       FontFamily="{StaticResource Montserrat-Medium}"
+                                       FontSize="12"
+                                       VerticalOptions="Start"
+                                       HorizontalOptions="Start"
+                                       Style="{StaticResource CommonLabelStyle}">
+                                    <Label.FormattedText>
+                                        <FormattedString>
+                                            <Span Text="ტელეფონი: " />
+                                            <Span Text="{Binding MobileNumber}"
+                                                  TextColor="{DynamicResource Gray-900}" />
+                                        </FormattedString>
+                                    </Label.FormattedText>
+                                </Label>
+                                <BoxView HeightRequest="1"
+                                         Style="{StaticResource BoxViewStyle}"
+                                         VerticalOptions="End" />
+                            </StackLayout>
 
-                        <!--  Customer Name  -->
-                        <Label
-                            Grid.Row="0"
-                            Grid.Column="1"
-                            FontFamily="{StaticResource Montserrat-Medium}"
-                            FontSize="14"
-                            HorizontalOptions="StartAndExpand"
-                            Style="{StaticResource CommonLabelStyle}">
-                            <Label.FormattedText>
-                                <FormattedString>
-                                    <Span Text="{Binding CustomerName}" TextColor="{DynamicResource Gray-900}" />
-                                    <Span
-                                        FontSize="12"
-                                        Text="{Binding AddressType, StringFormat='  {0}'}"
-                                        TextColor="{DynamicResource Gray-700}" />
-                                </FormattedString>
-                            </Label.FormattedText>
-                        </Label>
+                            <buttons:SfButton x:Name="RemoveButton"
+                                              BorderWidth="0"
+                                              Command="{Binding RemoveAddressCommand, Source={StaticResource MainViewModel}}"
+                                              CommandParameter="{x:Reference RemoveButton}"
+                                              CornerRadius="4"
+                                              FontFamily="{StaticResource Montserrat-SemiBold}"
+                                              FontSize="14"
+                                              HorizontalOptions="End"
+                                              VerticalOptions="Center"
+                                              Style="{StaticResource SfButtonStyle}"
+                                              HeightRequest="40"
+                                              Text="წაშლა"
+                                              TextColor="{StaticResource HyperLink}" />
+                        </StackLayout>
+                    </DataTemplate>
+                </BindableLayout.ItemTemplate>
+            </buttons:SfRadioGroup>
 
-                        <!--  Edit/Change button  -->
-                        <buttons:SfButton x:Name="RemoveButton"
-                            Grid.Row="0"
-                            Grid.Column="3"
-                            BorderWidth="0"
-                            Command="{Binding RemoveAddressCommand, Source={StaticResource MainViewModel}}" CommandParameter="{x:Reference RemoveButton}"
-                            CornerRadius="4"
-                            FontFamily="{StaticResource Montserrat-SemiBold}"
-                            FontSize="14"
-                            HeightRequest="{OnIdiom Desktop=18,
-                                                    Default=35}"
-                            HorizontalOptions="End"
-                            Style="{StaticResource SfButtonStyle}"
-                            Text="წაშლა"
-                            TextColor="{StaticResource HyperLink}"
-                            WidthRequest="{OnIdiom Desktop=50,
-                                                   Default=80}" />
-
-                        <!--  Address Label  -->
-                        <Label
-                            Grid.Row="1"
-                            Grid.Column="1"
-                           Margin="2"
-                            FontFamily="{StaticResource Montserrat-Medium}"
-                            FontSize="12"
-                            LineHeight="{OnPlatform Android=1.25,
-                                                    Default=-1}"
-                            Style="{StaticResource CommonLabelStyle}"
-                            Text="{Binding Address}"
-                            TextColor="{DynamicResource Gray-700}" />
-
-                        <!--  Mobile Number  -->
-                        <Label
-                            Grid.Row="2"
-                            Grid.Column="1"
-                            
-                            FontFamily="{StaticResource Montserrat-Medium}"
-                            FontSize="12"
-                            HorizontalOptions="StartAndExpand"
-                            Style="{StaticResource CommonLabelStyle}">
-                            <Label.FormattedText>
-                                <FormattedString>
-                                    <Span Text="ტელეფონი: " />
-                                    <Span Text="{Binding MobileNumber}" TextColor="{DynamicResource Gray-900}" />
-                                </FormattedString>
-                            </Label.FormattedText>
-                        </Label>
-
-                        <!--  Separator  -->
-                        <BoxView
-                            Grid.Row="3"
-                            Grid.ColumnSpan="4"
-                            Style="{StaticResource BoxViewStyle}"
-                            VerticalOptions="End" />
-
-                    </Grid>
-                </DataTemplate>
-            </BindableLayout.ItemTemplate>
-        </buttons:SfRadioGroup>
-
-        <!--  Add New Address Button  -->
+            <!--  Add New Address Button  -->
        
 
-        <buttons:SfButton
-                            Margin="4"
-                            BorderWidth="0"
-                            CornerRadius="4"
-                            FontFamily="{StaticResource Montserrat-SemiBold}"
-                            FontSize="14"
-            Clicked="AddAddressClicked"
-                            HeightRequest="{OnIdiom Desktop=18,
-                                                    Default=35}"
-                            HorizontalOptions="Center"
-                            Style="{StaticResource SfButtonStyle}"
-                            Text="ახალი მისამართის დამატება"
-                            TextColor="{StaticResource HyperLink}"
-                            />
-        <popuplayout:SfPopupLayout  x:Name="AddAddressPopUp">
-            <popuplayout:SfPopupLayout.PopupView>
-                 <popuplayout:PopupView HeaderTitle="მისამართი" ShowHeader="True" ShowFooter="True" ShowCloseButton="True" AcceptButtonText="დამატება" AcceptCommand="{Binding AddAddressCommand}"
-                                           HeightRequest="310">               
-                <popuplayout:PopupView.ContentTemplate>
-                    <DataTemplate>
-                            <ScrollView Padding="4">
-                                <StackLayout BindingContext="{Binding AddAddress}">
-                    <border:SfBorder BorderColor="{Binding Source={x:Reference NameEntry}, Path=IsFocused, Converter={StaticResource ColorConverter}, ConverterParameter=3}" Style="{StaticResource FormBorderStyle}">
-                        <control:BorderlessEntry  x:Name="NameEntry" Placeholder="სახელი" Text="{Binding CustomerName,Mode=TwoWay}" Style="{StaticResource EntryTextStyle}"/>
-                    </border:SfBorder>
-                    <border:SfBorder BorderColor="{Binding Source={x:Reference AddressTypeEntry}, Path=IsFocused, Converter={StaticResource ColorConverter}, ConverterParameter=3}" Style="{StaticResource FormBorderStyle}">
-                        <control:BorderlessEntry  x:Name="AddressTypeEntry" Text="{Binding AddressType, Mode=TwoWay}" Placeholder="ტიპი (სახლი, სამსახური...)" Style="{StaticResource EntryTextStyle}" />
-                    </border:SfBorder>
-                    <border:SfBorder BorderColor="{Binding Source={x:Reference AddressEntry}, Path=IsFocused, Converter={StaticResource ColorConverter}, ConverterParameter=3}" Style="{StaticResource FormBorderStyle}">
-                        <control:BorderlessEntry  x:Name="AddressEntry" TextChanged="AddressEntry_TextChanged"  Placeholder="მისამართი" Text="{Binding Address, Mode=TwoWay}" Style="{StaticResource EntryTextStyle}"/>
-                    </border:SfBorder>
-
-                                        <border:SfBorder HeightRequest="200" Margin="16" BorderColor="{Binding Source={x:Reference map}, Path=IsFocused, Converter={StaticResource ColorConverter}, ConverterParameter=3}" Style="{StaticResource FormBorderStyle}">
-                                            <Grid>
-                                                <ContentView Content="{StaticResource mapC}"></ContentView>
-                                            </Grid>
-                                            
-                                        </border:SfBorder>
-
-                                        <border:SfBorder BorderColor="{Binding Source={x:Reference PhoneEntry}, Path=IsFocused, Converter={StaticResource ColorConverter}, ConverterParameter=3}" Style="{StaticResource FormBorderStyle}">
-                        <control:BorderlessEntry Keyboard="Numeric" x:Name="PhoneEntry" Text="{Binding MobileNumber, Mode=TwoWay}" Placeholder="ტელეფონი" Style="{StaticResource EntryTextStyle}"/>
-                    </border:SfBorder>
-                </StackLayout>
-                            </ScrollView>                       
-                    </DataTemplate>
-                </popuplayout:PopupView.ContentTemplate>
-            </popuplayout:PopupView>
-            </popuplayout:SfPopupLayout.PopupView>
-           
-            <popuplayout:SfPopupLayout.Content>
-                <Grid x:Name="layout"></Grid>
-            </popuplayout:SfPopupLayout.Content>
-        </popuplayout:SfPopupLayout>
-    </StackLayout>
+            <buttons:SfButton
+                Margin="4"
+                BorderWidth="0"
+                CornerRadius="4"
+                FontFamily="{StaticResource Montserrat-SemiBold}"
+                FontSize="14"
+                Clicked="AddAddressClicked"
+                HeightRequest="{OnIdiom Desktop=18,
+                Default=35}"
+                HorizontalOptions="Center"
+                Style="{StaticResource SfButtonStyle}"
+                Text="ახალი მისამართის დამატება"
+                TextColor="{StaticResource HyperLink}"
+                />
+        </StackLayout>
         <ActivityIndicator IsRunning="{Binding AddressesLoading}" HorizontalOptions="Center" VerticalOptions="Center" Color="#FF5722"></ActivityIndicator>
     </Grid>
     

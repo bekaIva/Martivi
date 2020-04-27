@@ -1,4 +1,5 @@
-﻿using Martivi.Model;
+﻿using Martivi.Controls;
+using Martivi.Model;
 using Martivi.Models.Transaction;
 using Martivi.Pages;
 using Martivi.Pages.ContentViews;
@@ -7,6 +8,8 @@ using Martivi.Views.ErrorAndEmpty;
 using MartiviSharedLib;
 using MartiviSharedLib.Models.Users;
 using Microsoft.AspNetCore.SignalR.Client;
+using Newtonsoft.Json;
+using Plugin.Geolocator;
 using Plugin.Settings;
 using Plugin.Settings.Abstractions;
 using Syncfusion.ListView.XForms;
@@ -16,12 +19,15 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Net;
+using System.Reflection;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Xamarin.Forms;
+using Xamarin.Forms.Maps;
 
 namespace Martivi.ViewModels
 {
@@ -37,11 +43,9 @@ namespace Martivi.ViewModels
            
             ConnectCommand = new Command(async () => await Connect());
             DisconnectCommand = new Command(async () => await Disconnect());
-
             IsConnected = false;
 
             Instance = this;
-
             GlobalChatMessages = new ObservableCollection<ChatMessage>();
             ChatMessages = new ObservableCollection<ChatMessage>();
             MadeOrders = new ObservableCollection<Order>();
@@ -56,21 +60,6 @@ namespace Martivi.ViewModels
 
 
             AddCommand = new Command<object>(AddQuantity);
-            AddAddressCommand = new Command<object>(async (arg) =>
-            {
-                try
-                {
-                    if (AddAddress.MobileNumber == string.Empty) throw new Exception("");
-                    var res = await Services.AddAddress(AddAddress, "Bearer " + Token);
-                    LoadAddresses();
-                
-                }
-                catch(Exception e)
-                {
-
-                }
-
-            });
             RemoveAddressCommand = new Command<SfButton>(async (arg) =>
             {
                 try
@@ -116,7 +105,9 @@ namespace Martivi.ViewModels
             OrderListCommand = new Command<object>(NavigateOrdersPage);
             RemoveOrderCommand = new Command<object>(RemoveOrder);
             LoadMoreItemsCommand = new Command<object>(LoadMoreItems, CanLoadMoreItems);
-
+            MinOrder = 30;
+            MaxOrder = 100;
+            ServiceUnavailable = false;
             Initialize();
 
 
@@ -135,7 +126,6 @@ namespace Martivi.ViewModels
             get { return _AddAddress; }
             set { _AddAddress = value; OnPropertyChanged(); }
         }
-
         private bool _Loaded;
 
         public bool Loaded
@@ -143,6 +133,34 @@ namespace Martivi.ViewModels
             get { return _Loaded; }
             set { _Loaded = value; OnPropertyChanged(); }
         }
+        private bool _ServiceUnavailable;
+
+        public bool ServiceUnavailable
+        {
+            get { return _ServiceUnavailable; }
+            set { _ServiceUnavailable = value; OnPropertyChanged(); }
+        }
+
+        private double _MinOrder;
+
+        public double MinOrder
+        {
+            get { return _MinOrder; }
+            set { _MinOrder = value; OnPropertyChanged(); }
+        }
+
+        private bool _MapClicked;
+
+      
+
+        private double _MaxOrder;
+
+        public double MaxOrder
+        {
+            get { return _MaxOrder; }
+            set { _MaxOrder = value; OnPropertyChanged(); }
+        }
+
 
         private bool _CategoriesAvailable;
 
@@ -270,8 +288,6 @@ namespace Martivi.ViewModels
 
         public Command<object> LoadCommand { get; set; }
 
-       
-
         private string _Test;
 
         public string Test
@@ -345,9 +361,52 @@ namespace Martivi.ViewModels
 
         public bool UpdatingOrdersHistory
         {
-            get { return _UpdatingOrdersHistory; }
+            get 
+            {
+                return CancelingOrder || DeletingOrder || LoadingOrder || OrderCheckouting || CheckingOrderPaymentStatus;               
+            }
             set { _UpdatingOrdersHistory = value; OnPropertyChanged(); }
         }
+
+        private bool _CancelingOrder;
+
+        public bool CancelingOrder
+        {
+            get { return _CancelingOrder; }
+            set { _CancelingOrder = value; OnPropertyChanged();OnPropertyChanged("UpdatingOrdersHistory"); }
+        }
+        private bool _DeletingOrder;
+
+        public bool DeletingOrder
+        {
+            get { return _DeletingOrder; }
+            set { _DeletingOrder = value; OnPropertyChanged(); OnPropertyChanged("UpdatingOrdersHistory"); }
+        }
+
+        private bool _LoadingOrder;
+
+        public bool LoadingOrder
+        {
+            get { return _LoadingOrder; }
+            set { _LoadingOrder = value; OnPropertyChanged(); OnPropertyChanged("UpdatingOrdersHistory"); }
+        }
+
+        private bool _OrderCheckouting;
+
+        public bool OrderCheckouting
+        {
+            get { return _OrderCheckouting; }
+            set { _OrderCheckouting = value; OnPropertyChanged(); OnPropertyChanged("UpdatingOrdersHistory"); }
+        }
+
+        private bool _CheckingOrderPaymentStatus;
+
+        public bool CheckingOrderPaymentStatus
+        {
+            get { return _CheckingOrderPaymentStatus; }
+            set { _CheckingOrderPaymentStatus = value; OnPropertyChanged(); OnPropertyChanged("UpdatingOrdersHistory"); }
+        }
+
 
         private bool _ChatMessagesLoading;
 
@@ -415,7 +474,6 @@ namespace Martivi.ViewModels
             }
         }
         public Command<object> RefreshListing { get; set; }
-        public Command<object> AddAddressCommand { get; set; }
 
         public Command<object> AddCommand { get; set; }
         public Command<object> RefreshInfo { get; set; }
@@ -717,19 +775,9 @@ namespace Martivi.ViewModels
         {
 
             hubConnection = new HubConnectionBuilder()
-      .WithUrl(AppSettings.GetValueOrDefault("ServerBaseAddress", "") + "chatHub", options => { options.AccessTokenProvider = () => Task.FromResult(Token); }).Build();
+      .WithUrl(AppSettings.GetValueOrDefault("ServerBaseAddress", "") + "chatHub", options => { options.AccessTokenProvider = () => Task.FromResult(Token); }).WithAutomaticReconnect(new RetryPolicy()).Build();
 
 
-            hubConnection.On<string>("JoinChat", (user) =>
-            {
-
-            });
-
-
-            hubConnection.On<string>("LeaveChat", (user) =>
-            {
-
-            });
 
             hubConnection.On<ChatMessage>("ReceiveMessage", (message) =>
             {
@@ -739,14 +787,38 @@ namespace Martivi.ViewModels
                     {
                         case MessageTarget.Global:
                             {
-                                GlobalChatMessages.Add(message);
+                                try
+                                {
+                                    var stream = GetStreamFromFile("stairs.mp3");
+                                    var audio = Plugin.SimpleAudioPlayer.CrossSimpleAudioPlayer.Current;
+                                    audio.Load(stream);
+                                    audio.Play();
+                                    GlobalChatMessages.Add(message);
+                                }
+                                catch
+                                {
+
+                                }
+                                
                                 break;
                             }
                         case MessageTarget.TargetUser:
                             {
                                 if (UserId == message.TargetUser)
                                 {
-                                    ChatMessages.Add(message);
+                                    try
+                                    {
+                                        var stream = GetStreamFromFile("stairs.mp3");
+                                        var audio = Plugin.SimpleAudioPlayer.CrossSimpleAudioPlayer.Current;
+                                        audio.Load(stream);
+                                        audio.Play();
+                                        ChatMessages.Add(message);
+                                    }
+                                    catch
+                                    {
+
+                                    }
+                                    
                                 }
                                 break;
                             }
@@ -764,6 +836,22 @@ namespace Martivi.ViewModels
                 {
 
                 }
+
+            });
+            hubConnection.On("UpdateSettings", () =>
+            {
+                Device.BeginInvokeOnMainThread(() =>
+                {
+                    try
+                    {
+                        UpdateSettings();
+                    }
+                    catch
+                    {
+
+                    }
+                });
+              
 
             });
             hubConnection.On<string>("JoinChat", (user) =>
@@ -794,33 +882,31 @@ namespace Martivi.ViewModels
                 }
 
             });
-            hubConnection.On<object>("UpdateOrder", (Order) =>
+            hubConnection.On<System.Text.Json.JsonElement>("UpdateOrder", (o) =>
             {
                 try
                 {
-                    LoadOrders();
+                    var str = o.GetRawText();
+                    var order = JsonConvert.DeserializeObject<Order>(str);
+                    for (int i = 0; i < MadeOrders.Count; i++)
+                    {
+                        if (MadeOrders[i].OrderId == order.OrderId)
+                        {
+                            MadeOrders[i].OrderTimeTicks = order.OrderTimeTicks;
+                            MadeOrders[i].Payment = order.Payment;
+                            MadeOrders[i].Status = order.Status;
+                            MadeOrders[i].IsSeen = order.IsSeen;
+                        }
+                    }
                 }
-                catch
+                catch (Exception ee)
                 {
 
                 }
 
             });
             hubConnection.Closed += HubConnection_Closed;
-            Timer timer = new Timer((arg) => 
-            {
-                try
-                {
-                    if (hubConnection.State == HubConnectionState.Disconnected)
-                    {
-                        Connect();
-                    }
-                }
-                catch 
-                {
-
-                }
-            },null,0,15000);
+            
             
         }       
 
@@ -829,13 +915,20 @@ namespace Martivi.ViewModels
             
 
         }
+        Stream GetStreamFromFile(string filename)
+        {
+            var assembly = typeof(App).GetTypeInfo().Assembly;
 
+            var stream = assembly.GetManifestResourceStream("Martivi.Sounds." + filename);
+
+            return stream;
+        }
         public async Task DeleteOrder(Order o)
         {
             try
             {
-                if (UpdatingOrdersHistory) return;
-                UpdatingOrdersHistory = true;
+                if (DeletingOrder) return;
+                DeletingOrder = true;
                await Services.DeleteOrder(o, "Bearer "+ Token);
                
             }
@@ -845,15 +938,15 @@ namespace Martivi.ViewModels
             }
             finally
             {
-                UpdatingOrdersHistory = false;
+                DeletingOrder = false;
             }
         }
         public async Task CancelOrder(Order o)
         {
             try
             {
-                if (UpdatingOrdersHistory) return;
-                UpdatingOrdersHistory = true;
+                if (CancelingOrder) return;
+                CancelingOrder = true;
                 await Services.CancelOrder(o, "Bearer " + Token);
 
             }
@@ -863,7 +956,7 @@ namespace Martivi.ViewModels
             }
             finally
             {
-                UpdatingOrdersHistory = false;
+                CancelingOrder = false;
             }            
         }
         public async Task<bool> UpdateUser(UpdateModel update)
@@ -876,7 +969,7 @@ namespace Martivi.ViewModels
         {
             try
             {
-                UpdatingOrdersHistory = true;
+                LoadingOrder = true;
               var orders =  await Services.LoadOrders(UserId, "Bearer " + Token);
                 Device.BeginInvokeOnMainThread(() =>
                 {
@@ -897,7 +990,7 @@ namespace Martivi.ViewModels
             }
             finally
             {
-                UpdatingOrdersHistory = false;
+                LoadingOrder = false;
             }
         }
         public async Task LoadMessages()
@@ -933,7 +1026,28 @@ namespace Martivi.ViewModels
                 ChatMessagesLoading = false;
             }
         }
+        public async Task<bool> AddUserAdress()
+        {
+            if (string.IsNullOrEmpty(AddAddress.CustomerName)) throw new Exception("სახელი არ არის მითითებული");
+            if (string.IsNullOrEmpty(AddAddress.Address)) throw new Exception("მისამართი არ არის მითითებული");
+            if (string.IsNullOrEmpty(AddAddress.MobileNumber)) throw new Exception("ტელეფონი არ არის მითითებული");
+            if (AddAddress.Coordinates== null)
+            {
+                var WithoutMap = await Application.Current.MainPage.DisplayAlert("შეტყობინება", "მისამართი რუკაზე არ არის მითითებული, გსურთ რუკის გარეშე დამატება?", "კი", "არა");
+                if(WithoutMap)
+                {
 
+                }
+                else
+                {
+                    return false;
+                }
+                
+            }
+            var res = await Services.AddAddress(AddAddress, "Bearer " + Token);
+            LoadAddresses();
+            return res;
+        }
         
         public async Task LoadAddresses()
         {
@@ -969,6 +1083,52 @@ namespace Martivi.ViewModels
             GetCategories();
             LoadUser();
             UpdateInfo();
+            UpdateSettings();
+        }
+       
+
+       
+
+       
+        public async Task UpdateSettings()
+        {
+            try
+            {
+                var settings = await Services.GetSettings();
+                foreach (var setting in settings)
+                {
+                    try
+                    {
+                        switch (setting.Name)
+                        {
+                            case "MinOrder":
+                                {
+                                    MinOrder = Convert.ToDouble(setting.Value);
+                                    break;
+                                };
+                            case "MaxOrder":
+                                {
+                                    MaxOrder = Convert.ToDouble(setting.Value);
+                                    break;
+                                };
+                            case "ServiceUnavailable":
+                                {
+                                    ServiceUnavailable = Convert.ToBoolean(setting.Value);
+                                    break;
+                                };
+                        }
+                    }
+                    catch{}
+                }
+
+            }
+            catch
+            {
+
+            }
+            finally
+            {
+            }
         }
         public async Task UpdateInfo()
         {
@@ -1005,8 +1165,19 @@ namespace Martivi.ViewModels
         }
         public async Task Checkout(Order o)
         {
-            var res = await Services.Checkout(o, "Bearer " + Token);
-           await Application.Current.MainPage.Navigation.PushAsync(new UnipayCheckoutPage() { BindingContext = res }); ;
+            try
+            {
+                if (OrderCheckouting) throw new Exception("გთხოვთ დაიცადოთ სანამ მიმდინარე გადახდის პროცესი შესრულდება.");
+                OrderCheckouting = true;
+                var res = await Services.Checkout(o, "Bearer " + Token);
+                await Application.Current.MainPage.Navigation.PushAsync(new UnipayCheckoutPage() { BindingContext = res });
+            }
+            catch (Exception ee)
+            {
+
+                throw ee;
+            }
+            finally { OrderCheckouting = false; }
             //go to checkout
         }
         public async void MakeOrder(bool PayNow)
@@ -1015,13 +1186,17 @@ namespace Martivi.ViewModels
             {
                 if (MakingOrder) return;
                 MakingOrder = true;
+                if (TotalPrice > MaxOrder) throw new Exception(string.Format("შეკვეთის მაქსიმალური ღირებულება უნდა იყოს {0}₾",MaxOrder));
+                if (TotalPrice < MinOrder) throw new Exception(string.Format("შეკვეთის მინიმალური ღირებულება უნდა იყოს {0}₾", MinOrder));
+                if (ServiceUnavailable) throw new Exception("შეკვეთების მიღება დროებით შეჩერებულია");
                 var checkout = await Application.Current.MainPage.DisplayAlert("შეკვეთა", "გსურთ შეკვეთა?", "დიახ", "არა");
                 if (checkout)
                 {
                     if (!IsSignedIn) throw new Exception("გთხოვთ გაიაროთ ავტორიზაცია!");
                     var SelectedAddress = CurrentUser?.UserAddresses?.FirstOrDefault(a => a.IsPrimary);
                     if (SelectedAddress == null) throw new Exception("გთხოვთ აირჩიოთ მისამართი");
-                    Order o = new Order() {Payment= PaymentStatus.NotPaid, OrderAddress=SelectedAddress, OrderTimeTicks= DateTime.Now.Ticks, User= CurrentUser,  OrderedProducts = new List<Product>() };
+                   
+                    Order o = new Order() {Payment= PaymentStatus.NotPaid, IsSeen=false, OrderAddress=SelectedAddress, OrderTimeTicks= DateTime.Now.Ticks, User= CurrentUser,  OrderedProducts = new List<Product>() };
                     o.OrderedProducts.AddRange(Orders.ToArray());
                     o =  await Services.MakeOrder(o,"Bearer " + Token);
                     if (o!=null)
@@ -1066,14 +1241,14 @@ namespace Martivi.ViewModels
         {
             try
             {
-                if (IsBusy) return;
-                Categories.Clear();
+                if (IsBusy) return;                
                 IsBusy = true;
                 CategoriesAvailable = true;
                 ConnectionError = false;
                 NoCategories = false;
                 var categories = await Services.GetCategories();
-                if(categories.Count==0)
+                Categories.Clear();
+                if (categories.Count==0)
                 {
                     CategoriesAvailable = false;
                     NoCategories = true;

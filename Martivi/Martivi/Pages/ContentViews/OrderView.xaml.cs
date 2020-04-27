@@ -36,10 +36,10 @@ namespace Martivi.Pages.ContentViews
         {
             try
             {
-                var totalH = ViewModel.Orders.Count * 120;
-                if (totalH > 360)
+                var totalH = ViewModel.Orders.Count * 150;
+                if (totalH > 390)
                 {
-                    listView.HeightRequest = 360;
+                    listView.HeightRequest = 390;
                     return;
                 }
                 listView.HeightRequest = totalH;

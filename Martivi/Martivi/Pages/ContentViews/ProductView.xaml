@@ -13,45 +13,84 @@
             <Grid x:Name="sampleLayout" RowSpacing="0">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
                     <RowDefinition Height="*" />
                 </Grid.RowDefinitions>
-                <Frame BackgroundColor="White" HasShadow="True" Padding="0" Margin="0">
-                    <Grid Padding="0" HeightRequest="{OnPlatform Default=48, Android=56}">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*" />
-                            <ColumnDefinition Width="Auto" />
-                        </Grid.ColumnDefinitions>
-                        <Grid x:Name="grid" Grid.Column="0" Margin="16,0,8,0">
-                            <Label Text="პროდუქტების სია" FontAttributes="Bold" VerticalOptions="Center" FontSize="16" 
-                               TextColor="{OnPlatform Default=#333333, Android=#000000}"
-                               Opacity="{OnPlatform Default=1, Android=0.87}" />
-                        </Grid>
-                        <Grid Grid.Column="1" Margin="0" RowSpacing="0" ColumnSpacing="0" BackgroundColor="White" 
-                          HorizontalOptions="EndAndExpand" VerticalOptions="FillAndExpand" Padding="20, 0, 0, 0" >
-                            <Grid.GestureRecognizers>
-                                <TapGestureRecognizer Command="{Binding OrderListCommand}"
-                                                  CommandParameter="{Binding Source={x:Reference Name=productPage}}"/>
-                            </Grid.GestureRecognizers>
-                            <Label InputTransparent="True" Text="&#xe706;" FontSize="{OnPlatform Android=Medium, iOS=Large, UWP=Medium}" TextColor="#808080" FontFamily="{OnPlatform iOS=Sync FontIcons, Android=Sync FontIcons.ttf#, UWP=Sync FontIcons.ttf#Sync FontIcons}"
-                               VerticalOptions="Center" HeightRequest="20" WidthRequest="20" Margin="0,0,16,0"/>
-                            <Frame InputTransparent="True" Margin="0,12,6,0" Padding="0" HasShadow="False"
-                               VerticalOptions="Start" HorizontalOptions="End" CornerRadius="8"
-                               HeightRequest="14" WidthRequest="20" OutlineColor="Transparent"
-                               IsVisible="{Binding TotalOrderedItems, Mode=OneWay, Converter={StaticResource inverseZeroVisibilityConverter}}"
-                               BackgroundColor="{StaticResource primary}">
-                                <Label InputTransparent="True" Margin="0" TextColor="White" Text="{Binding TotalOrderedItems}" FontSize="11"
-                                   VerticalOptions="Center" HorizontalOptions="Center"/>
-                            </Frame>
-                        </Grid>
-                    </Grid>
-                </Frame>
-                <BoxView x:Name="boxView" Grid.Row="1" BackgroundColor="#EAEAEA" HeightRequest="{OnPlatform Default=0, UWP=1}" />
-                <sync:SfListView x:Name="listView" Grid.Row="2" AutoFitMode="Height" ItemTapped="PorductTapped"
+               
+                
+                <sync:SfListView x:Name="listView" Grid.Row="0" IsStickyHeader="True" AutoFitMode="Height" ItemTapped="PorductTapped"
                              LoadMoreOption="Auto"
                              LoadMoreCommand="{Binding LoadMoreItemsCommand}"
                              LoadMoreCommandParameter="{Binding Source={x:Reference Name=listView}}"
                              ItemsSource="{Binding SelectedCategory.FilteredProducts}">
+                    <sync:SfListView.HeaderTemplate>
+                        <DataTemplate>
+                            <Grid Padding="0">
+                                <Frame BackgroundColor="White" Margin="2"
+                                       HasShadow="True"
+                                       Padding="0">
+                                    <Grid Padding="0"
+                                          HeightRequest="{OnPlatform Default=48, Android=56}">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition Width="Auto" />
+                                        </Grid.ColumnDefinitions>
+                                        <Grid x:Name="grid"
+                                              Grid.Column="0"
+                                              Margin="16,0,8,0">
+                                            <Label Text="პროდუქტების სია"
+                                                   FontAttributes="Bold"
+                                                   VerticalOptions="Center"
+                                                   FontSize="16"
+                                                   TextColor="#333333"
+                                                   Opacity="{OnPlatform Default=1, Android=0.87}" />
+                                        </Grid>
+                                        <Grid Grid.Column="1"
+                                              Margin="0"
+                                              RowSpacing="0"
+                                              ColumnSpacing="0"
+                                              BackgroundColor="White"
+                                              HorizontalOptions="EndAndExpand"
+                                              VerticalOptions="FillAndExpand"
+                                              Padding="20, 0, 0, 0">
+                                            <Grid.GestureRecognizers>
+                                                <TapGestureRecognizer Command="{Binding OrderListCommand}"
+                                                                      CommandParameter="{Binding Source={x:Reference Name=productPage}}" />
+                                            </Grid.GestureRecognizers>
+                                            <Label InputTransparent="True"
+                                                   Text="&#xe706;"
+                                                   FontSize="{OnPlatform Android=Medium, iOS=Large, UWP=Medium}"
+                                                   TextColor="#808080"
+                                                   FontFamily="{OnPlatform iOS=Sync FontIcons, Android=Sync FontIcons.ttf#, UWP=Sync FontIcons.ttf#Sync FontIcons}"
+                                                   VerticalOptions="Center"
+                                                   HeightRequest="20"
+                                                   WidthRequest="20"
+                                                   Margin="0,0,16,0" />
+                                            <Frame InputTransparent="True"
+                                                   Margin="0,12,6,0"
+                                                   Padding="0"
+                                                   HasShadow="False"
+                                                   VerticalOptions="Start"
+                                                   HorizontalOptions="End"
+                                                   CornerRadius="8"
+                                                   HeightRequest="14"
+                                                   WidthRequest="20"
+                                                   OutlineColor="Transparent"
+                                                   IsVisible="{Binding TotalOrderedItems, Mode=OneWay, Converter={StaticResource inverseZeroVisibilityConverter}}"
+                                                   BackgroundColor="{StaticResource primary}">
+                                                <Label InputTransparent="True"
+                                                       Margin="0"
+                                                       TextColor="White"
+                                                       Text="{Binding TotalOrderedItems}"
+                                                       FontSize="11"
+                                                       VerticalOptions="Center"
+                                                       HorizontalOptions="Center" />
+                                            </Frame>
+                                        </Grid>
+                                    </Grid>
+                                </Frame>
+                            </Grid>
+                        </DataTemplate>
+                    </sync:SfListView.HeaderTemplate>
                     <sync:SfListView.ItemTemplate>
                         <DataTemplate>
                             <Grid  Margin="0" Padding="0" RowSpacing="0" BackgroundColor="White">
@@ -120,7 +159,7 @@
                         </DataTemplate>
                     </sync:SfListView.ItemTemplate>
                 </sync:SfListView>
-                <Label Grid.Row="2" LineBreakMode="WordWrap" FontAttributes="Bold"
+                <Label Grid.Row="1" LineBreakMode="WordWrap" FontAttributes="Bold"
              Text="კატეგორია ცარიელია!" VerticalOptions="Center" HorizontalOptions="Center"
              IsVisible="{Binding SelectedCategory.Products.Count, Converter={StaticResource zeroVisibilityConverter}}" FontSize="16"
              TextColor="{StaticResource primary}" />

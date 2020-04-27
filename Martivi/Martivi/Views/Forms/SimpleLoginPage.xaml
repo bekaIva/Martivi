@@ -99,8 +99,7 @@
                             TextColor="{DynamicResource Gray-900}" />
                     </border:SfBorder>
 
-                    <!--  Forgot password link  -->
-                    <!--<Label
+                    <Label
                         x:Name="ForgotPasswordLabel"
                         Grid.Row="4"
                         Margin="0,16"
@@ -112,7 +111,7 @@
                         <Label.GestureRecognizers>
                             <TapGestureRecognizer Command="{Binding ForgotPasswordCommand}" CommandParameter="{x:Reference ForgotPasswordLabel}" />
                         </Label.GestureRecognizers>
-                    </Label>-->
+                    </Label>
 
                     <!--  Login button  -->
                     <buttons:SfButton
@@ -167,12 +166,7 @@
                     Spacing="1"
                     VerticalOptions="End">
 
-                    <StackLayout.Padding>
-                        <OnIdiom
-                            x:DataType="Thickness"
-                            Default="0, 48, 0, 0"
-                            Phone="0" />
-                    </StackLayout.Padding>
+                  
 
                     <Label
                         FontFamily="{StaticResource Montserrat-Medium}"

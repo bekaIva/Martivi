@@ -46,6 +46,20 @@ namespace Martivi.Pages
             
         }
 
-        
+        private void MenuItemTapped(object sender, EventArgs e)
+        {
+            try
+            {
+                if (!mv.IsSignedIn)
+                {
+                    DependencyService.Get<IAlertNative>().ShowToast("გთხოვთ გაიაროთ ავტორიზაცია");
+                }
+
+    }
+            catch 
+            {
+
+            }
+        }
     }
 }

@@ -61,7 +61,14 @@ namespace Martivi.Model
 
         public string Name { get; set; }
 
-        public string Image { get; set; }
+        private string _Image;
+
+        public string Image
+        {
+            get { return _Image; }
+            set { _Image = value; OnPropertyChanged(); }
+        }
+
 
         public string Weight { get; set; }
 

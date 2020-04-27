@@ -18,11 +18,19 @@
 
         </model:ProductSearchHandler>
     </Shell.SearchHandler>
+    <ContentPage.Resources>
+        <model:ProductsTemplateSelector x:Key="ProductsTemplateSelector"></model:ProductsTemplateSelector>
+    </ContentPage.Resources>
     <ContentPage.Content>
         <Grid>
-            <pullToRefresh:SfPullToRefresh x:Name="ptf" RefreshCommand="{Binding RefreshListing}" RefreshCommandParameter="{x:Reference ptf}">
+            <pullToRefresh:SfPullToRefresh x:Name="ptf"
+                                           RefreshCommand="{Binding RefreshListing}"
+                                           RefreshCommandParameter="{x:Reference ptf}"
+                                           ProgressBackgroundColor="Transparent"
+                                           ProgressStrokeColor="{StaticResource primary_dark}">
                 <pullToRefresh:SfPullToRefresh.PullableContent>
-                    <Grid>
+                    <Grid BindableLayout.ItemTemplateSelector="{StaticResource ProductsTemplateSelector}" BindableLayout.ItemsSource="{Binding Source={StaticResource MainViewModel},Path=SelectedCategory.Products}">
+                      
                         <errorandempty:NoInternetConnectionPage IsVisible="{Binding Source={StaticResource MainViewModel},Path=ConnectionError}"></errorandempty:NoInternetConnectionPage>
                         <Grid IsVisible="{Binding Source={StaticResource MainViewModel},Path=ConnectionError, Converter={StaticResource BoolToNegative}}">
                                 <errorandempty:NoItemCategoryPage IsVisible="{Binding Source={StaticResource MainViewModel},Path=SelectedCategory.Products.Count, Converter={StaticResource CountToBoolConverter}, ConverterParameter=negative}"></errorandempty:NoItemCategoryPage>

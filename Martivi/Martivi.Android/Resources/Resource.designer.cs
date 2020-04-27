@@ -4334,6 +4334,7 @@ namespace Martivi.Droid
 			global::Xamarin.Forms.Maps.Android.Resource.Style.Animation_AppCompat_DropDownUp = global::Martivi.Droid.Resource.Style.Animation_AppCompat_DropDownUp;
 			global::Xamarin.Forms.Maps.Android.Resource.Style.Animation_AppCompat_Tooltip = global::Martivi.Droid.Resource.Style.Animation_AppCompat_Tooltip;
 			global::Xamarin.Forms.Maps.Android.Resource.Style.Animation_Design_BottomSheetDialog = global::Martivi.Droid.Resource.Style.Animation_Design_BottomSheetDialog;
+			global::Xamarin.Forms.Maps.Android.Resource.Style.AppCompatDialogStyle = global::Martivi.Droid.Resource.Style.AppCompatDialogStyle;
 			global::Xamarin.Forms.Maps.Android.Resource.Style.Base_AlertDialog_AppCompat = global::Martivi.Droid.Resource.Style.Base_AlertDialog_AppCompat;
 			global::Xamarin.Forms.Maps.Android.Resource.Style.Base_AlertDialog_AppCompat_Light = global::Martivi.Droid.Resource.Style.Base_AlertDialog_AppCompat_Light;
 			global::Xamarin.Forms.Maps.Android.Resource.Style.Base_Animation_AppCompat_Dialog = global::Martivi.Droid.Resource.Style.Base_Animation_AppCompat_Dialog;
@@ -4526,6 +4527,8 @@ namespace Martivi.Droid
 			global::Xamarin.Forms.Maps.Android.Resource.Style.CardView_Dark = global::Martivi.Droid.Resource.Style.CardView_Dark;
 			global::Xamarin.Forms.Maps.Android.Resource.Style.CardView_Light = global::Martivi.Droid.Resource.Style.CardView_Light;
 			global::Xamarin.Forms.Maps.Android.Resource.Style.collectionViewStyle = global::Martivi.Droid.Resource.Style.collectionViewStyle;
+			global::Xamarin.Forms.Maps.Android.Resource.Style.MainTheme = global::Martivi.Droid.Resource.Style.MainTheme;
+			global::Xamarin.Forms.Maps.Android.Resource.Style.MainTheme_Base = global::Martivi.Droid.Resource.Style.MainTheme_Base;
 			global::Xamarin.Forms.Maps.Android.Resource.Style.NestedScrollBarStyle = global::Martivi.Droid.Resource.Style.NestedScrollBarStyle;
 			global::Xamarin.Forms.Maps.Android.Resource.Style.Platform_AppCompat = global::Martivi.Droid.Resource.Style.Platform_AppCompat;
 			global::Xamarin.Forms.Maps.Android.Resource.Style.Platform_AppCompat_Light = global::Martivi.Droid.Resource.Style.Platform_AppCompat_Light;
@@ -6930,6 +6933,7 @@ namespace Martivi.Droid
 			global::Xamarin.Forms.Platform.Android.Resource.Style.Animation_AppCompat_DropDownUp = global::Martivi.Droid.Resource.Style.Animation_AppCompat_DropDownUp;
 			global::Xamarin.Forms.Platform.Android.Resource.Style.Animation_AppCompat_Tooltip = global::Martivi.Droid.Resource.Style.Animation_AppCompat_Tooltip;
 			global::Xamarin.Forms.Platform.Android.Resource.Style.Animation_Design_BottomSheetDialog = global::Martivi.Droid.Resource.Style.Animation_Design_BottomSheetDialog;
+			global::Xamarin.Forms.Platform.Android.Resource.Style.AppCompatDialogStyle = global::Martivi.Droid.Resource.Style.AppCompatDialogStyle;
 			global::Xamarin.Forms.Platform.Android.Resource.Style.Base_AlertDialog_AppCompat = global::Martivi.Droid.Resource.Style.Base_AlertDialog_AppCompat;
 			global::Xamarin.Forms.Platform.Android.Resource.Style.Base_AlertDialog_AppCompat_Light = global::Martivi.Droid.Resource.Style.Base_AlertDialog_AppCompat_Light;
 			global::Xamarin.Forms.Platform.Android.Resource.Style.Base_Animation_AppCompat_Dialog = global::Martivi.Droid.Resource.Style.Base_Animation_AppCompat_Dialog;
@@ -7122,6 +7126,8 @@ namespace Martivi.Droid
 			global::Xamarin.Forms.Platform.Android.Resource.Style.CardView_Dark = global::Martivi.Droid.Resource.Style.CardView_Dark;
 			global::Xamarin.Forms.Platform.Android.Resource.Style.CardView_Light = global::Martivi.Droid.Resource.Style.CardView_Light;
 			global::Xamarin.Forms.Platform.Android.Resource.Style.collectionViewStyle = global::Martivi.Droid.Resource.Style.collectionViewStyle;
+			global::Xamarin.Forms.Platform.Android.Resource.Style.MainTheme = global::Martivi.Droid.Resource.Style.MainTheme;
+			global::Xamarin.Forms.Platform.Android.Resource.Style.MainTheme_Base = global::Martivi.Droid.Resource.Style.MainTheme_Base;
 			global::Xamarin.Forms.Platform.Android.Resource.Style.NestedScrollBarStyle = global::Martivi.Droid.Resource.Style.NestedScrollBarStyle;
 			global::Xamarin.Forms.Platform.Android.Resource.Style.Platform_AppCompat = global::Martivi.Droid.Resource.Style.Platform_AppCompat;
 			global::Xamarin.Forms.Platform.Android.Resource.Style.Platform_AppCompat_Light = global::Martivi.Droid.Resource.Style.Platform_AppCompat_Light;
@@ -9493,6 +9499,7 @@ namespace Martivi.Droid
 			global::Xamarin.Forms.Platform.Resource.Style.Animation_AppCompat_DropDownUp = global::Martivi.Droid.Resource.Style.Animation_AppCompat_DropDownUp;
 			global::Xamarin.Forms.Platform.Resource.Style.Animation_AppCompat_Tooltip = global::Martivi.Droid.Resource.Style.Animation_AppCompat_Tooltip;
 			global::Xamarin.Forms.Platform.Resource.Style.Animation_Design_BottomSheetDialog = global::Martivi.Droid.Resource.Style.Animation_Design_BottomSheetDialog;
+			global::Xamarin.Forms.Platform.Resource.Style.AppCompatDialogStyle = global::Martivi.Droid.Resource.Style.AppCompatDialogStyle;
 			global::Xamarin.Forms.Platform.Resource.Style.Base_AlertDialog_AppCompat = global::Martivi.Droid.Resource.Style.Base_AlertDialog_AppCompat;
 			global::Xamarin.Forms.Platform.Resource.Style.Base_AlertDialog_AppCompat_Light = global::Martivi.Droid.Resource.Style.Base_AlertDialog_AppCompat_Light;
 			global::Xamarin.Forms.Platform.Resource.Style.Base_Animation_AppCompat_Dialog = global::Martivi.Droid.Resource.Style.Base_Animation_AppCompat_Dialog;
@@ -9685,6 +9692,8 @@ namespace Martivi.Droid
 			global::Xamarin.Forms.Platform.Resource.Style.CardView_Dark = global::Martivi.Droid.Resource.Style.CardView_Dark;
 			global::Xamarin.Forms.Platform.Resource.Style.CardView_Light = global::Martivi.Droid.Resource.Style.CardView_Light;
 			global::Xamarin.Forms.Platform.Resource.Style.collectionViewStyle = global::Martivi.Droid.Resource.Style.collectionViewStyle;
+			global::Xamarin.Forms.Platform.Resource.Style.MainTheme = global::Martivi.Droid.Resource.Style.MainTheme;
+			global::Xamarin.Forms.Platform.Resource.Style.MainTheme_Base = global::Martivi.Droid.Resource.Style.MainTheme_Base;
 			global::Xamarin.Forms.Platform.Resource.Style.NestedScrollBarStyle = global::Martivi.Droid.Resource.Style.NestedScrollBarStyle;
 			global::Xamarin.Forms.Platform.Resource.Style.Platform_AppCompat = global::Martivi.Droid.Resource.Style.Platform_AppCompat;
 			global::Xamarin.Forms.Platform.Resource.Style.Platform_AppCompat_Light = global::Martivi.Droid.Resource.Style.Platform_AppCompat_Light;
@@ -15357,9 +15366,6 @@ namespace Martivi.Droid
 			
 			// aapt resource value: 0x7F0C0000
 			public const int ic_launcher = 2131492864;
-			
-			// aapt resource value: 0x7F0C0003
-			public const int launcher_foreground = 2131492867;
 			
 			static Mipmap()
 			{

@@ -121,6 +121,8 @@ namespace Martivi.ViewModels.Forms
             try
             {
                 IsBusy = true;
+                if (string.IsNullOrEmpty(Email)) throw new Exception("გთხოვთ შეიყვანოთ მომხმარებელი");
+                if (string.IsNullOrEmpty(Password)) throw new Exception("გთხოვთ შეიყვანოთ პაროლი");
                 var user = await ViewModel.Auth(new AuthenticateModelBase() { Username = Email, Password = Password, IsAdmin = false });
 
                 await LoginPage.DisplayAlert("შესრულდა", "მოგესალმებით " + user.FirstName + ", თქვენ წარმატებით გაიარეთ ავტორიზაცია.", "Ok");
@@ -175,6 +177,7 @@ namespace Martivi.ViewModels.Forms
             label.BackgroundColor = Color.FromHex("#70FFFFFF");
             await Task.Delay(100);
             label.BackgroundColor = Color.Transparent;
+            LoginPage.Navigation.PushAsync(new PasswordRecoverPage());
         }
 
         /// <summary>

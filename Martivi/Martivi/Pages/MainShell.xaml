@@ -7,8 +7,56 @@
        xmlns:ffimageloadingsvg="clr-namespace:FFImageLoading.Svg.Forms;assembly=FFImageLoading.Svg.Forms"
        xmlns:fftransf="clr-namespace:FFImageLoading.Transformations;assembly=FFImageLoading.Transformations" xmlns:aboutus="clr-namespace:Martivi.Views.AboutUs"
        mc:Ignorable="d"
-             x:Class="Martivi.Pages.MainShell" BindingContext="{StaticResource MainViewModel}" x:Name="shellPage">
-    
+       x:Class="Martivi.Pages.MainShell"
+       BindingContext="{StaticResource MainViewModel}"
+       x:Name="shellPage"
+       >
+   
+    <Shell.ItemTemplate>
+        <DataTemplate >
+            <Grid  Padding="0"
+                   Style="{StaticResource FloutItemStyle}">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="4" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="4" />
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="1*" />
+                    <ColumnDefinition Width="4*" />
+                </Grid.ColumnDefinitions>
+                
+                <Image Source="{Binding Icon}"
+                       Grid.Row="1"
+                       Margin="2"></Image>
+                <Label Grid.Column="1"
+                       VerticalOptions="Center"
+                       Grid.Row="1"
+                       TextColor="{StaticResource primary_dark}"
+                       FontSize="15"
+                       Text="{Binding Title}"></Label>
+                <BoxView HeightRequest="1"
+                         Margin="0"
+                         Grid.Row="2"
+                         BackgroundColor="#39808080"
+                         Grid.ColumnSpan="2"
+                         HorizontalOptions="FillAndExpand"
+                         VerticalOptions="End" />
+                <Grid Grid.Row="0"
+                         IsVisible="{Binding IsEnabled,Converter={StaticResource BoolToNegative}}"
+                         Grid.RowSpan="3"
+                         Grid.Column="0"
+                         Grid.ColumnSpan="2"
+                         BackgroundColor="#1F808080">
+                    <Grid.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="MenuItemTapped">
+
+                        </TapGestureRecognizer>
+                    </Grid.GestureRecognizers>
+                </Grid>
+            </Grid>
+        </DataTemplate>
+    </Shell.ItemTemplate>
     <Shell.FlyoutHeader>
         <Grid HeightRequest="160" BackgroundColor="{StaticResource primary}">
             <Label Text="{Binding UserName}" TextColor="White" FontSize="20" VerticalOptions="Center" HorizontalOptions="Center" HorizontalTextAlignment="Center" VerticalTextAlignment="Center"></Label>
@@ -16,10 +64,9 @@
            
         </Grid>
     </Shell.FlyoutHeader>
-    
-    <FlyoutItem Title="Home" Route="home">
+    <FlyoutItem Title="Home" Route="home">      
         <FlyoutItem.Icon>
-            <FontImageSource Color="{StaticResource primary_text}" Size="24" FontFamily="{StaticResource FontAwesome5ProRegular}"  Glyph="&#xf80c;"></FontImageSource>
+            <FontImageSource Color="{StaticResource primary_dark}" Size="24" FontFamily="{StaticResource FontAwesome5ProRegular}"  Glyph="&#xf80c;"></FontImageSource>
         </FlyoutItem.Icon>
         <Tab Title="კატეგორიები" Icon="menu.png" Route="cb">
             <ShellContent Route="category" ContentTemplate="{DataTemplate local:CategoryPage}"/>
@@ -45,31 +92,33 @@
 
     </FlyoutItem>
     <FlyoutItem Title="პროფილი" Route="profile" IsEnabled="{Binding IsSignedIn}">
+       
         <FlyoutItem.Icon>
-            <FontImageSource Color="{StaticResource primary_text}" Size="24" FontFamily="{StaticResource FontAwesome5ProRegular}"  Glyph="&#xf007;"></FontImageSource>
+            <FontImageSource Color="{StaticResource primary_dark}" Size="24" FontFamily="{StaticResource FontAwesome5ProRegular}"  Glyph="&#xf007;"></FontImageSource>
         </FlyoutItem.Icon>      
         <Tab Route="profiletab" Title="პროფილი">
             <Tab.Icon>
-                <FontImageSource Color="{StaticResource primary_text}" Size="24" FontFamily="{StaticResource FontAwesome5ProRegular}"  Glyph="&#xf007;"></FontImageSource>
+                <FontImageSource Color="{StaticResource primary_dark}" Size="24" FontFamily="{StaticResource FontAwesome5ProRegular}"  Glyph="&#xf007;"></FontImageSource>
             </Tab.Icon>
             <ShellContent Route="profilepage"  ContentTemplate="{DataTemplate local:ProfilePage}"></ShellContent>
         </Tab>
         
     </FlyoutItem>
     <FlyoutItem Title="კონტაქტი" Route="contacttoadminflyout" IsEnabled="{Binding IsSignedIn}">
+      
         <FlyoutItem.Icon>
-            <FontImageSource Color="{StaticResource primary_text}" Size="24" FontFamily="{StaticResource FontAwesome5ProRegular}"  Glyph="&#xf4b6;"></FontImageSource>
+            <FontImageSource Color="{StaticResource primary_dark}" Size="24" FontFamily="{StaticResource FontAwesome5ProRegular}"  Glyph="&#xf4b6;"></FontImageSource>
         </FlyoutItem.Icon>
         <Tab Title="საერთო" Route="globaltab">
             <Tab.Icon>
-                <FontImageSource Color="{StaticResource primary_text}" Size="24" FontFamily="{StaticResource FontAwesome5ProSolid}"  Glyph="&#xf4b6;"></FontImageSource>
+                <FontImageSource Color="{StaticResource primary_dark}" Size="24" FontFamily="{StaticResource FontAwesome5ProSolid}"  Glyph="&#xf4b6;"></FontImageSource>
             </Tab.Icon>
 
             <ShellContent Route="globalpage" ContentTemplate="{DataTemplate local:GlobalChatPage}"></ShellContent>
         </Tab>
         <Tab Title="კავშირი ადმინთან" Route="contacttoadmintab">
             <Tab.Icon>
-                <FontImageSource Color="{StaticResource primary_text}" Size="24" FontFamily="{StaticResource FontAwesome5DuotoneSolid}"  Glyph="&#xf059;"></FontImageSource>
+                <FontImageSource Color="{StaticResource primary_dark}" Size="24" FontFamily="{StaticResource FontAwesome5DuotoneSolid}"  Glyph="&#xf059;"></FontImageSource>
             </Tab.Icon>
             <ShellContent Route="contacttoadminpage" ContentTemplate="{DataTemplate local:ContactToAdminPage}"></ShellContent>
         </Tab>
@@ -77,9 +126,14 @@
     </FlyoutItem>
     <FlyoutItem Title="შესახებ"
                 Route="contacttoadminflyout"
-                IsEnabled="{Binding IsSignedIn}"
-                Icon="information.png">
-       
+                
+                >
+        <FlyoutItem.Icon>
+            <FontImageSource Color="{StaticResource primary_dark}"
+                             Size="24"
+                             FontFamily="{StaticResource FontAwesome5ProLight}"
+                             Glyph="&#xf05a;"></FontImageSource>
+        </FlyoutItem.Icon>
        
 
        
@@ -88,16 +142,24 @@
        
 
     </FlyoutItem>
-    <MenuItem  Clicked="SignInOutClicked" IconImageSource="{Binding IsSignedIn,Converter={StaticResource IsSignedInConverter},ConverterParameter=Icon}">
+    <MenuItem  Clicked="SignInOutClicked" IconImageSource="{Binding IsSignedIn,Converter={StaticResource IsSignedInConverter},ConverterParameter=Icon}" >
         <Shell.MenuItemTemplate>
             <DataTemplate>
                 <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="4" />
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="4" />
+                    </Grid.RowDefinitions>
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="1*"/>
-                        <ColumnDefinition Width="4*"/>
+                        <ColumnDefinition Width="1*" />
+                        <ColumnDefinition Width="4*" />
                     </Grid.ColumnDefinitions>
-                    <Image Source="{Binding Icon}" Margin="2"></Image>
-                    <Label Grid.Column="1" FontAttributes="Italic" TextColor="{StaticResource primary_text}" FontSize="18" Text="{Binding BindingContext.IsSignedIn,Converter={StaticResource IsSignedInConverter},ConverterParameter=Label}"></Label>
+                    <Image Grid.Row="1" Source="{Binding Icon}" Margin="2"></Image>
+                    <Label Grid.Column="1" Grid.Row="1"
+                           VerticalOptions="Center"
+                           FontAttributes="Italic"
+                           TextColor="{StaticResource primary_dark}" FontSize="18" Text="{Binding BindingContext.IsSignedIn,Converter={StaticResource IsSignedInConverter},ConverterParameter=Label}"></Label>
                 </Grid>
             </DataTemplate>
         </Shell.MenuItemTemplate>

@@ -25,8 +25,6 @@ namespace Martivi.Pages
         protected override async void OnAppearing()
         {
             base.OnAppearing();
-            await Task.Delay(300);
-            viewModel.SelectedCategory = null;
         }
         
     }

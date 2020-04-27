@@ -44,6 +44,13 @@ namespace Martivi.Model
             get { return _Status; }
             set { _Status = value; OnPropertyChanged(); }
         }
+        private bool _IsSeen;
+
+        public bool IsSeen
+        {
+            get { return _IsSeen; }
+            set { _IsSeen = value; OnPropertyChanged(); }
+        }
 
         public PaymentStatus Payment { get; set; }
         public int OrderId { get; set; }

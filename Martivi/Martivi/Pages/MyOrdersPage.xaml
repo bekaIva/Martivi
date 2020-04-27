@@ -10,7 +10,9 @@
              x:Class="Martivi.Pages.MyOrdersPage" Title="ჩემი შეკვეთები" BindingContext="{StaticResource MainViewModel}">
     <ContentPage.Content>
         <Grid>
-            <pullToRefresh:SfPullToRefresh  Refreshing="refreshing">
+            <pullToRefresh:SfPullToRefresh  Refreshing="refreshing"
+                                            ProgressBackgroundColor="Transparent"
+                                            ProgressStrokeColor="{StaticResource primary_dark}">
                 <pullToRefresh:SfPullToRefresh.PullableContent>
                     <Grid>
                         <sync:SfListView x:Name="sflv" ItemTapped="OrderTapped" BindingContext="{StaticResource MainViewModel}" SelectionMode="Single" ItemsSource="{Binding MadeOrders, Mode=OneWay}" ItemSpacing="0,5,0,5" BackgroundColor="#F0F0F0" ItemSize="100">

@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
+using Xamarin.Essentials;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -109,6 +109,19 @@ namespace Martivi.Pages
             catch(Exception ee)
             {
                 DisplayAlert("შეცდომა", ee.Message,"Ok");
+            }
+        }
+
+        private void CopyClicked(object sender, EventArgs e)
+        {
+            try
+            {
+                Clipboard.SetTextAsync(CoordinateSpan.Text);
+                DependencyService.Get<IAlertNative>().ShowToast("Copied!");
+            }
+            catch
+            {
+
             }
         }
     }

@@ -17,8 +17,15 @@ namespace Martivi.Pages
         MainViewModel viewModel;
         public ProductPage()
         {
-            InitializeComponent();
-            viewModel = this.BindingContext as MainViewModel;
+            try
+            {
+                InitializeComponent();
+                viewModel = this.BindingContext as MainViewModel;
+            }
+            catch (Exception ee)
+            {
+                DisplayAlert("Error",ee.Message,"Ok");
+            }
         }      
         protected override void OnAppearing()
         {

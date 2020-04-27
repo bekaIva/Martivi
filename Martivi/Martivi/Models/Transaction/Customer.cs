@@ -4,6 +4,12 @@ using Xamarin.Forms.Internals;
 
 namespace Martivi.Models.Transaction
 {
+    public class Coordinate
+    {
+        public double Latitude { get; set; }
+
+        public double Longitude { get; set; }
+    }
     /// <summary>
     /// Model for review list.
     /// </summary>
@@ -53,8 +59,8 @@ namespace Martivi.Models.Transaction
 
 
 
-        private string _Coordinates;
-        public string Coordinates
+        private Coordinate _Coordinates;
+        public Coordinate Coordinates
         {
             get { return _Coordinates; }
             set { _Coordinates = value; OnPropertyChanged(); }
