@@ -74,7 +74,7 @@
                                TextColor="{OnPlatform Default=#333333, Android=#000000}"
                                Opacity="{OnPlatform Default=1, Android=0.87}" />
                     
-                        <Label Text="{Binding Weight, StringFormat='წონა {0}კგ'}" FontSize="14" Grid.Row="1" HorizontalOptions="Start"
+                        <Label Text="{Binding Weight}" FontSize="14" Grid.Row="1" HorizontalOptions="Start"
                                TextColor="{OnPlatform Default=#757575, Android=#000000, UWP=#4C4C4C}"
                                Opacity="{OnPlatform Default=1, Android=0.54}" />
                         <Label Text="{Binding QuantityInSupply,StringFormat='მარაგშია: {0}'}" FontSize="14" Grid.Row="2" HorizontalOptions="Start"

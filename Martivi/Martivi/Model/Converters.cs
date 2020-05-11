@@ -212,19 +212,6 @@ namespace Martivi.Model
         }
     }
 
-    public class WeightConverter : IValueConverter
-    {
-        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            if (value is string weight && weight.Length > 0 && parameter is string param && param.Length > 0) return weight += " " + param;
-            return value;
-        }
-
-        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            throw new NotImplementedException();
-        }
-    }
 
     public class ShortDescription : IValueConverter
     {

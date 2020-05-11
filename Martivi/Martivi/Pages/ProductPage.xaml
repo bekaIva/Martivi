@@ -29,14 +29,12 @@
                                            ProgressBackgroundColor="Transparent"
                                            ProgressStrokeColor="{StaticResource primary_dark}">
                 <pullToRefresh:SfPullToRefresh.PullableContent>
-                    <Grid BindableLayout.ItemTemplateSelector="{StaticResource ProductsTemplateSelector}" BindableLayout.ItemsSource="{Binding Source={StaticResource MainViewModel},Path=SelectedCategory.Products}">
-                      
+                    <Grid>                      
                         <errorandempty:NoInternetConnectionPage IsVisible="{Binding Source={StaticResource MainViewModel},Path=ConnectionError}"></errorandempty:NoInternetConnectionPage>
                         <Grid IsVisible="{Binding Source={StaticResource MainViewModel},Path=ConnectionError, Converter={StaticResource BoolToNegative}}">
                                 <errorandempty:NoItemCategoryPage IsVisible="{Binding Source={StaticResource MainViewModel},Path=SelectedCategory.Products.Count, Converter={StaticResource CountToBoolConverter}, ConverterParameter=negative}"></errorandempty:NoItemCategoryPage>
                         <contentviews:ProductView IsVisible="{Binding Source={StaticResource MainViewModel},Path=SelectedCategory.Products.Count, Converter={StaticResource CountToBoolConverter}}"></contentviews:ProductView>
-                        </Grid>
-                    
+                        </Grid>                    
                     </Grid>
                 </pullToRefresh:SfPullToRefresh.PullableContent>                    
             </pullToRefresh:SfPullToRefresh>
