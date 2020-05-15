@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Text.Json.Serialization;
@@ -43,7 +44,9 @@ namespace Martivi.Model
         {
             FilteredProducts = new ObservableCollection<Product>(Products?.Where((c) =>
             {
-                if (c.Name?.ToLower().Contains(ProductFilter?.ToLower() ?? string.Empty) ?? false)
+                if ((c.Name?.ToLower().Contains(ProductFilter?.ToLower() ?? string.Empty) ?? false)||
+                (c.Description?.ToLower().Contains(ProductFilter?.ToLower() ?? string.Empty) ?? false)
+                )
                 {
                     return true;
                 }
@@ -72,11 +75,11 @@ namespace Martivi.Model
 
         public string Weight { get; set; }
 
-        public double Price { get; set; }
+        public decimal Price { get; set; }
 
 
         private int quantity = 0;
-        private double totalPrice = 0;
+        private decimal totalPrice = 0;
         public int Quantity
         {
             get { return quantity; }
@@ -84,6 +87,10 @@ namespace Martivi.Model
             {
                 if (quantity != value)
                 {
+                   // StackTrace stackTrace = new StackTrace();
+
+                   // // Get calling method name
+                   //string name = stackTrace.GetFrame(1).GetMethod().Name;
                     quantity = value;
                     TotalPrice = quantity * Price;
                     OnPropertyChanged();
@@ -99,7 +106,7 @@ namespace Martivi.Model
         }
 
 
-        public double TotalPrice
+        public decimal TotalPrice
         {
             get { return totalPrice; }
             set

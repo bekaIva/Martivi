@@ -102,7 +102,7 @@
                 LineHeight="{OnPlatform Android=1.25,
                                         Default=-1}"
                 Style="{StaticResource PriceLabelStyle}"
-                Text="{Binding MainViewModel.TotalPrice, StringFormat='₾{0}'}"
+                   Text="{Binding MainViewModel.TotalPrice,StringFormat='₾{0:0.######}' }"
                 TextColor="{DynamicResource Gray-900}" />
 
         </Grid>

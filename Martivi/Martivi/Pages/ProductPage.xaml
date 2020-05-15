@@ -9,18 +9,17 @@
              xmlns:numeric="clr-namespace:Syncfusion.SfNumericUpDown.XForms;assembly=Syncfusion.SfNumericUpDown.XForms"
              xmlns:pullToRefresh="clr-namespace:Syncfusion.SfPullToRefresh.XForms;assembly=Syncfusion.SfPullToRefresh.XForms"
              xmlns:model="clr-namespace:Martivi.Model"
-             xmlns:errorandempty="clr-namespace:Martivi.Views.ErrorAndEmpty"
              xmlns:contentviews="clr-namespace:Martivi.Pages.ContentViews"
+             xmlns:button="clr-namespace:Syncfusion.XForms.Buttons;assembly=Syncfusion.Buttons.XForms"
+             xmlns:svg="clr-namespace:Martivi.Controls"
+             xmlns:core="clr-namespace:Syncfusion.XForms.Core;assembly=Syncfusion.Core.XForms"
              mc:Ignorable="d"
-             x:Class="Martivi.Pages.ProductPage" x:Name="productPage" BindingContext="{StaticResource MainViewModel}" Title="{Binding SelectedCategory.Name}">
+             x:Class="Martivi.Pages.ProductPage" x:Name="productPage" BindingContext="{StaticResource MainViewModel}" Title="{Binding SelectedCategory.Name}" x:DataType="ViewModel:MainViewModel">
     <Shell.SearchHandler>
         <model:ProductSearchHandler CurrentPage="{x:Reference productPage}" ViewModel="{StaticResource MainViewModel}" Query="{Binding SelectedCategory.ProductFilter,Mode=TwoWay}"  ItemTemplate="{StaticResource ProductTemplate}" SearchBoxVisibility="Collapsible">
 
         </model:ProductSearchHandler>
     </Shell.SearchHandler>
-    <ContentPage.Resources>
-        <model:ProductsTemplateSelector x:Key="ProductsTemplateSelector"></model:ProductsTemplateSelector>
-    </ContentPage.Resources>
     <ContentPage.Content>
         <Grid>
             <pullToRefresh:SfPullToRefresh x:Name="ptf"
@@ -29,11 +28,360 @@
                                            ProgressBackgroundColor="Transparent"
                                            ProgressStrokeColor="{StaticResource primary_dark}">
                 <pullToRefresh:SfPullToRefresh.PullableContent>
-                    <Grid>                      
-                        <errorandempty:NoInternetConnectionPage IsVisible="{Binding Source={StaticResource MainViewModel},Path=ConnectionError}"></errorandempty:NoInternetConnectionPage>
+                    <Grid>
+                        <Grid IsVisible="{Binding Source={StaticResource MainViewModel},Path=ConnectionError}">
+
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="*" />
+                                <RowDefinition Height="Auto" />
+                            </Grid.RowDefinitions>
+
+
+                            <StackLayout BackgroundColor="Transparent"
+                                         Spacing="0"
+                                         VerticalOptions="Center">
+
+                                <!--  Display the svg illustration image  -->
+                                <svg:SVGImage Margin="{x:OnIdiom Phone='0,0,0,0',
+                                       Desktop='0',
+                                       Tablet='0'}"
+                                              HeightRequest="{core:OnPlatformOrientationDoubleValue Default=300,
+                                                                          AndroidPhonePortrait=200,
+                                                                          AndroidPhoneLandscape=140,
+                                                                          iOSPhonePortrait=200,
+                                                                          iOSPhoneLandscape=140}"
+                                              Source="NoInternet.svg"
+                                              VerticalOptions="Center"
+                                              WidthRequest="{x:OnIdiom Phone=200,
+                                             Desktop=300,
+                                             Tablet=300}" />
+
+                                <!--  Label to display header  -->
+                                <Label Margin="0,32,0,8"
+                                       FontFamily="{StaticResource Montserrat-SemiBold}"
+                                       FontSize="20"
+                                       HorizontalOptions="Center"
+                                       HorizontalTextAlignment="Center"
+                                       Style="{StaticResource LabelStyle}"
+                                       Text="კავშირის პრობლემა"
+                                       VerticalTextAlignment="Center" />
+
+                                <!--  Label to display content  -->
+                                <Label Margin="8,0,8,0"
+                                       FontFamily="{StaticResource Montserrat-Medium}"
+                                       FontSize="16"
+                                       Style="{StaticResource LabelStyle}"
+                                       HorizontalOptions="Center"
+                                       Text="სერვერთან დაკავშირება ვერ მოხერხდა. დარწმუნდით, რომ გაქვთ წვდომა ინტერნეტთან"
+                                       VerticalTextAlignment="Center" />
+                            </StackLayout>
+
+                            <!--  Try again button  -->
+                            <button:SfButton Grid.Row="1" Clicked="TryAgainClicked"
+                                             Style="{StaticResource SfGradientButtonStyle}"
+                                             Text="სცადეთ თავიდან" />
+
+                        </Grid>
+
+
+                        <!--<errorandempty:NoInternetConnectionPage IsVisible="{Binding Source={StaticResource MainViewModel},Path=ConnectionError}"></errorandempty:NoInternetConnectionPage>-->
                         <Grid IsVisible="{Binding Source={StaticResource MainViewModel},Path=ConnectionError, Converter={StaticResource BoolToNegative}}">
-                                <errorandempty:NoItemCategoryPage IsVisible="{Binding Source={StaticResource MainViewModel},Path=SelectedCategory.Products.Count, Converter={StaticResource CountToBoolConverter}, ConverterParameter=negative}"></errorandempty:NoItemCategoryPage>
-                        <contentviews:ProductView IsVisible="{Binding Source={StaticResource MainViewModel},Path=SelectedCategory.Products.Count, Converter={StaticResource CountToBoolConverter}}"></contentviews:ProductView>
+                            <Grid IsVisible="{Binding Source={StaticResource MainViewModel},Path=SelectedCategory.Products.Count, Converter={StaticResource CountToBoolConverter}, ConverterParameter=negative}">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="*" />
+                                    <RowDefinition Height="Auto" />
+                                </Grid.RowDefinitions>
+
+
+                                <StackLayout BackgroundColor="Transparent"
+                                             Spacing="0"
+                                             VerticalOptions="Center">
+
+                                    <!--  Display the svg illustration image  -->
+                                    <svg:SVGImage
+                                                  Margin="{x:OnIdiom Phone='0,0,0,0',
+                                       Desktop='0',
+                                       Tablet='0'}"
+                                                  HeightRequest="{core:OnPlatformOrientationDoubleValue Default=300,
+                                                                          AndroidPhonePortrait=200,
+                                                                          AndroidPhoneLandscape=140,
+                                                                          iOSPhonePortrait=200,
+                                                                          iOSPhoneLandscape=140}"
+                                                  Source="NoItem.svg"
+                                                  VerticalOptions="Center"
+                                                  WidthRequest="{x:OnIdiom Phone=200,
+                                             Desktop=300,
+                                             Tablet=300}" />
+
+                                    <!--  Label to display header  -->
+                                    <Label Margin="0,32,0,8"
+                                           FontFamily="{StaticResource Montserrat-SemiBold}"
+                                           FontSize="20"
+                                           HorizontalTextAlignment="Center"
+                                           Style="{StaticResource LabelStyle}"
+                                           HorizontalOptions="Center"
+                                           Text="სია ცარიელია"
+                                           VerticalTextAlignment="Center" />
+
+                                    <!--  Label to display content  -->
+                                    <Label Margin="8,0,8,0"
+                                           FontFamily="{StaticResource Montserrat-Medium}"
+                                           FontSize="16"
+                                           Style="{StaticResource LabelStyle}"
+                                           HorizontalOptions="Center"
+                                           Text="არაფერია, რომ ვაჩვენოთ"
+                                           VerticalTextAlignment="Center" />
+                                </StackLayout>
+
+                                <!--  Try again button  -->
+                                <button:SfButton Grid.Row="1" Clicked="TryAgainClicked"
+                                                 Style="{StaticResource SfGradientButtonStyle}"
+                                                 Text="სცადეთ თავიდან" />
+                            </Grid>
+                            <!--<errorandempty:NoItemCategoryPage IsVisible="{Binding Source={StaticResource MainViewModel},Path=SelectedCategory.Products.Count, Converter={StaticResource CountToBoolConverter}, ConverterParameter=negative}"></errorandempty:NoItemCategoryPage>-->
+
+                            <Grid x:Name="ContentGrid"
+                                  IsVisible="{Binding Source={StaticResource MainViewModel},Path=SelectedCategory.Products.Count, Converter={StaticResource CountToBoolConverter}}">
+                                <Grid x:Name="sampleLayout"
+                                      RowSpacing="0">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="*" />
+                                    </Grid.RowDefinitions>
+
+
+                                    <sync:SfListView x:Name="listView"
+                                                     Grid.Row="0"
+                                                     IsStickyHeader="True"
+                                                     AutoFitMode="Height"
+                                                     ItemTapped="PorductTapped"
+                                                     LoadMoreOption="Auto"
+                                                     LoadMoreCommand="{Binding LoadMoreItemsCommand}"
+                                                     LoadMoreCommandParameter="{Binding Source={x:Reference Name=listView}}"
+                                                     ItemsSource="{Binding SelectedCategory.FilteredProducts}">
+                                        <sync:SfListView.HeaderTemplate>
+                                            <DataTemplate>
+                                                <Grid Padding="0" x:DataType="ViewModel:MainViewModel">
+                                                    <Frame BackgroundColor="White"
+                                                           Margin="2"
+                                                           HasShadow="True"
+                                                           Padding="0">
+                                                        <Grid Padding="0"
+                                                              HeightRequest="56">
+                                                            <Grid.ColumnDefinitions>
+                                                                <ColumnDefinition Width="*" />
+                                                                <ColumnDefinition Width="Auto" />
+                                                            </Grid.ColumnDefinitions>
+                                                            <Grid x:Name="grid"
+                                                                  Grid.Column="0"
+                                                                  Margin="16,0,8,0">
+                                                                <Label Text="პროდუქტების სია"
+                                                                       FontAttributes="Bold"
+                                                                       VerticalOptions="Center"
+                                                                       FontSize="16"
+                                                                       TextColor="#333333"
+                                                                       Opacity="0.87" />
+                                                            </Grid>
+                                                            <Grid Grid.Column="1"
+                                                                  Margin="0"
+                                                                  RowSpacing="0"
+                                                                  ColumnSpacing="0"
+                                                                  BackgroundColor="White"
+                                                                  HorizontalOptions="EndAndExpand"
+                                                                  VerticalOptions="FillAndExpand"
+                                                                  Padding="20, 0, 0, 0">
+                                                                <Grid.GestureRecognizers>
+                                                                    <TapGestureRecognizer Command="{Binding OrderListCommand}"
+                                                                                          CommandParameter="{Binding Source={x:Reference Name=productPage}}" />
+                                                                </Grid.GestureRecognizers>
+                                                                <Label InputTransparent="True"
+                                                                       Text="&#xe706;"
+                                                                       FontSize="Medium"
+                                                                       TextColor="#808080"
+                                                                       FontFamily="Sync FontIcons.ttf#"
+                                                                       VerticalOptions="Center"
+                                                                       HeightRequest="20"
+                                                                       WidthRequest="20"
+                                                                       Margin="0,0,16,0" />
+                                                                <Frame InputTransparent="True"
+                                                                       Margin="0,12,6,0"
+                                                                       Padding="0"
+                                                                       HasShadow="False"
+                                                                       VerticalOptions="Start"
+                                                                       HorizontalOptions="End"
+                                                                       CornerRadius="8"
+                                                                       HeightRequest="14"
+                                                                       WidthRequest="20"
+                                                                       OutlineColor="Transparent"
+                                                                       IsVisible="{Binding TotalOrderedItems, Mode=OneWay, Converter={StaticResource inverseZeroVisibilityConverter}}"
+                                                                       BackgroundColor="{StaticResource primary}">
+                                                                    <Label InputTransparent="True"
+                                                                           Margin="0"
+                                                                           TextColor="White"
+                                                                           Text="{Binding TotalOrderedItems}"
+                                                                           FontSize="11"
+                                                                           VerticalOptions="Center"
+                                                                           HorizontalOptions="Center" />
+                                                                </Frame>
+                                                            </Grid>
+                                                        </Grid>
+                                                    </Frame>
+                                                </Grid>
+                                            </DataTemplate>
+                                        </sync:SfListView.HeaderTemplate>
+                                        <sync:SfListView.ItemTemplate>
+                                            <DataTemplate>
+                                                <Grid  Margin="0"
+                                                       Padding="0"
+                                                       RowSpacing="0"
+                                                       BackgroundColor="White"
+                                                       x:DataType="model:Product">
+                                                    <Grid.RowDefinitions>
+                                                        <RowDefinition Height="*" />
+                                                        <RowDefinition Height="1" />
+                                                    </Grid.RowDefinitions>
+                                                    <Grid Padding="0"
+                                                          ColumnSpacing="0"
+                                                          Margin="16">
+                                                        <Grid.ColumnDefinitions>
+                                                            <ColumnDefinition Width="0.4*" />
+                                                            <ColumnDefinition Width="*" />
+                                                        </Grid.ColumnDefinitions>
+                                                        <ffimageloading:CachedImage Source="{Binding Image}"
+                                                                                    VerticalOptions="Fill"
+                                                                                    HorizontalOptions="Fill"
+                                                                                    LoadingPlaceholder="placeholderimage.png"
+                                                                                    DownsampleToViewSize="true"
+                                                                                    Aspect="AspectFit"
+                                                                                    CacheType="All" />
+                                                        <Grid Grid.Column="1"
+                                                              Padding="0"
+                                                              RowSpacing="0"
+                                                              Margin="16,0,0,0">
+                                                            <Grid.RowDefinitions>
+                                                                <RowDefinition Height="Auto" />
+                                                                <RowDefinition Height="Auto" />
+                                                                <RowDefinition Height="Auto" />
+                                                                <RowDefinition Height="Auto" />
+                                                                <RowDefinition Height="Auto" />
+                                                            </Grid.RowDefinitions>
+                                                            <Label Text="{Binding Name}"
+                                                                   HorizontalOptions="Start"
+                                                                   Margin="0,0,0,4"
+                                                                   FontSize="16"
+                                                                   TextColor="{StaticResource primary_dark}"
+                                                                   FontAttributes="Bold"
+                                                                   Opacity="0.87" />
+                                                            <StackLayout Orientation="Horizontal"
+                                                                         Grid.Row="1">
+                                                                <Label Text="წონა: "
+                                                                       FontSize="14"
+                                                                       FontAttributes="Bold"
+                                                                       HorizontalOptions="Start"
+                                                                       TextColor="#000000"
+                                                                       Opacity="0.54" />
+                                                                <Label Text="{Binding Weight}"
+                                                                       FontSize="14"
+                                                                       HorizontalOptions="Start"
+                                                                       TextColor="#000000"
+                                                                       Opacity="0.54" />
+                                                            </StackLayout>
+
+                                                            <StackLayout Orientation="Horizontal"
+                                                                         Grid.Row="2">
+                                                                <Label Text="მარაგშია: "
+                                                                       FontSize="14"
+                                                                       FontAttributes="Bold"
+                                                                       HorizontalOptions="Start"
+                                                                       TextColor="#000000"
+                                                                       Opacity="0.54" />
+                                                                <Label Text="{Binding QuantityInSupply}"
+                                                                       FontSize="14"
+                                                                       Grid.Row="2"
+                                                                       HorizontalOptions="Start"
+                                                                       TextColor="#000000"
+                                                                       Opacity="0.54" />
+                                                            </StackLayout>
+
+
+                                                            <Label Margin="4"
+                                                                   Text="{Binding Description,Converter={StaticResource ShortDescription}, ConverterParameter=70}"
+                                                                   FontSize="14"
+                                                                   Grid.Row="3"
+                                                                   HorizontalOptions="Start"
+                                                                   TextColor="#000000"
+                                                                   Opacity="0.54" />
+                                                            <Grid Grid.Row="4"
+                                                                  Padding="0"
+                                                                  ColumnSpacing="0">
+                                                                <Grid.ColumnDefinitions>
+                                                                    <ColumnDefinition Width="*" />
+                                                                    <ColumnDefinition Width="auto" />
+                                                                </Grid.ColumnDefinitions>
+                                                                <Label Text="{Binding Price,StringFormat='₾{0:0.######}'}"
+                                                                       VerticalOptions="Start"
+                                                                       FontAttributes="Bold"
+                                                                       HorizontalOptions="Start"
+                                                                       FontSize="16"
+                                                                       Margin="0,16,0,0"
+                                                                       TextColor="{StaticResource primary}" />
+                                                                <numeric:SfNumericUpDown Grid.Column="1"
+                                                                                         x:Name="numericUpDown"
+                                                                                         MaximumDecimalDigits="0"
+                                                                                         IsEditable="False"
+                                                                                         Minimum="0"
+                                                                                         Maximum="{Binding QuantityInSupply}"
+                                                                                         HorizontalOptions="End"
+                                                                                         VerticalOptions="Center"
+                                                                                         AllowNull="false"
+                                                                                         FormatString="n"
+                                                                                         Watermark="Units"
+                                                                                         TextAlignment="Center"
+                                                                                         SpinButtonAlignment="Both"
+                                                                                         UpDownButtonColor="White"
+                                                                                         Value="{Binding Quantity, Mode=TwoWay}"
+                                                                                         IsVisible="{Binding Quantity, Converter={StaticResource inverseZeroVisibilityConverter}}"
+                                                                                         TextColor="#FFFFFF"
+                                                                                         BackgroundColor="{StaticResource primary}"
+                                                                                         WidthRequest="155" />
+                                                                <Button Grid.Column="1"
+                                                                        x:Name="addButton"
+                                                                        FontSize="16"
+                                                                        Text="დამატება"
+                                                                        BorderWidth="1"
+                                                                        WidthRequest="{OnPlatform Default=155}"
+                                                                        VerticalOptions="CenterAndExpand"
+                                                                        HorizontalOptions="End"
+                                                                        Command="{Binding Path=BindingContext.AddCommand, Source={x:Reference Name=listView}}"
+                                                                        CommandParameter="{Binding .}"
+                                                                        IsEnabled="{Binding QuantityInSupply,Converter={StaticResource CountToBoolConverter}}"
+                                                                        IsVisible="{Binding Quantity, Converter={StaticResource zeroVisibilityConverter}}"
+                                                                        BackgroundColor="{StaticResource primary}"
+                                                                        BorderColor="{StaticResource primary}"
+                                                                        TextColor="#FFFFFF" />
+                                                            </Grid>
+                                                        </Grid>
+                                                    </Grid>
+                                                    <BoxView x:Name="boxView"
+                                                             Grid.Row="1"
+                                                             BackgroundColor="#EAEAEA" />
+                                                </Grid>
+                                            </DataTemplate>
+                                        </sync:SfListView.ItemTemplate>
+                                    </sync:SfListView>
+                                    <Label Grid.Row="1"
+                                           LineBreakMode="WordWrap"
+                                           FontAttributes="Bold"
+                                           Text="კატეგორია ცარიელია!"
+                                           VerticalOptions="Center"
+                                           HorizontalOptions="Center"
+                                           IsVisible="{Binding SelectedCategory.Products.Count, Converter={StaticResource zeroVisibilityConverter}}"
+                                           FontSize="16"
+                                           TextColor="{StaticResource primary}" />
+                                </Grid>
+                            </Grid>
+
+                            <!--<contentviews:ProductView IsVisible="{Binding Source={StaticResource MainViewModel},Path=SelectedCategory.Products.Count, Converter={StaticResource CountToBoolConverter}}"></contentviews:ProductView>-->
                         </Grid>                    
                     </Grid>
                 </pullToRefresh:SfPullToRefresh.PullableContent>                    

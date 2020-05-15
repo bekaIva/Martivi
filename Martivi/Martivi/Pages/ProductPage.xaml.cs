@@ -32,5 +32,23 @@ namespace Martivi.Pages
             base.OnAppearing();
             
         }
+
+        private void TryAgainClicked(object sender, EventArgs e)
+        {
+            viewModel?.GetCategories();
+        }
+
+        private void PorductTapped(object sender, Syncfusion.ListView.XForms.ItemTappedEventArgs e)
+        {
+            if(e.ItemType== Syncfusion.ListView.XForms.ItemType.Record)
+            {
+                var p = e.ItemData as Product;
+                if (p !=null)
+                {
+                    Navigation.PushAsync(new SingleProductPage(viewModel, p));
+                }
+            }
+            
+        }
     }
 }

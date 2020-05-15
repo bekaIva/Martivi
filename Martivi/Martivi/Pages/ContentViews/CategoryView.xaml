@@ -5,6 +5,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:pullToRefresh="clr-namespace:Syncfusion.SfPullToRefresh.XForms;assembly=Syncfusion.SfPullToRefresh.XForms"
              xmlns:ffimageloading="clr-namespace:FFImageLoading.Forms;assembly=FFImageLoading.Forms"
+             xmlns:model="clr-namespace:Martivi.Model"
              mc:Ignorable="d"
              x:Class="Martivi.Pages.ContentViews.CategoryView" BindingContext="{StaticResource MainViewModel}">
   <ContentView.Content>       
@@ -13,7 +14,7 @@
                 <ListView.ItemTemplate>
                     <DataTemplate>
                         <ViewCell>
-                            <Grid>
+                            <Grid x:DataType="model:Category">                               
                                 <ffimageloading:CachedImage Source="{Binding Image}" LoadingPlaceholder="placeholderimage.png" HeightRequest="200" DownsampleToViewSize="true" Aspect="Fill" CacheType="All">
                                 </ffimageloading:CachedImage>
                                 <BoxView BackgroundColor="Black" Opacity="0.4"></BoxView>

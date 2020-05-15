@@ -8,6 +8,9 @@
              xmlns:model="clr-namespace:Martivi.Model"
              xmlns:contentviews="clr-namespace:Martivi.Pages.ContentViews"
              xmlns:errorandempty="clr-namespace:Martivi.Views.ErrorAndEmpty"
+             xmlns:svg="clr-namespace:Martivi.Controls"
+             xmlns:button="clr-namespace:Syncfusion.XForms.Buttons;assembly=Syncfusion.Buttons.XForms"
+             xmlns:core="clr-namespace:Syncfusion.XForms.Core;assembly=Syncfusion.Core.XForms"
              mc:Ignorable="d"
              x:Class="Martivi.Pages.CategoryPage" x:Name="categoryPage" BindingContext="{StaticResource MainViewModel}" Title="კატეგორიები" >
     <Shell.SearchHandler>
@@ -23,8 +26,116 @@
             <pullToRefresh:SfPullToRefresh x:Name="ptf" RefreshCommand="{Binding RefreshListing}" RefreshCommandParameter="{x:Reference ptf}" ProgressBackgroundColor="Transparent" ProgressStrokeColor="{StaticResource primary_dark}">
                 <pullToRefresh:SfPullToRefresh.PullableContent>
                     <Grid>
-                        <errorandempty:NoInternetConnectionPage IsVisible="{Binding Source={StaticResource MainViewModel},Path=ConnectionError}"></errorandempty:NoInternetConnectionPage>
-                        <errorandempty:NoItemCategoryPage IsVisible="{Binding Source={StaticResource MainViewModel},Path=NoCategories}"></errorandempty:NoItemCategoryPage>
+                        <Grid IsVisible="{Binding Source={StaticResource MainViewModel},Path=ConnectionError}">
+
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="*" />
+                                <RowDefinition Height="Auto" />
+                            </Grid.RowDefinitions>
+
+
+                            <StackLayout BackgroundColor="Transparent"
+                                         Spacing="0"
+                                         VerticalOptions="Center">
+
+                                <!--  Display the svg illustration image  -->
+                                <svg:SVGImage Margin="{x:OnIdiom Phone='0,0,0,0',
+                                       Desktop='0',
+                                       Tablet='0'}"
+                                              HeightRequest="{core:OnPlatformOrientationDoubleValue Default=300,
+                                                                          AndroidPhonePortrait=200,
+                                                                          AndroidPhoneLandscape=140,
+                                                                          iOSPhonePortrait=200,
+                                                                          iOSPhoneLandscape=140}"
+                                              Source="NoInternet.svg"
+                                              VerticalOptions="Center"
+                                              WidthRequest="{x:OnIdiom Phone=200,
+                                             Desktop=300,
+                                             Tablet=300}" />
+
+                                <!--  Label to display header  -->
+                                <Label Margin="0,32,0,8"
+                                       FontFamily="{StaticResource Montserrat-SemiBold}"
+                                       FontSize="20"
+                                       HorizontalOptions="Center"
+                                       HorizontalTextAlignment="Center"
+                                       Style="{StaticResource LabelStyle}"
+                                       Text="კავშირის პრობლემა"
+                                       VerticalTextAlignment="Center" />
+
+                                <!--  Label to display content  -->
+                                <Label Margin="8,0,8,0"
+                                       FontFamily="{StaticResource Montserrat-Medium}"
+                                       FontSize="16"
+                                       Style="{StaticResource LabelStyle}"
+                                       HorizontalOptions="Center"
+                                       Text="სერვერთან დაკავშირება ვერ მოხერხდა. დარწმუნდით, რომ გაქვთ წვდომა ინტერნეტთან"
+                                       VerticalTextAlignment="Center" />
+                            </StackLayout>
+
+                            <!--  Try again button  -->
+                            <button:SfButton Grid.Row="1"
+                                             Clicked="TryAgainClicked"
+                                             Style="{StaticResource SfGradientButtonStyle}"
+                                             Text="სცადეთ თავიდან" />
+
+                        </Grid>
+
+                        <Grid IsVisible="{Binding Source={StaticResource MainViewModel},Path=NoCategories}">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="*" />
+                                    <RowDefinition Height="Auto" />
+                                </Grid.RowDefinitions>
+
+
+                                <StackLayout BackgroundColor="Transparent"
+                                             Spacing="0"
+                                             VerticalOptions="Center">
+
+                                    <!--  Display the svg illustration image  -->
+                                    <svg:SVGImage Margin="{x:OnIdiom Phone='0,0,0,0',
+                                       Desktop='0',
+                                       Tablet='0'}"
+                                                  HeightRequest="{core:OnPlatformOrientationDoubleValue Default=300,
+                                                                          AndroidPhonePortrait=200,
+                                                                          AndroidPhoneLandscape=140,
+                                                                          iOSPhonePortrait=200,
+                                                                          iOSPhoneLandscape=140}"
+                                                  Source="NoItem.svg"
+                                                  VerticalOptions="Center"
+                                                  WidthRequest="{x:OnIdiom Phone=200,
+                                             Desktop=300,
+                                             Tablet=300}" />
+
+                                    <!--  Label to display header  -->
+                                    <Label Margin="0,32,0,8"
+                                           FontFamily="{StaticResource Montserrat-SemiBold}"
+                                           FontSize="20"
+                                           HorizontalTextAlignment="Center"
+                                           Style="{StaticResource LabelStyle}"
+                                           HorizontalOptions="Center"
+                                           Text="სია ცარიელია"
+                                           VerticalTextAlignment="Center" />
+
+                                    <!--  Label to display content  -->
+                                    <Label Margin="8,0,8,0"
+                                           FontFamily="{StaticResource Montserrat-Medium}"
+                                           FontSize="16"
+                                           Style="{StaticResource LabelStyle}"
+                                           HorizontalOptions="Center"
+                                           Text="არაფერია, რომ ვაჩვენოთ"
+                                           VerticalTextAlignment="Center" />
+                                </StackLayout>
+
+                                <!--  Try again button  -->
+                                <button:SfButton Grid.Row="1"
+                                                 Clicked="TryAgainClicked"
+                                                 Style="{StaticResource SfGradientButtonStyle}"
+                                                 Text="სცადეთ თავიდან" />
+                            </Grid>
+                         
+                        <!--<errorandempty:NoInternetConnectionPage IsVisible="{Binding Source={StaticResource MainViewModel},Path=ConnectionError}"></errorandempty:NoInternetConnectionPage>
+                        <errorandempty:NoItemCategoryPage IsVisible="{Binding Source={StaticResource MainViewModel},Path=NoCategories}"></errorandempty:NoItemCategoryPage>-->
                         <contentviews:CategoryView IsVisible="{Binding Source={StaticResource MainViewModel},Path=CategoriesAvailable}"></contentviews:CategoryView>
                     </Grid>
                     

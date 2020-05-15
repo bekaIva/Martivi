@@ -9,386 +9,336 @@
              xmlns:buttons="clr-namespace:Syncfusion.XForms.Buttons;assembly=Syncfusion.Buttons.XForms"
              xmlns:textinputlayout="clr-namespace:Syncfusion.XForms.TextInputLayout;assembly=Syncfusion.Core.XForms"
              xmlns:forms="clr-namespace:FFImageLoading.Forms;assembly=FFImageLoading.Forms"
+             xmlns:expander="clr-namespace:Syncfusion.XForms.Expander;assembly=Syncfusion.Expander.XForms"
+             xmlns:viewmodels="clr-namespace:Martivi.ViewModels"
+             xmlns:transaction="clr-namespace:Martivi.Models.Transaction"
              mc:Ignorable="d"
-             x:Class="Martivi.Pages.OrderDetailPage" x:Name="orderDetailPage" BindingContext="{StaticResource MainViewModel}" Title="{Binding SelectedDetailOrder.OrderId, StringFormat='შეკვეთა #{0}'}">
+             x:Class="Martivi.Pages.OrderDetailPage" x:Name="orderDetailPage"  Title="{Binding OrderId, StringFormat='შეკვეთა #{0}'}">
     <ContentPage.Resources>
-        <Style x:Key="CommonLabelStyle" TargetType="Label">
-            <Setter Property="TextColor" Value="{DynamicResource Gray-700}" />
-            <Setter Property="FontFamily" Value="Montserrat-Regular" />
-            <Setter Property="FontSize" Value="14" />
-            <Setter Property="LineHeight" Value="{OnPlatform Android=1.5, Default=-1}" />
-            <Setter Property="HorizontalTextAlignment" Value="Start" />
-            <Setter Property="VerticalTextAlignment" Value="Center" />
-            <Setter Property="VerticalOptions" Value="Center" />
-            <Setter Property="HorizontalOptions" Value="Start" />
-        </Style>
-        <Style x:Key="BoxViewStyle" TargetType="BoxView">
-            <Setter Property="Color" Value="{DynamicResource Gray-200}" />
-            <Setter Property="VerticalOptions" Value="Center" />
-        </Style>
-        <Style x:Key="SfButtonStyle"
-               TargetType="buttons:SfButton">
-            <Setter Property="BackgroundColor"
-                    Value="Transparent" />
-            <Setter Property="TextColor"
-                    Value="{DynamicResource Gray-700}" />
-            <Setter Property="FontFamily"
-                    Value="Montserrat-Regular" />
-            <Setter Property="FontSize"
-                    Value="16" />
-        </Style>
+        
     </ContentPage.Resources>
     <ContentPage.Content>
         <ScrollView>
-            <Grid>
-            <Grid x:Name="OrdersLayout" RowSpacing="0" BindingContext="{Binding Source={x:Reference orderDetailPage}}">
+          
+            <Grid x:Name="OrdersLayout" RowSpacing="0">
                 <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="auto" />
-                        <RowDefinition Height="auto"/>
-                        <RowDefinition Height="auto"/>
-                    </Grid.RowDefinitions>
-                <Frame BackgroundColor="White" HasShadow="True" Padding="0" Margin="0">
-                    <Grid Padding="0" HeightRequest="60">
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="auto" />
+                    <RowDefinition Height="auto"/>
+                </Grid.RowDefinitions>
+                <expander:SfExpander Grid.Row="0"
+                                     Margin="4" HeaderBackgroundColor="Transparent"
+                                     >
+                    <expander:SfExpander.Header>
+                            <Grid x:DataType="viewmodels:MainViewModel" Padding="4"
+                                  HorizontalOptions="FillAndExpand"
+                                  VerticalOptions="Center">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+                                <Label FontAttributes="Bold" x:DataType="viewmodels:MainViewModel"
+                                       Margin="0"
+                                       Text="{Binding TotalOrderedItems, Source={x:Reference orderDetailPage}, Converter={StaticResource totalItemsCountConverter}}"
+                                       VerticalOptions="Center"
+                                       HorizontalOptions="End"
+                                       FontSize="16"
+                                       TextColor="{StaticResource primary}" />
+                                <Label Grid.Column="1"
+                                       FontAttributes="Bold"
+                                   Text="{Binding TotalPrice, Source={x:Reference orderDetailPage}, StringFormat='₾{0:0.######}'}"
+                                       VerticalOptions="Center"
+                                       HorizontalOptions="End"
+                                       Margin="0,0,8,0"
+                                       FontSize="16"
+                                       TextColor="{StaticResource primary}" />
+                            </Grid>
+                                   
+                                 
+                                
+                    </expander:SfExpander.Header>
+                    <expander:SfExpander.Content>
+
+                        <sync:SfListView IsScrollingEnabled="False"
+                                         SelectionMode="None"
+                                         AutoFitMode="Height"
+                                         VerticalOptions="Start"
+                                         ItemsSource="{Binding OrderedProducts}">
+                            <sync:SfListView.ItemTemplate>
+                                <DataTemplate>
+                                    <Grid  Margin="0"
+                                           x:DataType="model:Product"
+                                           Padding="0"
+                                           RowSpacing="0"
+                                           BackgroundColor="White">
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="*" />
+                                            <RowDefinition Height="1" />
+                                        </Grid.RowDefinitions>
+                                        <Grid Padding="0"
+                                              ColumnSpacing="0"
+                                              Margin='16,16,0,0'>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="130" />
+                                                <ColumnDefinition Width="*" />
+                                            </Grid.ColumnDefinitions>
+                                            <forms:CachedImage Source="{Binding Image}"
+                                                               HeightRequest="130"
+                                                               WidthRequest="130"
+                                                               Aspect="AspectFit"
+                                                               VerticalOptions="Center"
+                                                               HorizontalOptions="Center" />
+                                            <Grid Grid.Column="1"
+                                                  Padding="0"
+                                                  RowSpacing="0"
+                                                  Margin='16'>
+                                                <Grid.RowDefinitions>
+                                                    <RowDefinition Height="Auto" />
+                                                    <RowDefinition Height="Auto" />
+                                                    <RowDefinition Height="Auto" />
+                                                    <RowDefinition Height="Auto" />
+                                                </Grid.RowDefinitions>
+                                                <Label Text="{Binding Name}"
+                                                       HorizontalOptions="Start"
+                                                       Margin="0,0,0,4"
+                                                       FontSize="16"
+                                                       TextColor="#000000"
+                                                       Opacity="0.87" />
+
+                                                <StackLayout Grid.Row="1"
+                                                             Orientation="Horizontal">
+                                                    <Label Text="წონა: "
+                                                           FontAttributes="Bold"
+                                                           FontSize="14"
+                                                           HorizontalOptions="Start"
+                                                           TextColor="#000000"
+                                                           Opacity="0.54" />
+                                                    <Label Text="{Binding Weight}"
+                                                           FontSize="14"
+                                                           HorizontalOptions="Start"
+                                                           TextColor="#000000"
+                                                           Opacity="0.54" />
+                                                </StackLayout>
+
+                                                <StackLayout Grid.Row="2"
+                                                             Orientation="Horizontal">
+                                                    <Label Text="რაოდენობა: "
+                                                           FontAttributes="Bold"
+                                                           FontSize="14"
+                                                           HorizontalOptions="Start"
+                                                           TextColor="#000000"
+                                                           Opacity="0.54" />
+                                                    <Label Text="{Binding Quantity}"
+                                                           FontSize="14"
+                                                           HorizontalOptions="Start"
+                                                           TextColor="#000000"
+                                                           Opacity="0.54" />
+                                                </StackLayout>
+
+
+                                                <Grid Grid.Row="3"
+                                                      Padding="0"
+                                                      ColumnSpacing="0">
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="*" />
+                                                        <ColumnDefinition Width="*" />
+                                                    </Grid.ColumnDefinitions>
+                                                    <Label Text="{Binding TotalPrice, StringFormat = '₾{0:0.######}'}"
+                                                           VerticalOptions="Start"
+                                                           FontAttributes="Bold"
+                                                           HorizontalOptions="Start"
+                                                           FontSize="16"
+                                                           TextColor="{StaticResource primary}"
+                                                           Margin="0,16,0,0" />
+
+                                                </Grid>
+                                            </Grid>
+                                        </Grid>
+                                        <BoxView x:Name="boxView"
+                                                 Grid.Row="1"
+                                                 BackgroundColor="#EAEAEA" />
+                                    </Grid>
+                                </DataTemplate>
+                            </sync:SfListView.ItemTemplate>
+                            
+                        </sync:SfListView>
+                        
+                       
+                    </expander:SfExpander.Content>
+                </expander:SfExpander>
+                
+                
+                <Frame Grid.Row="1"
+                       Margin="4"                       
+                       HasShadow="True">                          
+                    <StackLayout  >
+                        <border:SfBorder HorizontalOptions="Center"
+                                         WidthRequest="50"
+                                         HeightRequest="50"
+                                         VerticalOptions="Center"
+                                         CornerRadius="50"
+                                         BorderWidth="2"
+                                         BorderColor="{StaticResource primary}">
+                            <forms:CachedImage Source="{Binding User.ProfileImageUrl,TargetNullValue=blankprofile.png}" />
+                        </border:SfBorder>
+                        <Label Text="{Binding User.Username}"
+                               VerticalOptions="Center"
+                               HorizontalOptions="Center"></Label>
+                        <Label Text="{Binding User.FirstName, StringFormat='სახელი: {0}'}"
+                               HorizontalOptions="Start"></Label>
+                        <Label Text="{Binding User.LastName, StringFormat='გვარი: {0}'}"
+                               HorizontalOptions="Start"></Label>
+                        <Label Text="{Binding User.Phone, StringFormat='ტელეფონი: {0}'}"
+                               HorizontalOptions="Start"></Label>
+
+                        <Frame>
+                            <Grid>
+                                <StackLayout Spacing="0">
+                                    <Label Style="{StaticResource HeaderLabelStyle}"
+                                           FontSize="12"
+                                           Text="გადახდა"></Label>
+                                    <buttons:SfButton Margin="4"
+                                                      BorderWidth="0"
+                                                      CornerRadius="4"
+                                                      FontFamily="{StaticResource Montserrat-SemiBold}"
+                                                      FontSize="14"
+                                                      Clicked="PayClicked"
+                                                      HeightRequest="{OnIdiom Desktop=18,
+                                                      Default=35}"
+                                                      HorizontalOptions="Center"
+                                                      Style="{StaticResource SfButtonStyle}"
+                                                      Text="{Binding Payment, Converter={StaticResource PaymentStatusToTextOrColorConverter}, ConverterParameter=Text}"
+                                                      TextColor="{Binding Payment,Converter={StaticResource PaymentStatusToTextOrColorConverter}, ConverterParameter=Color}" />
+                                </StackLayout>
+                                <ActivityIndicator Color="{StaticResource primary_dark}"
+                                                   VerticalOptions="Center"
+                                                   HorizontalOptions="Center"
+                                                   IsRunning="{Binding Source={StaticResource MainViewModel},Path=OrderCheckouting}"></ActivityIndicator>
+                            </Grid>
+
+
+                        </Frame>
+
+                    </StackLayout>
+                            
+
+                </Frame>
+                <Grid Grid.Row="2"
+                      Padding="2" BindingContext="{Binding OrderAddress}" >
+                    <Grid RowSpacing="0" VerticalOptions="{OnIdiom Default=Start, Desktop=Fill}">
+
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="auto" />
+                        </Grid.RowDefinitions>
+
                         <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
                             <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="{OnIdiom Default=*, Phone=0}" />
                             <ColumnDefinition Width="Auto" />
                         </Grid.ColumnDefinitions>
-                        <Grid x:Name="grid" Grid.Column="0" Margin="16,0,8,0">
-                            <Label Text="პროდუქტების სია" FontAttributes="Bold" VerticalOptions="Center" FontSize="14"
-                           TextColor="{OnPlatform Default=#333333, Android=#000000}"
-                           Opacity="{OnPlatform Default=1, Android=0.87}" />
-                        </Grid>
-                        <Grid Grid.Column="1" BackgroundColor="White" HorizontalOptions="End" VerticalOptions="Center" Padding="0">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="Auto"/>
-                                <ColumnDefinition Width="Auto"/>
-                            </Grid.ColumnDefinitions>
-                            <Label FontAttributes="Bold" Margin="0" Text="{Binding TotalOrderedItems, Converter={StaticResource totalItemsCountConverter}}"
-                         VerticalOptions="Center" HorizontalOptions="End" FontSize="16"
-                         TextColor="{StaticResource primary}" />
-                            <Label Grid.Column="1" FontAttributes="Bold"
-                           Text="{Binding TotalPrice, StringFormat='₾{0}'}" 
-                           VerticalOptions="Center" HorizontalOptions="End" Margin="16,0,8,0" FontSize="16"
-                         TextColor="{StaticResource primary}" />
-                        </Grid>
+
+
+
+                        <Label Grid.Row="0"
+                               Grid.Column="1"
+                               FontFamily="{StaticResource Montserrat-Medium}"
+                               FontSize="14"
+                               HorizontalOptions="StartAndExpand"
+                               Style="{StaticResource CommonLabelStyle}">
+                            <Label.FormattedText>
+                                <FormattedString>
+                                    <Span Text="{Binding CustomerName}"
+                                          TextColor="{DynamicResource Gray-900}" />
+                                    <Span FontSize="12"
+                                          Text="{Binding AddressType, StringFormat='  {0}'}"
+                                          TextColor="{DynamicResource Gray-700}" />
+                                </FormattedString>
+                            </Label.FormattedText>
+                        </Label>
+
+
+                        <!--  Address Label  -->
+                        <Label Grid.Row="1"
+                               Grid.Column="1"
+                               FontSize="12"
+                               LineHeight="{OnPlatform Android=1.25,
+                               Default=-1}"
+                               Style="{StaticResource CommonLabelStyle}"
+                               Text="{Binding Address}"
+                               TextColor="{DynamicResource Gray-700}" />
+
+                    
+                        <Label Grid.Row="2"
+                               Grid.Column="1"
+                               FontSize="12"
+                               HorizontalOptions="StartAndExpand"
+                               Style="{StaticResource CommonLabelStyle}">
+                            <Label.FormattedText>
+                                <FormattedString>
+                                    <Span Text="Mobile: " />
+                                    <Span Text="{Binding MobileNumber}"
+                                          TextColor="{DynamicResource Gray-900}" />
+                                </FormattedString>
+                            </Label.FormattedText>
+                        </Label>
+
+
+                        <Label Margin="0,0,20,0"
+                               Grid.Row="3"
+                               Grid.Column="1"
+                               FontSize="12"
+                               HorizontalOptions="StartAndExpand"
+                               Style="{StaticResource CommonLabelStyle}">
+                            <Label.FormattedText>
+                                <FormattedString>
+                                    <Span Text="კოორდინატები: " />
+                                    <Span x:Name="CoordinateSpan"
+                                          Text="{Binding Coordinates,Converter={StaticResource CoordinateToString}}"
+                                          TextColor="{DynamicResource Gray-900}" />
+                                </FormattedString>
+                            </Label.FormattedText>
+                        </Label>
+                        <buttons:SfButton TextColor="{StaticResource primary_dark}"
+                                          BackgroundColor="Transparent"
+                                          FontFamily="{StaticResource FontAwesome5ProLight}"
+                                          Grid.Row="3"
+                                          Grid.Column="1"
+                                          HorizontalOptions="End"
+                                          Text="&#xf0c5;"
+                                          Clicked="CopyClicked"></buttons:SfButton>
+
+                        <BoxView Grid.Row="4"
+                                 Grid.ColumnSpan="4"
+                                 Style="{StaticResource BoxViewStyle}"
+                                 VerticalOptions="End" />
+
+                        <Frame x:Name="MapFrame"
+                               HasShadow="True"
+                               Grid.Row="4"
+                               Grid.ColumnSpan="4"
+                               HeightRequest="100">
+                            <model:BindableMap MapSpan="{Binding Coordinates, Converter={StaticResource CoordinateToMapSpan}}"
+                                               PinSource="{Binding Coordinates, Converter={StaticResource CoordinateToPin}}"></model:BindableMap>
+                        </Frame>
+
                     </Grid>
+                </Grid>
+                <Frame Grid.Row="3" Padding="4,2,4,2" BackgroundColor="#FFE7E8E9" HorizontalOptions="Start" VerticalOptions="End"
+                       HasShadow="True">
+                    <Label Margin="4" x:Name="TagLabel" LineBreakMode="NoWrap" Text="{Binding Status,Converter={StaticResource OrderStatusConverter}}"
+                           FontSize="16" TextColor="Black"/>
                 </Frame>
-                <BoxView x:Name="boxView" Grid.Row="1" BackgroundColor="#EAEAEA"  HeightRequest="{OnPlatform Default=0, UWP=1}" />
-                    <sync:SfListView Loaded="listView_Loaded" x:Name="listView" Grid.Row="2"  VerticalOptions="Start" FooterSize="300"
-                            ItemSize="140"
-                            SelectionMode="None"
-                            ItemsSource="{Binding Source={x:StaticResource MainViewModel}, Path=SelectedDetailOrder.OrderedProducts}">
-                    <sync:SfListView.ItemTemplate>
-                        <DataTemplate>
-                            <Grid  Margin="0" Padding="0" RowSpacing="0" BackgroundColor="White">
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="*"/>
-                                    <RowDefinition Height="1"/>
-                                </Grid.RowDefinitions>
-                                <Grid Padding="0" ColumnSpacing="0"  Margin='{OnPlatform Default="15,12,15,12", Android=16}' >
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="0.4*" />
-                                        <ColumnDefinition Width="*" />
-                                    </Grid.ColumnDefinitions>
-                                    <forms:CachedImage Source="{Binding Image}" Aspect="AspectFit" VerticalOptions="Center" HorizontalOptions="Center" />
-                                    <Grid Grid.Column="1" Padding="0" RowSpacing="0"  Margin='{OnPlatform Default="12,0,0,0", Android="16,0,0,0"}'>
-                                        <Grid.RowDefinitions>
-                                            <RowDefinition Height="Auto" />
-                                            <RowDefinition Height="Auto" />
-                                            <RowDefinition Height="Auto" />
-                                            <RowDefinition Height="Auto" />
-                                        </Grid.RowDefinitions>
-                                        <!--<Grid Margin="0" HorizontalOptions="End" VerticalOptions="Start" WidthRequest="{OnPlatform Default=32, Android=24}" HeightRequest="{OnPlatform Default=32, Android=24}">
-                                            <Grid.GestureRecognizers>
-                                                <TapGestureRecognizer Command="{Binding Path=BindingContext.RemoveOrderCommand, Source={x:Reference listView}}" 
-                                                              CommandParameter="{Binding .}" />
-                                            </Grid.GestureRecognizers>
-                                            <Label Text="&#xe735;" TextColor="#808080" FontFamily="{OnPlatform iOS=Sync FontIcons, Android=Sync FontIcons.ttf#, UWP=Sync FontIcons.ttf#Sync FontIcons}"
-                                           HeightRequest="40" WidthRequest="40" FontSize="Medium"
-                                           VerticalOptions="Center" HorizontalOptions="Center"/>
-                                        </Grid>-->
-                                        <Label Text="{Binding Name}" HorizontalOptions="Start" Margin="0,0,0,4" FontSize="16"
-                                     TextColor="{OnPlatform Default=#333333, Android=#000000}"
-                                     Opacity="{OnPlatform Default=1, Android=0.87}" />
-                                        <Label Text="{Binding Weight, StringFormat='წონა {0}'}" FontSize="14" Grid.Row="1" HorizontalOptions="Start" 
-                                       TextColor="{OnPlatform Default=#757575, Android=#000000, UWP=#4C4C4C}"
-                                       Opacity="{OnPlatform Default=1, Android=0.54}" />
-                                        <Label Text="{Binding Quantity,StringFormat='რაოდენობა {0}'}" FontSize="14" Grid.Row="2" HorizontalOptions="Start" 
-                                       TextColor="{OnPlatform Default=#757575, Android=#000000, UWP=#4C4C4C}"
-                                       Opacity="{OnPlatform Default=1, Android=0.54}" />
-                                        <Grid Grid.Row="3" Padding="0" ColumnSpacing="0">
-                                            <Grid.ColumnDefinitions>
-                                                <ColumnDefinition Width="*"/>
-                                                <ColumnDefinition Width="*"/>
-                                            </Grid.ColumnDefinitions>
-                                            <Label Text="{Binding TotalPrice, Converter={StaticResource currencyFormatConverter}}" VerticalOptions="Start" FontAttributes="Bold"
-                                         HorizontalOptions="Start" FontSize="16"
-                                         TextColor="{StaticResource primary}"
-                                         Margin='{OnPlatform Default="0,12,0,0", Android="0,16,0,0"}' />
-                                           
-                                        </Grid>
-                                    </Grid>
-                                </Grid>
-                                <BoxView x:Name="boxView" Grid.Row="1" BackgroundColor="#EAEAEA"/>
-                            </Grid>
-                        </DataTemplate>
-                    </sync:SfListView.ItemTemplate>
-                        <sync:SfListView.FooterTemplate>
-                            <DataTemplate>
-                                <Grid  BindingContext="{Binding Source={x:Reference orderDetailPage}}" >
-                                    <Frame Margin="4" HasShadow="True" >
-                                        <Grid>
-                                            <StackLayout BindingContext="{StaticResource MainViewModel}">
-                                                <border:SfBorder HorizontalOptions="Center" WidthRequest="50" HeightRequest="50" VerticalOptions="Center" CornerRadius="50" BorderWidth="2" BorderColor="{StaticResource primary}">
-                                                    <forms:CachedImage Source="{Binding SelectedDetailOrder.User.ProfileImageUrl,TargetNullValue=blankprofile.png}" />
-                                                </border:SfBorder>
-                                                <Label Text="{Binding SelectedDetailOrder.User.Username}" VerticalOptions="Center" HorizontalOptions="Center"></Label>
-                                                <Label Text="{Binding SelectedDetailOrder.User.FirstName, StringFormat='სახელი: {0}'}"  HorizontalOptions="Start"></Label>
-                                                <Label Text="{Binding SelectedDetailOrder.User.LastName, StringFormat='გვარი: {0}'}"  HorizontalOptions="Start"></Label>
-                                                <Label Text="{Binding SelectedDetailOrder.User.Phone, StringFormat='ტელეფონი: {0}'}"  HorizontalOptions="Start"></Label>
-                                                <!--<Label HorizontalOptions="Center" Text="{Binding SelectedDetailOrder.Payment, Converter={StaticResource PaymentStatusToTextOrColorConverter}, ConverterParameter=Text}"
-                                                       TextColor="{Binding SelectedDetailOrder.Payment,Converter={StaticResource PaymentStatusToTextOrColorConverter}, ConverterParameter=Color}"></Label>-->
-                                                <!--IsVisible="{Binding SelectedDetailOrder.Payment,Converter={StaticResource PaymentStatusToTextOrColorConverter}, ConverterParameter=Visibility}"-->
-                                                <Frame>
-                                                    <Grid>
-                                                        <StackLayout Spacing="0">
-                                                        <Label Style="{StaticResource HeaderLabelStyle}" FontSize="12" Text="გადახდა"></Label>
-                                                        <buttons:SfButton
-                                                    Margin="4"
-                                                            
-                                                                  BorderWidth="0"
-                                                                  CornerRadius="4"
-                                                                  FontFamily="{StaticResource Montserrat-SemiBold}"
-                                                                  FontSize="14"
-                                                                  Clicked="PayClicked"
-                                                                  HeightRequest="{OnIdiom Desktop=18,
-                                                    Default=35}"
-                                                                  HorizontalOptions="Center"
-                                                                  Style="{StaticResource SfButtonStyle}"
-                                                                  Text="{Binding SelectedDetailOrder.Payment, Converter={StaticResource PaymentStatusToTextOrColorConverter}, ConverterParameter=Text}"
-                                                                  TextColor="{Binding SelectedDetailOrder.Payment,Converter={StaticResource PaymentStatusToTextOrColorConverter}, ConverterParameter=Color}" />
-                                                    </StackLayout>
-                                                        <ActivityIndicator Color="{StaticResource primary_dark}" VerticalOptions="Center" HorizontalOptions="Center" IsRunning="{Binding OrderCheckouting}"></ActivityIndicator>
-                                                    </Grid>
-                                                    
-
-                                                </Frame>
-                                               
-                                            </StackLayout>
-                                        </Grid>
-
-                                    </Frame>
-                                </Grid>
-                            </DataTemplate>
-                        </sync:SfListView.FooterTemplate>
-                    </sync:SfListView>
-                    <Grid Padding="2" Grid.Row="3" BindingContext="{Binding Source={x:StaticResource MainViewModel}, Path=SelectedDetailOrder.OrderAddress}">
-                        <Grid RowSpacing="0" VerticalOptions="{OnIdiom Default=Start, Desktop=Fill}">
-
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="Auto" />
-                                <RowDefinition Height="Auto" />
-                                <RowDefinition Height="Auto" />
-                                <RowDefinition Height="Auto" />
-                                <RowDefinition Height="auto" />
-                                <RowDefinition Height="Auto" />
-                                <RowDefinition Height="auto" />
-                            </Grid.RowDefinitions>
-
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="Auto" />
-                                <ColumnDefinition Width="*" />
-                                <ColumnDefinition Width="{OnIdiom Default=*, Phone=0}" />
-                                <ColumnDefinition Width="Auto" />
-                            </Grid.ColumnDefinitions>
-
-
-
-                            <Label Grid.Row="0"
-                                   Grid.Column="1"
-                                   FontFamily="{StaticResource Montserrat-Medium}"
-                                   FontSize="14"
-                                   HorizontalOptions="StartAndExpand"
-                                   Style="{StaticResource CommonLabelStyle}">
-                                <Label.FormattedText>
-                                    <FormattedString>
-                                        <Span Text="{Binding CustomerName}"
-                                              TextColor="{DynamicResource Gray-900}" />
-                                        <Span FontSize="12"
-                                              Text="{Binding AddressType, StringFormat='  {0}'}"
-                                              TextColor="{DynamicResource Gray-700}" />
-                                    </FormattedString>
-                                </Label.FormattedText>
-                            </Label>
-
-
-                            <!--  Address Label  -->
-                            <Label Grid.Row="1"
-                                   Grid.Column="1"
-                                   FontSize="12"
-                                   LineHeight="{OnPlatform Android=1.25,
-                                                    Default=-1}"
-                                   Style="{StaticResource CommonLabelStyle}"
-                                   Text="{Binding Address}"
-                                   TextColor="{DynamicResource Gray-700}" />
-
-                            <!--  Mobile Number  -->
-                            <Label Grid.Row="2"
-                                   Grid.Column="1"
-                                   FontSize="12"
-                                   HorizontalOptions="StartAndExpand"
-                                   Style="{StaticResource CommonLabelStyle}">
-                                <Label.FormattedText>
-                                    <FormattedString>
-                                        <Span Text="Mobile: " />
-                                        <Span Text="{Binding MobileNumber}"
-                                              TextColor="{DynamicResource Gray-900}" />
-                                    </FormattedString>
-                                </Label.FormattedText>
-                            </Label>
-
-
-                            <Label Margin="0,0,20,0"
-                                Grid.Row="3"
-                                   Grid.Column="1"
-                                   FontSize="12"
-                                   HorizontalOptions="StartAndExpand"
-                                   Style="{StaticResource CommonLabelStyle}">
-                                <Label.FormattedText>
-                                    <FormattedString>
-                                        <Span Text="კოორდინატები: " />
-                                        <Span x:Name="CoordinateSpan"
-                                              Text="{Binding Coordinates,Converter={StaticResource CoordinateToString}}"
-                                              TextColor="{DynamicResource Gray-900}" />
-                                    </FormattedString>
-                                </Label.FormattedText>
-                            </Label>
-                            <buttons:SfButton TextColor="{StaticResource primary_dark}"
-                                              BackgroundColor="Transparent"
-                                              FontFamily="{StaticResource FontAwesome5ProLight}"
-                                              Grid.Row="3"
-                                              Grid.Column="1"
-                                              HorizontalOptions="End"
-                                              Text="&#xf0c5;"
-                                              Clicked="CopyClicked"></buttons:SfButton>
-
-                            <!--  Separator  -->
-                            <BoxView Grid.Row="4"
-                                     Grid.ColumnSpan="4"
-                                     Style="{StaticResource BoxViewStyle}"
-                                     VerticalOptions="End" />
-
-                            <Frame x:Name="MapFrame"
-                                   HasShadow="True"
-                                   Grid.Row="4"
-                                   Grid.ColumnSpan="4"
-                                   HeightRequest="100">
-                                <model:BindableMap MapSpan="{Binding Coordinates, Converter={StaticResource CoordinateToMapSpan}}"
-                                                   PinSource="{Binding Coordinates, Converter={StaticResource CoordinateToPin}}"></model:BindableMap>
-                            </Frame>
-
-                        </Grid>
-                    </Grid>
-                    <Frame Grid.Row="4" Padding="4,2,4,2" BackgroundColor="#FFE7E8E9" HorizontalOptions="Start" VerticalOptions="End"
-                                       HasShadow="True">
-                        <Label Margin="4" x:Name="TagLabel" LineBreakMode="NoWrap" Text="{Binding Source={x:StaticResource MainViewModel},Path=SelectedDetailOrder.Status,Converter={StaticResource OrderStatusConverter}}"
-                          FontSize="16" TextColor="Black"/>
-                    </Frame>
-                    <!--<Label Margin="4" x:Name="TagLabel" LineBreakMode="NoWrap" Text="{Binding Source={x:StaticResource MainViewModel},Path=SelectedDetailOrder.Status,Converter={StaticResource OrderStatusConverter}}"
-                          FontSize="16" TextColor="Black"/>-->
-                <!--<Grid Grid.Row="3" BackgroundColor="{StaticResource Gray-White}">
-                    
-                        <progressBar:SfStepProgressBar
-                    x:Name="stepProgress"
-                    Margin="0,20,0,0"    
-                    Orientation="Horizontal"
-                    TitleAlignment="Start"
-                            VerticalOptions="FillAndExpand"
-                            HorizontalOptions="FillAndExpand"
-                    TitleSpace="12"
-                    >
-
-                        --><!--  Style for step progress not started  --><!--
-                        <progressBar:SfStepProgressBar.NotStartedStepStyle>
-                            <progressBar:StepStyle
-                            x:TypeArguments="progressBar:NotStartedStepState"
-                            MarkerContentSize="12"
-                            MarkerShapeType="Circle" />
-                        </progressBar:SfStepProgressBar.NotStartedStepStyle>
-
-                        --><!--  Style for step progress inprogress  --><!--
-                        <progressBar:SfStepProgressBar.InProgressStepStyle>
-                            <progressBar:StepStyle
-                            x:TypeArguments="progressBar:InProgressStepState"
-                            MarkerFillColor="{StaticResource PrimaryColor}"
-                            MarkerShapeType="Circle"
-                            MarkerStrokeColor="{StaticResource PrimaryDarkColor}"
-                            ProgressLineColor="{StaticResource PrimaryColor}" />
-                        </progressBar:SfStepProgressBar.InProgressStepStyle>
-
-                        --><!--  Style for step progress completed  --><!--
-                        <progressBar:SfStepProgressBar.CompletedStepStyle>
-                            <progressBar:StepStyle
-                            x:TypeArguments="progressBar:CompletedStepState"
-                            MarkerContentFillColor="{StaticResource Gray-White}"
-                            MarkerContentType="Tick"
-                            MarkerFillColor="{StaticResource PrimaryColor}"
-                            MarkerShapeType="Circle"
-                            MarkerStrokeColor="{StaticResource PrimaryDarkColor}" />
-                        </progressBar:SfStepProgressBar.CompletedStepStyle>
-                        <BindableLayout.ItemTemplate>
-                            <DataTemplate>
-                                <progressBar:StepView
-                                Margin="20,16,0,0"
-                                ProgressValue="{Binding ProgressValue}"
-                                Status="{Binding Status}">
-                                    <progressBar:StepView.PrimaryFormattedText>
-                                        <FormattedString>
-                                            <Span
-                                            FontSize="16"
-                                            Style="{StaticResource SpanStyle}"
-                                            Text="{Binding Title}" />
-                                            <Span Text="&#10;&#10;" />
-                                            <Span Style="{StaticResource SpanStyle}" Text="{Binding TitleStatus}" />
-                                            <Span Text="&#10;" />
-                                            <Span
-                                            FontFamily="{StaticResource Montserrat-Medium}"
-                                            Style="{StaticResource SpanStyle}"
-                                            Text="{Binding Date}"
-                                            TextColor="{StaticResource Gray-700}" />
-                                            <Span Text="&#10;&#10;" />
-                                            
-                                            <Span Text="&#10;" />
-                                            <Span
-                                            FontFamily="{StaticResource Montserrat-Medium}"
-                                            Style="{StaticResource SpanStyle}"
-                                            Text="{Binding OrderDate}"
-                                            TextColor="{StaticResource Gray-700}" />
-                                            <Span Text="&#10;&#10;" />
-                                        </FormattedString>
-                                    </progressBar:StepView.PrimaryFormattedText>
-                                </progressBar:StepView>
-                            </DataTemplate>
-                        </BindableLayout.ItemTemplate>
-                    </progressBar:SfStepProgressBar>
-                    
-                        
-                    </Grid>-->
-                    
-
-                <!--<Button Grid.Row="3" TextColor="#FFFFFF" Text="შეკვეთა" 
-                HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand"
-                Command="{Binding CheckoutCommand}" CommandParameter="{Binding Source={x:Reference Name=orderPage}}" BorderRadius="0"
-                IsVisible="{Binding TotalOrderedItems, Converter={StaticResource inverseZeroVisibilityConverter}}"
-                FontSize="{OnPlatform Default=12, Android=16}"
-                BackgroundColor="{StaticResource primary_dark}" />-->
+                 
             </Grid>
 
-            <!--<ActivityIndicator  HorizontalOptions="Center" VerticalOptions="Center" Color="#FF5722" IsRunning="{Binding MakingOrder}"></ActivityIndicator>-->
-
-        </Grid>
         </ScrollView>
              
        

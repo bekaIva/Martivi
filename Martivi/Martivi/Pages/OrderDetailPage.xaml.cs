@@ -15,7 +15,7 @@ namespace Martivi.Pages
     public partial class OrderDetailPage : ContentPage
     {
         private int totalOrderedItems = 0;
-        private double totalPrice = 0;
+        private decimal totalPrice = 0;
         public int TotalOrderedItems
         {
             get { return totalOrderedItems; }
@@ -28,7 +28,7 @@ namespace Martivi.Pages
                 }
             }
         }
-        public double TotalPrice
+        public decimal TotalPrice
         {
             get { return totalPrice; }
             set
@@ -49,21 +49,20 @@ namespace Martivi.Pages
             set { _Order = value; OnPropertyChanged(); }
         }
         MainViewModel mv;
-        public OrderDetailPage()
+        public OrderDetailPage(Order order)
         {
             try
             {
+               
                 mv = Application.Current.Resources["MainViewModel"] as MainViewModel;
-                TotalOrderedItems = mv.SelectedDetailOrder.OrderedProducts.Count;
-                foreach (var p in mv.SelectedDetailOrder.OrderedProducts)
+                Order = order;
+                this.BindingContext = order;
+                InitializeComponent();
+                TotalOrderedItems = Order.OrderedProducts.Count;
+                foreach (var p in Order.OrderedProducts)
                 {
                     TotalPrice += p.TotalPrice;
                 }
-                InitializeComponent();
-              
-           
-                
-               
             }
             catch (Exception e)
             {
@@ -76,24 +75,24 @@ namespace Martivi.Pages
 
         }
 
-        private void listView_Loaded(object sender, Syncfusion.ListView.XForms.ListViewLoadedEventArgs e)
-        {
-            try
-            {
-                var totalH = mv.SelectedDetailOrder.OrderedProducts.Count * 140;
-                if (totalH > 560)
-                {
-                    listView.HeightRequest = 560 + 300;
-                    return;
-                }
-                listView.HeightRequest = totalH + 300;
+        //private void listView_Loaded(object sender, Syncfusion.ListView.XForms.ListViewLoadedEventArgs e)
+        //{
+        //    try
+        //    {
+        //        var totalH = mv.SelectedDetailOrder.OrderedProducts.Count * 140;
+        //        if (totalH > 560)
+        //        {
+        //            listView.HeightRequest = 560 + 300;
+        //            return;
+        //        }
+        //        listView.HeightRequest = totalH + 300;
 
-            }
-            catch
-            {
+        //    }
+        //    catch
+        //    {
 
-            }
-        }
+        //    }
+        //}
 
         private void UserFrameTapped(object sender, EventArgs e)
         {
@@ -104,7 +103,7 @@ namespace Martivi.Pages
         {
             try
             {
-               await mv.Checkout(mv.SelectedDetailOrder);
+               await mv.Checkout(Order);
             }
             catch(Exception ee)
             {

@@ -11,6 +11,7 @@
              xmlns:themes = "clr-namespace:Martivi.Themes;assembly=Martivi"
              xmlns:gradient="clr-namespace:Syncfusion.XForms.Graphics;assembly=Syncfusion.Core.XForms"
              xmlns:converter="clr-namespace:Martivi.Converters"
+             xmlns:buttons="clr-namespace:Syncfusion.XForms.Buttons;assembly=Syncfusion.Buttons.XForms"
              x:Class="Martivi.App">
     <Application.Resources>        
         <ResourceDictionary>
@@ -40,7 +41,83 @@
             <Color x:Key="secondary_text">#757575</Color>
             <Color x:Key="icons">#FFFFFF</Color>
             <Color x:Key="divider">#BDBDBD</Color>
-
+            <Style x:Key="SfGradientButtonStyle"
+                   TargetType="buttons:SfButton">
+                <Setter Property="HorizontalOptions"
+                        Value="CenterAndExpand" />
+                <Setter Property="VerticalOptions"
+                        Value="EndAndExpand" />
+                <Setter Property="Margin"
+                        Value="0,10,0,24" />
+                <Setter Property="TextColor"
+                        Value="{DynamicResource Gray-White}" />
+                <Setter Property="FontFamily"
+                        Value="{StaticResource Montserrat-SemiBold}" />
+                <Setter Property="FontSize"
+                        Value="16" />
+                <Setter Property="HeightRequest"
+                        Value="40" />
+                <Setter Property="CornerRadius"
+                        Value="20" />
+                <Setter Property="WidthRequest"
+                        Value="245" />
+                <Setter Property="FontAttributes"
+                        Value="Bold" />
+                <Setter Property="BorderWidth"
+                        Value="0" />
+                <Setter Property="VerticalTextAlignment"
+                        Value="Center" />
+                <Setter Property="BackgroundGradient">
+                    <Setter.Value>
+                        <gradient:SfLinearGradientBrush StartPoint="0, 0"
+                                                        EndPoint="1, 1">
+                            <gradient:SfLinearGradientBrush.GradientStops>
+                                <gradient:SfGradientStop Offset="0"
+                                                         Color="{DynamicResource PrimaryColor}" />
+                                <gradient:SfGradientStop Offset="1"
+                                                         Color="{DynamicResource PrimaryGradient}" />
+                            </gradient:SfLinearGradientBrush.GradientStops>
+                        </gradient:SfLinearGradientBrush>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+            <Style x:Key="CommonLabelStyle"
+                   TargetType="Label">
+                <Setter Property="TextColor"
+                        Value="{DynamicResource Gray-700}" />
+                <Setter Property="FontFamily"
+                        Value="Montserrat-Regular" />
+                <Setter Property="FontSize"
+                        Value="14" />
+                <Setter Property="LineHeight"
+                        Value="{OnPlatform Android=1.5, Default=-1}" />
+                <Setter Property="HorizontalTextAlignment"
+                        Value="Start" />
+                <Setter Property="VerticalTextAlignment"
+                        Value="Center" />
+                <Setter Property="VerticalOptions"
+                        Value="Center" />
+                <Setter Property="HorizontalOptions"
+                        Value="Start" />
+            </Style>
+            <Style x:Key="BoxViewStyle"
+                   TargetType="BoxView">
+                <Setter Property="Color"
+                        Value="{DynamicResource Gray-200}" />
+                <Setter Property="VerticalOptions"
+                        Value="Center" />
+            </Style>
+            <Style x:Key="SfButtonStyle"
+                   TargetType="buttons:SfButton">
+                <Setter Property="BackgroundColor"
+                        Value="Transparent" />
+                <Setter Property="TextColor"
+                        Value="{DynamicResource Gray-700}" />
+                <Setter Property="FontFamily"
+                        Value="Montserrat-Regular" />
+                <Setter Property="FontSize"
+                        Value="16" />
+            </Style>
 
             <Style x:Key="FloutItemStyle"
                    TargetType="Grid">
@@ -135,7 +212,7 @@
                     </ffimageloading:CachedImage>
                     <StackLayout Grid.Column="1">
                         <Label Grid.Column="1" Text="{Binding Name}" VerticalOptions="Start" ></Label>
-                        <Label Text="{Binding Price, Converter={StaticResource currencyFormatConverter}}" VerticalOptions="Start" FontAttributes="Bold" 
+                        <Label Text="{Binding Price, StringFormat = '₾{0:0.######}'}" VerticalOptions="Start" FontAttributes="Bold" 
                                                HorizontalOptions="Start" FontSize="14" TextColor="{StaticResource primary}" />
                         <Label Text="{Binding Description,Converter={StaticResource ShortDescription}, ConverterParameter=60}" FontSize="12"  VerticalOptions="Start" HorizontalOptions="Start"
                                            TextColor="{OnPlatform Default=#757575, Android=#000000, UWP=#4C4C4C}"

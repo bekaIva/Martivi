@@ -4,7 +4,6 @@ using Martivi.Models.Transaction;
 using Martivi.Pages;
 using Martivi.Pages.ContentViews;
 using Martivi.Services;
-using Martivi.Views.ErrorAndEmpty;
 using MartiviSharedLib;
 using MartiviSharedLib.Models.Users;
 using Microsoft.AspNetCore.SignalR.Client;
@@ -141,21 +140,21 @@ namespace Martivi.ViewModels
             set { _ServiceUnavailable = value; OnPropertyChanged(); }
         }
 
-        private double _MinOrder;
+        private decimal _MinOrder;
 
-        public double MinOrder
+        public decimal MinOrder
         {
             get { return _MinOrder; }
             set { _MinOrder = value; OnPropertyChanged(); }
         }
 
-        private bool _MapClicked;
+     
 
       
 
-        private double _MaxOrder;
+        private decimal _MaxOrder;
 
-        public double MaxOrder
+        public decimal MaxOrder
         {
             get { return _MaxOrder; }
             set { _MaxOrder = value; OnPropertyChanged(); }
@@ -208,17 +207,7 @@ namespace Martivi.ViewModels
         //}
 
 
-        private Order _SelectedDetailOrder;
-
-        public Order SelectedDetailOrder
-        {
-            get { return _SelectedDetailOrder; }
-            set 
-            {
-                _SelectedDetailOrder = value;
-                OnPropertyChanged();
-            }
-        }
+       
 
         private Info _Info;
         public Info Info
@@ -314,7 +303,7 @@ namespace Martivi.ViewModels
         }
 
         private int totalOrderedItems = 0;
-        private double totalPrice = 0;
+        private decimal totalPrice = 0;
 
        
 
@@ -331,7 +320,7 @@ namespace Martivi.ViewModels
             }
         }
 
-        public double TotalPrice
+        public decimal TotalPrice
         {
             get { return totalPrice; }
             set
@@ -592,7 +581,7 @@ namespace Martivi.ViewModels
                 {
                     return true;
                 }
-                if (c.Products.Any((p) => { return p.Name.ToLower().Contains(CategoryFilter); })) return true;
+                if (c.Products.Any((p) => { return p.Name.ToLower().Contains(CategoryFilter)|| p.Description.ToLower().Contains(CategoryFilter); })) return true;
                 return false;
             }));
         }
@@ -975,11 +964,7 @@ namespace Martivi.ViewModels
                 {
                     MadeOrders.Clear();
                     foreach(var order in orders)
-                    {
-                        if (SelectedDetailOrder != null && SelectedDetailOrder.OrderId == order.OrderId)
-                        {
-                            SelectedDetailOrder = order;
-                        }
+                    {                       
                         MadeOrders.Add(order);
                     }
                 });
@@ -1103,12 +1088,12 @@ namespace Martivi.ViewModels
                         {
                             case "MinOrder":
                                 {
-                                    MinOrder = Convert.ToDouble(setting.Value);
+                                    MinOrder = Convert.ToDecimal(setting.Value);
                                     break;
                                 };
                             case "MaxOrder":
                                 {
-                                    MaxOrder = Convert.ToDouble(setting.Value);
+                                    MaxOrder = Convert.ToDecimal(setting.Value);
                                     break;
                                 };
                             case "ServiceUnavailable":
@@ -1155,8 +1140,7 @@ namespace Martivi.ViewModels
         }
         private void NavigateOrdersPage(object obj)
         {
-            var ordersPage = new OrderPage();
-            Shell.Current.Navigation.PushAsync(ordersPage);
+            Shell.Current.GoToAsync($"//home/carttab/orderpageroute");
         }
         private void RemoveOrder(object obj)
         {

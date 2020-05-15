@@ -6,7 +6,9 @@
              xmlns:sync="clr-namespace:Syncfusion.ListView.XForms;assembly=Syncfusion.SfListView.XForms"
              xmlns:numeric="clr-namespace:Syncfusion.SfNumericUpDown.XForms;assembly=Syncfusion.SfNumericUpDown.XForms"
              xmlns:contentviews="clr-namespace:Martivi.Pages.ContentViews"
-             xmlns:errorandempty="clr-namespace:Martivi.Views.ErrorAndEmpty"
+             xmlns:svg="clr-namespace:Martivi.Controls"
+             xmlns:core="clr-namespace:Syncfusion.XForms.Core;assembly=Syncfusion.Core.XForms"
+             xmlns:button="clr-namespace:Syncfusion.XForms.Buttons;assembly=Syncfusion.Buttons.XForms"
              mc:Ignorable="d"
              x:Class="Martivi.Pages.OrderPage" BackgroundColor="White" BindingContext="{StaticResource MainViewModel}" x:Name="orderPage" Title="კალათა">
   
@@ -14,7 +16,63 @@
 
         <Grid>
             <contentviews:OrderView  IsVisible="{Binding Source={StaticResource MainViewModel},Path=TotalOrderedItems, Converter={StaticResource CountToBoolConverter}}"></contentviews:OrderView>
-            <errorandempty:EmptyCartPage IsVisible="{Binding Source={StaticResource MainViewModel},Path=TotalOrderedItems, Converter={StaticResource CountToBoolConverter}, ConverterParameter=negative}"></errorandempty:EmptyCartPage>
+
+            <Grid IsVisible="{Binding Source={StaticResource MainViewModel},Path=TotalOrderedItems, Converter={StaticResource CountToBoolConverter}, ConverterParameter=negative}">
+
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+
+
+                <StackLayout BackgroundColor="Transparent"
+                             Spacing="0"
+                             VerticalOptions="Center">
+
+                    <!--  Display the svg illustration image  -->
+
+                    <svg:SVGImage x:Name="ErrorImage"
+                                  Margin="{x:OnIdiom Phone='0,0,0,0',
+                                       Desktop='0',
+                                       Tablet='0'}"
+                                  HeightRequest="{core:OnPlatformOrientationDoubleValue Default=300,
+                                                                          AndroidPhonePortrait=200,
+                                                                          AndroidPhoneLandscape=140,
+                                                                          iOSPhonePortrait=200,
+                                                                          iOSPhoneLandscape=140}"
+                                  Source="EmptyCart.svg"
+                                  VerticalOptions="Center"
+                                  WidthRequest="{x:OnIdiom Phone=200,
+                                             Desktop=300,
+                                             Tablet=300}" />
+
+                    <!--  Label to display header  -->
+                    <Label Margin="0,32,0,8"
+                           FontFamily="{StaticResource Montserrat-SemiBold}"
+                           FontSize="20"
+                           HorizontalTextAlignment="Center"
+                           Style="{StaticResource LabelStyle}"
+                           Text="კალათა ცარიელია"
+                           HorizontalOptions="Center"
+                           VerticalTextAlignment="Center" />
+
+                    <!--  Label to display content  -->
+                    <Label Margin="8,0,8,0"
+                           FontFamily="{StaticResource Montserrat-Medium}"
+                           FontSize="16"
+                           HorizontalOptions="Center"
+                           Style="{StaticResource LabelStyle}"
+                           Text="კალათში არ გაქვთ არცერთი ნივთი"
+                           VerticalTextAlignment="Center" />
+                </StackLayout>
+
+                <!--  Try again button  -->
+                <button:SfButton Grid.Row="1" Clicked="GoBackClicked"
+                                 Style="{StaticResource SfGradientButtonStyle}"
+                                 Text="უკან" />
+
+            </Grid>
+            <!--<errorandempty:EmptyCartPage IsVisible="{Binding Source={StaticResource MainViewModel},Path=TotalOrderedItems, Converter={StaticResource CountToBoolConverter}, ConverterParameter=negative}"></errorandempty:EmptyCartPage>-->
             <ActivityIndicator  HorizontalOptions="Center" VerticalOptions="Center" Color="#FF5722" IsRunning="{Binding MakingOrder}"></ActivityIndicator>
           
         </Grid>

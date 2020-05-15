@@ -1,6 +1,8 @@
 ﻿using Martivi.ViewModels;
 using Martivi.Views.Bookmarks;
 using Martivi.Views.Transaction;
+using Syncfusion.ListView.XForms;
+using Syncfusion.XForms.Expander;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -32,23 +34,46 @@ namespace Martivi.Pages.ContentViews
             //Navigation.PushAsync(new CheckoutPage());
         }
 
-        private void listView_Loaded(object sender, Syncfusion.ListView.XForms.ListViewLoadedEventArgs e)
+        private async void RemoveTapped(object sender, EventArgs e)
         {
             try
             {
-                var totalH = ViewModel.Orders.Count * 150;
-                if (totalH > 390)
-                {
-                    listView.HeightRequest = 390;
-                    return;
-                }
-                listView.HeightRequest = totalH;
+                await Task.Delay(200);
+                sfExpander.changeProperty("Content");
 
             }
-            catch
+            catch 
             {
 
             }
+            //try
+            //{
+            //    expander.IsExpanded = !expander.IsExpanded;
+            //    expander.IsExpanded = !expander.IsExpanded;
+            //}
+            //catch 
+            //{
+
+            //}
         }
+
+        //private void listView_Loaded(object sender, Syncfusion.ListView.XForms.ListViewLoadedEventArgs e)
+        //{
+        //    try
+        //    {
+        //        var totalH = ViewModel.Orders.Count * 150;
+        //        if (totalH > 390)
+        //        {
+        //            listView.HeightRequest = 390;
+        //            return;
+        //        }
+        //        listView.HeightRequest = totalH;
+
+        //    }
+        //    catch
+        //    {
+
+        //    }
+        //}
     }
 }

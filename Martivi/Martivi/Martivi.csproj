@@ -43,25 +43,27 @@
     <PackageReference Include="SkiaSharp.Extended" Version="1.60.0" />
     <PackageReference Include="SkiaSharp.Svg" Version="1.60.0" />
     <PackageReference Include="SkiaSharp.Views.Forms" Version="1.68.1.1" />
-    <PackageReference Include="Syncfusion.Xamarin.Buttons" Version="18.1.0.45" />
-    <PackageReference Include="Syncfusion.Xamarin.Cards" Version="18.1.0.45" />
-    <PackageReference Include="Syncfusion.Xamarin.Core" Version="18.1.0.45" />
-    <PackageReference Include="Syncfusion.Xamarin.SfBadgeView" Version="18.1.0.45" />
-    <PackageReference Include="Syncfusion.Xamarin.SfComboBox" Version="18.1.0.45" />
-    <PackageReference Include="Syncfusion.Xamarin.SfListView" Version="18.1.0.45" />
-    <PackageReference Include="Syncfusion.Xamarin.SfNumericUpDown" Version="18.1.0.45" />
-    <PackageReference Include="Syncfusion.Xamarin.SfPopupLayout" Version="18.1.0.45" />
-    <PackageReference Include="Syncfusion.Xamarin.SfProgressBar" Version="18.1.0.45" />
-    <PackageReference Include="Syncfusion.Xamarin.SfPullToRefresh" Version="18.1.0.45" />
+    <PackageReference Include="Syncfusion.Xamarin.Buttons" Version="18.1.0.48" />
+    <PackageReference Include="Syncfusion.Xamarin.Cards" Version="18.1.0.48" />
+    <PackageReference Include="Syncfusion.Xamarin.Core" Version="18.1.0.48" />
+    <PackageReference Include="Syncfusion.Xamarin.Expander" Version="18.1.0.48" />
+    <PackageReference Include="Syncfusion.Xamarin.SfBadgeView" Version="18.1.0.48" />
+    <PackageReference Include="Syncfusion.Xamarin.SfComboBox" Version="18.1.0.48" />
+    <PackageReference Include="Syncfusion.Xamarin.SfImageEditor" Version="18.1.0.48" />
+    <PackageReference Include="Syncfusion.Xamarin.SfListView" Version="18.1.0.48" />
+    <PackageReference Include="Syncfusion.Xamarin.SfNumericUpDown" Version="18.1.0.48" />
+    <PackageReference Include="Syncfusion.Xamarin.SfPopupLayout" Version="18.1.0.48" />
+    <PackageReference Include="Syncfusion.Xamarin.SfProgressBar" Version="18.1.0.48" />
+    <PackageReference Include="Syncfusion.Xamarin.SfPullToRefresh" Version="18.1.0.48" />
     <PackageReference Include="Syncfusion.Xamarin.SfRating" Version="18.1.0.45" />
-    <PackageReference Include="Syncfusion.Xamarin.SfTabView" Version="18.1.0.45" />
+    <PackageReference Include="Syncfusion.Xamarin.SfTabView" Version="18.1.0.48" />
     <PackageReference Include="Xam.Plugin.Geolocator" Version="4.5.0.6" />
     <PackageReference Include="Xam.Plugin.SimpleAudioPlayer" Version="1.4.0" />
     <PackageReference Include="Xam.Plugins.Settings" Version="3.1.1" />
     <PackageReference Include="Xamarin.FFImageLoading.Forms" Version="2.4.11.982" />
     <PackageReference Include="Xamarin.FFImageLoading.Svg.Forms" Version="2.4.11.982" />
     <PackageReference Include="Xamarin.FFImageLoading.Transformations" Version="2.4.11.982" />
-    <PackageReference Include="Xamarin.Forms" Version="4.7.0.688-nightly" />
+    <PackageReference Include="Xamarin.Forms" Version="4.8.0.788-nightly" />
     <PackageReference Include="Xamarin.Essentials" Version="1.5.3" />
     <PackageReference Include="Xamarin.Forms.Maps" Version="4.7.0.688-nightly" />
   </ItemGroup>
@@ -77,9 +79,6 @@
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="Pages\ContentViews\OrderView.xaml">
-      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Pages\ContentViews\ProductView.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="Pages\GlobalChatPage.xaml">
@@ -151,21 +150,6 @@
     <EmbeddedResource Update="Views\Bookmarks\Styles.xaml">
       <Generator>MSBuild:Compile</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="Views\ErrorandEmpty\EmptyCartPage.xaml">
-      <Generator>MSBuild:Compile</Generator>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Views\ErrorandEmpty\NoInternetConnectionPage.xaml">
-      <Generator>MSBuild:Compile</Generator>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Views\ErrorandEmpty\NoItemProductsPage.xaml">
-      <Generator>MSBuild:Compile</Generator>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Views\ErrorandEmpty\NoItemCategoryPage.xaml">
-      <Generator>MSBuild:Compile</Generator>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Views\ErrorandEmpty\Styles.xaml">
-      <Generator>MSBuild:Compile</Generator>
-    </EmbeddedResource>
     <EmbeddedResource Update="Views\Forms\AddProfilePage.xaml">
       <Generator>MSBuild:Compile</Generator>
     </EmbeddedResource>
@@ -226,12 +210,6 @@
     </Compile>
     <Compile Update="Pages\ProductPage.xaml.cs">
       <DependentUpon>ProductPage.xaml</DependentUpon>
-    </Compile>
-    <Compile Update="Views\ErrorandEmpty\NoItemCategoryPage.xaml.cs">
-      <DependentUpon>NoItemCategoryPage.xaml</DependentUpon>
-    </Compile>
-    <Compile Update="Views\ErrorandEmpty\NoItemProductsPage.xaml.cs">
-      <DependentUpon>NoItemProductsPage.xaml</DependentUpon>
     </Compile>
     <Compile Update="Views\Transaction\CheckoutView.xaml.cs">
       <DependentUpon>CheckoutView.xaml</DependentUpon>

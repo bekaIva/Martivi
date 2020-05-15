@@ -5,115 +5,271 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:ffimageloading="clr-namespace:FFImageLoading.Forms;assembly=FFImageLoading.Forms"
              xmlns:numeric="clr-namespace:Syncfusion.SfNumericUpDown.XForms;assembly=Syncfusion.SfNumericUpDown.XForms"
+             xmlns:sfPopup="clr-namespace:Syncfusion.XForms.PopupLayout;assembly=Syncfusion.SfPopupLayout.XForms"
+             xmlns:xforms="clr-namespace:Syncfusion.SfImageEditor.XForms;assembly=Syncfusion.SfImageEditor.XForms"
              mc:Ignorable="d"
              x:Class="Martivi.Pages.SingleProductPage" x:Name="page">
     <ContentPage.Content>
-        <Grid>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="*" />
-            </Grid.RowDefinitions>
-            <Frame BackgroundColor="White" HasShadow="True" Padding="0" Margin="0">
-                <Grid Padding="0" HeightRequest="{OnPlatform Default=48, Android=56}">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="Auto" />
-                    </Grid.ColumnDefinitions>
-                    <Grid x:Name="grid" Grid.Column="0" Margin="16,0,8,0">
-                        <Label Text="პროდუქტი" FontAttributes="Bold" VerticalOptions="Center" FontSize="16" 
-                               TextColor="#333333"
-                               Opacity="{OnPlatform Default=1, Android=0.87}" />
-                    </Grid>
-                    <Grid Grid.Column="1" Margin="0" RowSpacing="0" ColumnSpacing="0" BackgroundColor="White" 
-                          HorizontalOptions="EndAndExpand" VerticalOptions="FillAndExpand" Padding="20, 0, 0, 0" >
-                        <Grid.GestureRecognizers>
-                            <TapGestureRecognizer Command="{Binding OrderListCommand}"
-                                                  CommandParameter="{Binding Source={x:Reference Name=page}}"/>
-                        </Grid.GestureRecognizers>
-                        <Label InputTransparent="True" Text="&#xe706;" FontSize="{OnPlatform Android=Medium, iOS=Large, UWP=Medium}" TextColor="#808080" FontFamily="{OnPlatform iOS=Sync FontIcons, Android=Sync FontIcons.ttf#, UWP=Sync FontIcons.ttf#Sync FontIcons}"
-                               VerticalOptions="Center" HeightRequest="20" WidthRequest="20" Margin="0,0,16,0"/>
-                        <Frame InputTransparent="True" Margin="0,12,6,0" Padding="0" HasShadow="False"
-                               VerticalOptions="Start" HorizontalOptions="End" CornerRadius="8"
-                               HeightRequest="14" WidthRequest="20" OutlineColor="Transparent"
-                               IsVisible="{Binding TotalOrderedItems, Mode=OneWay, Converter={StaticResource inverseZeroVisibilityConverter}}"
-                               BackgroundColor="{StaticResource primary}">
-                            <Label InputTransparent="True" Margin="0" TextColor="White" Text="{Binding TotalOrderedItems}" FontSize="11"
-                                   VerticalOptions="Center" HorizontalOptions="Center"/>
-                        </Frame>
-                    </Grid>
-                </Grid>
-            </Frame>
-            <BoxView x:Name="boxView" Grid.Row="1" BackgroundColor="#EAEAEA" HeightRequest="{OnPlatform Default=0, UWP=1}" />
-            <Grid x:Name="contentGrid" Grid.Row="2" Margin="0" Padding="0" RowSpacing="0" BackgroundColor="White">
-            
+        <ScrollView>
+            <Grid>
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="*"/>
-                    <RowDefinition Height="1"/>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
                 </Grid.RowDefinitions>
-                <Grid Padding="0" ColumnSpacing="0" Margin='{OnPlatform Default="15,12,15,12", Android=16}'>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="0.4*" />
-                        <ColumnDefinition Width="*" />
-                    </Grid.ColumnDefinitions>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="auto"/>
-                        <RowDefinition />
-                    </Grid.RowDefinitions>
-                    <ffimageloading:CachedImage Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Source="{Binding Image}"  VerticalOptions="StartAndExpand" HorizontalOptions="Fill" LoadingPlaceholder="placeholderimage.png"  DownsampleToViewSize="true" Aspect="AspectFit" CacheType="All"/>
-                
-                    <Grid Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="1" Padding="0" RowSpacing="0" Margin='{OnPlatform Default="12,0,0,0", Android="16,0,0,0"}'>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto" />
-                            <RowDefinition Height="Auto" />
-                            <RowDefinition Height="Auto" />
-                            <RowDefinition Height="Auto" />
-                            <RowDefinition Height="Auto" />
-                        </Grid.RowDefinitions>
-                        <Label Text="{Binding Name}" HorizontalOptions="Start" Margin="0,0,0,4" FontSize="16"
-                               TextColor="{OnPlatform Default=#333333, Android=#000000}"
-                               Opacity="{OnPlatform Default=1, Android=0.87}" />
-                    
-                        <Label Text="{Binding Weight}" FontSize="14" Grid.Row="1" HorizontalOptions="Start"
-                               TextColor="{OnPlatform Default=#757575, Android=#000000, UWP=#4C4C4C}"
-                               Opacity="{OnPlatform Default=1, Android=0.54}" />
-                        <Label Text="{Binding QuantityInSupply,StringFormat='მარაგშია: {0}'}" FontSize="14" Grid.Row="2" HorizontalOptions="Start"
-                               TextColor="{OnPlatform Default=#757575, Android=#000000, UWP=#4C4C4C}"
-                               Opacity="{OnPlatform Default=1, Android=0.54}" />
-                        <Label Text="{Binding Description}" FontSize="14" Grid.Row="3" HorizontalOptions="Start"
-                               TextColor="{OnPlatform Default=#757575, Android=#000000, UWP=#4C4C4C}"
-                               Opacity="{OnPlatform Default=1, Android=0.54}" />
-                        <Grid Grid.Row="4" Padding="0" ColumnSpacing="0">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="1*"/>
-                                <ColumnDefinition Width="auto"/>
-                            </Grid.ColumnDefinitions>
-                            <Label Text="{Binding Price, Converter={StaticResource currencyFormatConverter}}" VerticalOptions="Start" FontAttributes="Bold" 
-                                   HorizontalOptions="Start" FontSize="16"
-                                   Margin='{OnPlatform Default="0,12,0,0", Android="0,16,0,0"}'
-                                   TextColor="{StaticResource primary}" />
-                            <numeric:SfNumericUpDown Grid.Column="1"  x:Name="numericUpDown" MaximumDecimalDigits="0"
-                                                     IsEditable="False" Minimum="0" Maximum="{Binding QuantityInSupply}" HorizontalOptions="End" VerticalOptions="Center"
-                                                     AllowNull="false" FormatString="n" Watermark="Units" TextAlignment="Center"
-                                                     SpinButtonAlignment="Both" UpDownButtonColor="White"
-                                                     Value="{Binding Quantity, Mode=TwoWay}"
-                                                     IsVisible="{Binding Quantity, Converter={StaticResource inverseZeroVisibilityConverter}}"
-                                                     TextColor="{OnPlatform Default=#1C73F2, Android=#FFFFFF, UWP=#0078D7}"
-                                                     BackgroundColor="{StaticResource primary}"
-                                                     WidthRequest="{OnPlatform Default=155}" />
-                            <Button Grid.Column="1" x:Name="addButton" FontSize="16" Text="დამატება" BorderWidth="1" WidthRequest="{OnPlatform Default=155}" 
-                                    VerticalOptions="CenterAndExpand" HorizontalOptions="End" 
-                                    Command="{Binding Path=BindingContext.AddCommand, Source={x:Reference Name=page}}"
-                                    CommandParameter="{Binding .}"
-                                    IsVisible="{Binding Quantity, Converter={StaticResource zeroVisibilityConverter}}"
-                                    BackgroundColor="{StaticResource primary}"
-                                    BorderColor="{StaticResource primary}"
-                                    TextColor="{OnPlatform Default=#1C73F2, Android=#FFFFFF, UWP=#000000}" />
+               
+                <Frame BackgroundColor="White"
+                       HasShadow="True"
+                       Padding="0"
+                       Margin="0">
+                    <Grid Padding="0"
+                          HeightRequest="{OnPlatform Default=48, Android=56}">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <Grid x:Name="grid"
+                              Grid.Column="0"
+                              Margin="16,0,8,0">
+                            <Label Text="პროდუქტი"
+                                   FontAttributes="Bold"
+                                   VerticalOptions="Center"
+                                   FontSize="16"
+                                   TextColor="#333333"
+                                   Opacity="{OnPlatform Default=1, Android=0.87}" />
+                        </Grid>
+                        <Grid Grid.Column="1"
+                              Margin="0"
+                              RowSpacing="0"
+                              ColumnSpacing="0"
+                              BackgroundColor="White"
+                              HorizontalOptions="EndAndExpand"
+                              VerticalOptions="FillAndExpand"
+                              Padding="20, 0, 0, 0">
+                            <Grid.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding OrderListCommand}"
+                                                      CommandParameter="{Binding Source={x:Reference Name=page}}" />
+                            </Grid.GestureRecognizers>
+                            <Label InputTransparent="True"
+                                   Text="&#xe706;"
+                                   FontSize="{OnPlatform Android=Medium, iOS=Large, UWP=Medium}"
+                                   TextColor="#808080"
+                                   FontFamily="{OnPlatform iOS=Sync FontIcons, Android=Sync FontIcons.ttf#, UWP=Sync FontIcons.ttf#Sync FontIcons}"
+                                   VerticalOptions="Center"
+                                   HeightRequest="20"
+                                   WidthRequest="20"
+                                   Margin="0,0,16,0" />
+                            <Frame InputTransparent="True"
+                                   Margin="0,12,6,0"
+                                   Padding="0"
+                                   HasShadow="False"
+                                   VerticalOptions="Start"
+                                   HorizontalOptions="End"
+                                   CornerRadius="8"
+                                   HeightRequest="14"
+                                   WidthRequest="20"
+                                   OutlineColor="Transparent"
+                                   IsVisible="{Binding TotalOrderedItems, Mode=OneWay, Converter={StaticResource inverseZeroVisibilityConverter}}"
+                                   BackgroundColor="{StaticResource primary}">
+                                <Label InputTransparent="True"
+                                       Margin="0"
+                                       TextColor="White"
+                                       Text="{Binding TotalOrderedItems}"
+                                       FontSize="11"
+                                       VerticalOptions="Center"
+                                       HorizontalOptions="Center" />
+                            </Frame>
                         </Grid>
                     </Grid>
+                </Frame>
+                <BoxView x:Name="boxView"
+                         Grid.Row="1"
+                         BackgroundColor="#EAEAEA"
+                         HeightRequest="{OnPlatform Default=0, UWP=1}" />
+                <Grid x:Name="contentGrid"
+                      Grid.Row="2"
+                      Margin="0"
+                      Padding="0"
+                      RowSpacing="0"
+                      BackgroundColor="White">
+
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="1" />
+                    </Grid.RowDefinitions>
+                    <sfPopup:SfPopupLayout x:Name="popupLayout" Padding="0" ShowOverlayAlways="False" BackgroundColor="Transparent">
+                        <sfPopup:SfPopupLayout.PopupView>
+                            <sfPopup:PopupView  IsFullScreen="True" Margin="0" BackgroundColor="Transparent" AppearanceMode="OneButton" ShowHeader="False" ShowFooter="False">
+                                <sfPopup:PopupView.PopupStyle>
+                                    <sfPopup:PopupStyle HeaderBackgroundColor="Transparent"
+                                                        HeaderFontAttribute="Bold"
+                                                        BorderColor="Transparent"
+                                                        HeaderFontFamily="Helvetica-Bold"
+                                                        HeaderFontSize="25"
+                                                        HeaderTextAlignment="Center"
+                                                        HeaderTextColor="White" />
+                                </sfPopup:PopupView.PopupStyle>
+                                <sfPopup:PopupView.ContentTemplate>
+                                    <DataTemplate>
+                                        <xforms:SfImageEditor Source="{Binding Image}"
+                                                              BackgroundColor="Transparent"
+                                                              Margin="0">                                           
+                                        <xforms:SfImageEditor.ToolbarSettings>
+                                                <xforms:ToolbarSettings IsVisible="False"></xforms:ToolbarSettings>
+                                            </xforms:SfImageEditor.ToolbarSettings>
+                                        </xforms:SfImageEditor>
+                                    </DataTemplate>
+                                </sfPopup:PopupView.ContentTemplate>
+                            </sfPopup:PopupView>
+                        </sfPopup:SfPopupLayout.PopupView>                   
+                    </sfPopup:SfPopupLayout>
+                    <Grid Padding="0"
+                          ColumnSpacing="0"
+                          Margin='{OnPlatform Default="15,12,15,12", Android=16}'>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="0.4*" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="auto" />
+                            <RowDefinition />
+                        </Grid.RowDefinitions>
+                        <ffimageloading:CachedImage Grid.Row="0"
+                                                    Grid.Column="0"
+                                                    Grid.ColumnSpan="2"
+                                                    Source="{Binding Image}"
+                                                    VerticalOptions="StartAndExpand"
+                                                    HorizontalOptions="Fill"
+                                                    LoadingPlaceholder="placeholderimage.png"
+                                                    DownsampleToViewSize="true"
+                                                    Aspect="AspectFit"
+                                                    CacheType="All">
+                            <ffimageloading:CachedImage.GestureRecognizers>
+                                <TapGestureRecognizer  Tapped="TapGestureRecognizer_Tapped"/>
+                            </ffimageloading:CachedImage.GestureRecognizers>
+                        </ffimageloading:CachedImage>
+
+                        <Grid Grid.Column="0"
+                              Grid.ColumnSpan="2"
+                              Grid.Row="1"
+                              Padding="0"
+                              RowSpacing="0"
+                              Margin='{OnPlatform Default="12,0,0,0", Android="16,0,0,0"}'>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                            </Grid.RowDefinitions>
+                            <Label Text="{Binding Name}"
+                                   Margin="0,0,0,4"
+                                   TextColor="{StaticResource primary_dark}"
+                                   Opacity="{OnPlatform Default=1, Android=0.87}" HorizontalOptions="Center" FontAttributes="Bold" FontSize="24"/>
+
+                            <StackLayout Grid.Row="1" Orientation="Horizontal" Margin="4">
+                                <Label Text="წონა: "
+                                       FontSize="14"
+                                       HorizontalOptions="Start"
+                                       TextColor="{OnPlatform Default=#757575, Android=#000000, UWP=#4C4C4C}"
+                                       Opacity="{OnPlatform Default=1, Android=0.54}" FontAttributes="Bold"/>
+                                <Label Text="{Binding Weight}"
+                                       FontSize="14"
+                                       HorizontalOptions="Start"
+                                       TextColor="{OnPlatform Default=#757575, Android=#000000, UWP=#4C4C4C}"
+                                       Opacity="{OnPlatform Default=1, Android=0.54}" />
+                            </StackLayout>
+                            <StackLayout Grid.Row="2"
+                                         Margin="4"
+                                         Orientation="Horizontal">
+                                <Label Text="მარაგშია: "
+                                       FontSize="14"
+                                       HorizontalOptions="Start"
+                                       TextColor="{OnPlatform Default=#757575, Android=#000000, UWP=#4C4C4C}"
+                                       Opacity="{OnPlatform Default=1, Android=0.54}"
+                                       FontAttributes="Bold" />
+                                <Label Text="{Binding QuantityInSupply}"
+                                       FontSize="14"
+                                       Grid.Row="2"
+                                       HorizontalOptions="Start"
+                                       TextColor="{OnPlatform Default=#757575, Android=#000000, UWP=#4C4C4C}"
+                                       Opacity="{OnPlatform Default=1, Android=0.54}" />
+                            </StackLayout>
+
+                            <StackLayout Grid.Row="3"
+                                         Margin="4"
+                                         Orientation="Vertical">
+                                <Label Text="აღწერა: "
+                                       FontSize="14"
+                                       HorizontalOptions="Start"
+                                       TextColor="{OnPlatform Default=#757575, Android=#000000, UWP=#4C4C4C}"
+                                       Opacity="{OnPlatform Default=1, Android=0.54}"
+                                       FontAttributes="Bold" />
+                                <Label Text="{Binding Description}"
+                                       FontSize="14"
+                                       Grid.Row="3"
+                                       HorizontalOptions="Start"
+                                       TextColor="{OnPlatform Default=#757575, Android=#000000, UWP=#4C4C4C}"
+                                       Opacity="{OnPlatform Default=1, Android=0.54}" />
+                            </StackLayout>
+
+                            
+                            <Grid Grid.Row="4"
+                                  Padding="0"
+                                  ColumnSpacing="0">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="1*" />
+                                    <ColumnDefinition Width="auto" />
+                                </Grid.ColumnDefinitions>
+                                <Label Text="{Binding Price, StringFormat = '₾{0:0.######}'}"
+                                       VerticalOptions="Start"
+                                       FontAttributes="Bold"
+                                       HorizontalOptions="Start"
+                                       FontSize="16"
+                                       Margin='{OnPlatform Default="0,12,0,0", Android="0,16,0,0"}'
+                                       TextColor="{StaticResource primary}" />
+                                <numeric:SfNumericUpDown Grid.Column="1"
+                                                         x:Name="numericUpDown"
+                                                         MaximumDecimalDigits="0"
+                                                         IsEditable="False"
+                                                         Minimum="0"
+                                                         Maximum="{Binding QuantityInSupply}"
+                                                         HorizontalOptions="End"
+                                                         VerticalOptions="Center"
+                                                         AllowNull="false"
+                                                         FormatString="n"
+                                                         Watermark="Units"
+                                                         TextAlignment="Center"
+                                                         SpinButtonAlignment="Both"
+                                                         UpDownButtonColor="White"
+                                                         Value="{Binding Quantity, Mode=TwoWay}"
+                                                         IsVisible="{Binding Quantity, Converter={StaticResource inverseZeroVisibilityConverter}}"
+                                                         TextColor="{OnPlatform Default=#1C73F2, Android=#FFFFFF, UWP=#0078D7}"
+                                                         BackgroundColor="{StaticResource primary}"
+                                                         WidthRequest="{OnPlatform Default=155}" />
+                                <Button Grid.Column="1"
+                                        x:Name="addButton"
+                                        FontSize="16"
+                                        Text="დამატება"
+                                        BorderWidth="1"
+                                        WidthRequest="{OnPlatform Default=155}"
+                                        VerticalOptions="CenterAndExpand"
+                                        HorizontalOptions="End"
+                                        Command="{Binding Path=BindingContext.AddCommand, Source={x:Reference Name=page}}"
+                                        CommandParameter="{Binding .}"
+                                        IsVisible="{Binding Quantity, Converter={StaticResource zeroVisibilityConverter}}"
+                                        BackgroundColor="{StaticResource primary}"
+                                        BorderColor="{StaticResource primary}"
+                                        TextColor="{OnPlatform Default=#1C73F2, Android=#FFFFFF, UWP=#000000}" />
+                            </Grid>
+                        </Grid>
+                    </Grid>
+                    <BoxView x:Name="boxView2"
+                             Grid.Row="1"
+                             BackgroundColor="#EAEAEA" />
                 </Grid>
-                <BoxView x:Name="boxView2" Grid.Row="1" BackgroundColor="#EAEAEA"/>
             </Grid>
-        </Grid>
+        </ScrollView>
+       
     </ContentPage.Content>
 </ContentPage>

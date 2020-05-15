@@ -32,5 +32,17 @@ namespace Martivi.Pages
             catch
             { }
         }
+
+        private void GoBackClicked(object sender, EventArgs e)
+        {
+            if (Shell.Current.Navigation.NavigationStack.Count > 1)
+            {
+                Shell.Current.Navigation.PopAsync();
+            }
+            else
+            {
+                Shell.Current.GoToAsync($"//home/cb/category");
+            }
+        }
     }
 }

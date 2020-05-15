@@ -21,7 +21,9 @@ using Xamarin.Forms.Maps;
 namespace Martivi.Model
 {
     [Preserve(AllMembers = true)]
-   
+
+ 
+
     public class PaymentStatusToTextOrColorConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
@@ -151,7 +153,7 @@ namespace Martivi.Model
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            double totalPrice=0;
+            decimal totalPrice=0;
             if(value is List<Product> products)
             {
                 foreach(var p in products)
@@ -159,7 +161,9 @@ namespace Martivi.Model
                     totalPrice += p.Price * p.Quantity;
                 }
             }
-            return string.Format("₾{0:0.00}", totalPrice);
+            
+
+            return string.Format("₾{0:0.######}", totalPrice);
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
@@ -268,9 +272,8 @@ namespace Martivi.Model
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if (value is int && (int)value <= 1)
-                return value + " პროდუქტი |";
-            return value + " პროდუქტები |";
+           
+                return value + " პროდუქტი | ";
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
@@ -284,7 +287,7 @@ namespace Martivi.Model
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            var d = (double)value;
+            var d = (decimal)value;
             return string.Format("₾{0:0.00}", d);
         }
 

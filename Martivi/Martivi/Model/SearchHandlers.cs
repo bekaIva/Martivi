@@ -37,7 +37,10 @@ namespace Martivi.Model
                     {
                         List<object> r = new List<object>();
                         if (c.Name?.ToLower().Contains(newValue.ToLower()) ?? false) r.Add(c);
-                        r.AddRange(c.Products.Where(p => p.Name?.ToLower().Contains(newValue.ToLower()) ?? false));
+                        r.AddRange(c.Products.Where(p =>
+                        (p.Name?.ToLower().Contains(newValue.ToLower()) ?? false) ||
+                        (p.Description?.ToLower().Contains(newValue.ToLower()) ?? false)
+                        ));
                         return r;
                     });
                     foreach (var o in l) (ItemsSource as ObservableCollection<object>)?.Add(o);

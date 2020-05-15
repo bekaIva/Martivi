@@ -11,7 +11,14 @@ namespace Martivi.Model
         public event PropertyChangedEventHandler PropertyChanged;
         internal void OnPropertyChanged([CallerMemberName] string propertyname = null)
         {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyname));
+            try
+            {
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyname));
+            }
+            catch 
+            {
+
+            }
         }
     }
 }

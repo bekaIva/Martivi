@@ -26,6 +26,10 @@ namespace Martivi.Pages
         {
             base.OnAppearing();
         }
-        
+
+        private void TryAgainClicked(object sender, EventArgs e)
+        {
+            viewModel?.GetCategories();
+        }
     }
 }
